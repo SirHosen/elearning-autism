@@ -5,6 +5,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Student\HomeController;
+use App\Http\Controllers\Student\LearnController;
+use App\Http\Controllers\Student\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,14 +32,27 @@ Route::middleware('guest')->group(function () {
 Route::post('/keluar', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Area Siswa (Role: Siswa)
-Route::middleware(['auth', 'role:siswa'])->group(function () {
-    Route::get('/beranda', function () {
-        return view('student.home');
-    })->name('student.home');
+Route::middleware(['auth', 'role:siswa'])->name('student.')->group(function () {
+    Route::get('/beranda', [HomeController::class, 'index'])->name('home');
 
-    Route::get('/pengaturan', function () {
-        return view('student.settings');
-    })->name('student.settings');
+    // Modul Belajar
+    Route::get('/belajar', [LearnController::class, 'index'])->name('learn.index');
+    Route::get('/belajar/{category:slug}', [LearnController::class, 'showCategory'])->name('learn.category');
+    Route::get('/belajar/{category:slug}/{material}', [LearnController::class, 'showMaterial'])->name('learn.material');
+
+    // Pengaturan Aksesibilitas
+    Route::get('/pengaturan', [SettingController::class, 'index'])->name('settings');
+    Route::put('/pengaturan', [SettingController::class, 'update'])->name('settings.update');
+
+    // Placeholder rute untuk fase 2.4 - 2.7
+    Route::get('/bermain', fn () => redirect()->route('student.home'))->name('games.index');
+    Route::get('/bermain/{game}', fn () => redirect()->route('student.home'))->name('games.play');
+    Route::get('/kuis', fn () => redirect()->route('student.home'))->name('quizzes.index');
+    Route::get('/kuis/{quiz}', fn () => redirect()->route('student.home'))->name('quizzes.play');
+    Route::get('/video', fn () => redirect()->route('student.home'))->name('videos.index');
+    Route::get('/video/{video}', fn () => redirect()->route('student.home'))->name('videos.show');
+    Route::get('/absen', fn () => redirect()->route('student.home'))->name('attendance.index');
+    Route::post('/absen', fn () => redirect()->route('student.home'))->name('attendance.submit');
 });
 
 // Area Guru / Admin (Role: Admin)
