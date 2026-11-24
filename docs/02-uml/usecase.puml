@@ -1,0 +1,60 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam monochrome true
+
+actor "Siswa (Anak Autis)" as Siswa
+actor "Admin (Guru / Pengelola)" as Guru
+
+rectangle "Sistem Pembelajaran Interaktif EduAutis" {
+  package "Autentikasi" {
+    usecase "Masuk Akun Siswa (PIN Numpad)" as UC_LoginSiswa
+    usecase "Masuk Akun Guru (Email & Password)" as UC_LoginGuru
+    usecase "Keluar Akun" as UC_Logout
+  }
+
+  package "Aktivitas Siswa" {
+    usecase "Melihat Beranda Pembelajaran" as UC_Home
+    usecase "Melihat Materi Visual & Memutar Audio" as UC_Belajar
+    usecase "Memainkan Game Edukasi" as UC_Game
+    usecase "Mengerjakan Kuis Bergambar" as UC_Kuis
+    usecase "Menonton Video Edukasi" as UC_Video
+    usecase "Mencatat Absensi Harian (Saya Hadir)" as UC_Absen
+    usecase "Mengatur Preferensi Aksesibilitas" as UC_Setting
+  }
+
+  package "Pengelolaan Guru (Admin)" {
+    usecase "Mengelola Kategori Materi" as UC_AdmKategori
+    usecase "Mengelola Materi (Gambar & Audio)" as UC_AdmMateri
+    usecase "Mengelola Video Pembelajaran" as UC_AdmVideo
+    usecase "Mengelola Konfigurasi Permainan" as UC_AdmGame
+    usecase "Mengelola Bank Soal Kuis" as UC_AdmKuis
+    usecase "Mengelola Akun Siswa & Cetak Kartu PIN" as UC_AdmSiswa
+    usecase "Memantau & Ekspor Rekap Absensi (CSV)" as UC_AdmAbsen
+    usecase "Melihat & Ekspor Hasil Belajar (CSV)" as UC_AdmHasil
+  }
+}
+
+Siswa --> UC_LoginSiswa
+Siswa --> UC_Logout
+Siswa --> UC_Home
+Siswa --> UC_Belajar
+Siswa --> UC_Game
+Siswa --> UC_Kuis
+Siswa --> UC_Video
+Siswa --> UC_Absen
+Siswa --> UC_Setting
+
+Guru --> UC_LoginGuru
+Guru --> UC_Logout
+Guru --> UC_AdmKategori
+Guru --> UC_AdmMateri
+Guru --> UC_AdmVideo
+Guru --> UC_AdmGame
+Guru --> UC_AdmKuis
+Guru --> UC_AdmSiswa
+Guru --> UC_AdmAbsen
+Guru --> UC_AdmHasil
+
+@enduml
