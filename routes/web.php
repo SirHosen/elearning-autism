@@ -4,10 +4,12 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Student\HomeController;
 use App\Http\Controllers\Student\LearnController;
 use App\Http\Controllers\Student\SettingController;
+use App\Http\Controllers\Student\VideoController as StudentVideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -49,8 +51,9 @@ Route::middleware(['auth', 'role:siswa'])->name('student.')->group(function () {
     Route::get('/bermain/{game}', fn () => redirect()->route('student.home'))->name('games.play');
     Route::get('/kuis', fn () => redirect()->route('student.home'))->name('quizzes.index');
     Route::get('/kuis/{quiz}', fn () => redirect()->route('student.home'))->name('quizzes.play');
-    Route::get('/video', fn () => redirect()->route('student.home'))->name('videos.index');
-    Route::get('/video/{video}', fn () => redirect()->route('student.home'))->name('videos.show');
+    // Modul Video
+    Route::get('/video', [StudentVideoController::class, 'index'])->name('videos.index');
+    Route::get('/video/{video}', [StudentVideoController::class, 'show'])->name('videos.show');
     Route::get('/absen', fn () => redirect()->route('student.home'))->name('attendance.index');
     Route::post('/absen', fn () => redirect()->route('student.home'))->name('attendance.submit');
 });
@@ -77,7 +80,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('siswa/{student}/kartu', [StudentController::class, 'printCard'])->name('students.card');
 
     // Placeholder untuk modul berikutnya
-    Route::get('/video', fn () => redirect()->route('admin.dashboard'))->name('videos.index');
+    // CRUD Video
+    Route::resource('video', AdminVideoController::class)
+        ->names('videos')
+        ->parameters(['video' => 'video']);
+    Route::post('video/{video}/toggle', [AdminVideoController::class, 'toggleActive'])->name('videos.toggle');
     Route::get('/permainan', fn () => redirect()->route('admin.dashboard'))->name('games.index');
     Route::get('/kuis', fn () => redirect()->route('admin.dashboard'))->name('quizzes.index');
     Route::get('/absensi', fn () => redirect()->route('admin.dashboard'))->name('attendances.index');
