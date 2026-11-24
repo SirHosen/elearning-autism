@@ -2,76 +2,135 @@
 
 @section('title', 'Dashboard | Panel Guru')
 
+@push('styles')
+<style>
+  .admin-page-head {
+    margin-bottom: 24px;
+  }
+  .admin-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .admin-panels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .admin-panel {
+    background-color: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .admin-panel-title {
+    font-size: 1.0625rem;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .admin-list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background-color: var(--surface-alt);
+    border-radius: 10px;
+  }
+  .admin-list-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    display: block;
+    color: var(--ink);
+  }
+  .admin-list-meta {
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+  }
+</style>
+@endpush
+
 @section('content')
-<div style="margin-bottom: 28px;">
-  <p style="font-size: 13px; font-weight: 800; letter-spacing: 2px; color: var(--primary); margin-bottom: 4px;">PANEL PENGELOLAAN</p>
-  <h2 style="font-size: 28px;">Selamat bekerja, Guru! 👋</h2>
-  <p style="color: var(--ink-soft); font-size: 15px; margin-top: 4px;">Pantau kehadiran dan kelola materi untuk siswa SLB B-C Wijayakusumah.</p>
+<div class="admin-page-head">
+  <p class="admin-eyebrow">Panel Pengelolaan</p>
+  <h2 style="font-size: 1.75rem;">Selamat bekerja, Guru</h2>
+  <p style="font-size: 0.9375rem; margin-top: 4px;">
+    Pantau kehadiran dan kelola materi untuk siswa SLB B-C Wijayakusumah.
+  </p>
 </div>
 
-<!-- Statistik Ringkasan -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
-  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px;">
-    <small style="color: var(--ink-soft); font-weight: 700;">Siswa Aktif</small>
-    <strong style="display: block; font-size: 32px; margin-top: 6px; color: var(--ink);">{{ $totalStudents }}</strong>
+<div class="stat-grid">
+  <div class="stat-card">
+    <span class="stat-card-label">Siswa Aktif</span>
+    <strong class="stat-card-value">{{ $totalStudents }}</strong>
   </div>
-  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px;">
-    <small style="color: var(--ink-soft); font-weight: 700;">Hadir Hari Ini</small>
-    <strong style="display: block; font-size: 32px; margin-top: 6px; color: var(--success);">{{ $todayAttendedCount }}</strong>
+  <div class="stat-card">
+    <span class="stat-card-label">Hadir Hari Ini</span>
+    <strong class="stat-card-value" style="color: var(--success);">{{ $todayAttendedCount }}</strong>
   </div>
-  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px;">
-    <small style="color: var(--ink-soft); font-weight: 700;">Belum Presensi</small>
-    <strong style="display: block; font-size: 32px; margin-top: 6px; color: #D97706;">{{ $unattendedCount }}</strong>
+  <div class="stat-card">
+    <span class="stat-card-label">Belum Presensi</span>
+    <strong class="stat-card-value" style="color: var(--hint-line);">{{ $unattendedCount }}</strong>
   </div>
-  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px;">
-    <small style="color: var(--ink-soft); font-weight: 700;">Materi Pembelajaran</small>
-    <strong style="display: block; font-size: 32px; margin-top: 6px; color: var(--primary);">{{ $activeMaterialsCount }}</strong>
+  <div class="stat-card">
+    <span class="stat-card-label">Materi Pembelajaran</span>
+    <strong class="stat-card-value" style="color: var(--primary);">{{ $activeMaterialsCount }}</strong>
   </div>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
-  <!-- Daftar Belum Absen Hari Ini -->
-  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px;">
-    <h3 style="font-size: 18px; margin-bottom: 14px;">Belum Presensi Hari Ini</h3>
+<div class="admin-panels-grid">
+  <section class="admin-panel">
+    <h3 class="admin-panel-title">Belum Presensi Hari Ini</h3>
     @if ($unattendedStudents->isEmpty())
-      <p style="color: var(--success); font-weight: 700; font-size: 14px;">🎉 Luar biasa! Seluruh siswa sudah presensi hari ini.</p>
+      <div class="feedback-bar feedback-success" style="margin: 0; font-size: 0.9375rem;">
+        <span>Seluruh siswa sudah tercatat hadir hari ini.</span>
+      </div>
     @else
-      <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div class="admin-list">
         @foreach ($unattendedStudents->take(6) as $s)
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--surface-alt); border-radius: 8px;">
+          <div class="admin-list-row">
             <div>
-              <strong style="font-size: 14px; display: block;">{{ $s->name }}</strong>
-              <small style="color: var(--ink-soft); font-size: 12px;">{{ $s->class_name ?? 'Umum' }}</small>
+              <span class="admin-list-name">{{ $s->name }}</span>
+              <span class="admin-list-meta">{{ $s->class_name ?? 'Umum' }}</span>
             </div>
-            <a href="{{ route('admin.attendances.index') }}" class="btn btn-secondary" style="min-height: 32px; padding: 0 10px; font-size: 12px;">
-              Catat Kehadiran
+            <a href="{{ route('admin.attendances.index') }}" class="btn btn-secondary" style="min-height: 36px; padding: 0 12px; font-size: 0.8125rem;">
+              Catat Hadir
             </a>
           </div>
         @endforeach
       </div>
     @endif
-  </div>
+  </section>
 
-  <!-- Aktivitas Kuis Terbaru -->
-  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px;">
-    <h3 style="font-size: 18px; margin-bottom: 14px;">Aktivitas Kuis Terbaru</h3>
+  <section class="admin-panel">
+    <h3 class="admin-panel-title">Aktivitas Kuis Terbaru</h3>
     @if ($recentQuizAttempts->isEmpty())
-      <p style="color: var(--ink-soft); font-size: 14px;">Belum ada riwayat pengerjaan kuis.</p>
+      <p style="font-size: 0.9375rem;">Belum ada riwayat pengerjaan kuis.</p>
     @else
-      <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div class="admin-list">
         @foreach ($recentQuizAttempts as $attempt)
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--surface-alt); border-radius: 8px;">
+          <div class="admin-list-row">
             <div>
-              <strong style="font-size: 14px; display: block;">{{ $attempt->user->name }}</strong>
-              <small style="color: var(--ink-soft); font-size: 12px;">{{ $attempt->quiz->title }}</small>
+              <span class="admin-list-name">{{ $attempt->user->name }}</span>
+              <span class="admin-list-meta">{{ $attempt->quiz->title }}</span>
             </div>
-            <span style="font-size: 13px; font-weight: 800; color: var(--success);">
+            <span style="font-size: 0.875rem; font-weight: 800; color: var(--success);">
               {{ $attempt->correct_first_try }}/{{ $attempt->total_questions }} Benar
             </span>
           </div>
         @endforeach
       </div>
     @endif
-  </div>
+  </section>
 </div>
 @endsection

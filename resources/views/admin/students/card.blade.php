@@ -28,7 +28,7 @@
 <body>
   <div style="position: absolute; top: 16px; right: 16px;" class="no-print">
     <button onclick="window.print()" style="padding: 10px 16px; font-weight: bold; cursor: pointer; border-radius: 8px; border: 1px solid #ccc; background: #fff;">
-      🖨 Cetak Kartu Ini
+      Cetak Kartu Ini
     </button>
   </div>
 

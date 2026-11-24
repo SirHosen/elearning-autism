@@ -24,7 +24,7 @@
       </div>
       <div>
         <a href="{{ route('admin.students.card', session('student_id')) }}" target="_blank" class="btn btn-primary" style="min-height: 42px; padding: 0 16px;">
-          🖨 Cetak Kartu PIN
+          Cetak Kartu PIN
         </a>
       </div>
     </div>
@@ -74,7 +74,7 @@
           <td style="padding: 14px 16px; text-align: right;">
             <div style="display: inline-flex; gap: 8px;">
               <a href="{{ route('admin.students.card', $s) }}" target="_blank" class="btn btn-secondary" style="min-height: 36px; padding: 0 10px; font-size: 13px;" title="Cetak Kartu PIN">
-                🖨 Kartu
+                Kartu
               </a>
               <form action="{{ route('admin.students.reset-pin', $s) }}" method="POST" onsubmit="return confirm('Reset PIN untuk {{ $s->name }}?')">
                 @csrf

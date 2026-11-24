@@ -11,7 +11,7 @@
 
 @section('content')
 <div style="max-width: 560px; margin: 40px auto; background: var(--surface); border: var(--border) solid var(--line); border-radius: var(--radius); padding: 48px 32px; text-align: center;">
-  <div style="font-size: 64px; margin-bottom: 16px;">🧩</div>
+  
   <h2 style="font-size: 24px; margin-bottom: 8px;">Materi Belum Tersedia</h2>
   <p style="color: var(--ink-soft); font-size: var(--fs-base); margin-bottom: 24px;">
     {{ __('ui.empty_content') }}

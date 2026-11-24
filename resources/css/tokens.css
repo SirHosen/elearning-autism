@@ -54,4 +54,10 @@
   /* Animasi & Transisi */
   --dur: 150ms;
   --ease: ease-out;
+
+  /* Alias & Elevasi (Fix halaman Auth & Komponen Modern) */
+  --text: var(--ink);
+  --text-muted: var(--ink-soft);
+  --shadow-sm: 0 2px 8px rgba(31, 41, 51, 0.05);
+  --shadow-md: 0 8px 24px rgba(31, 41, 51, 0.08);
 }
