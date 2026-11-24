@@ -1,13 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\QuizController as AdminQuizController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Student\AttendanceController as StudentAttendanceController;
 use App\Http\Controllers\Student\GameController as StudentGameController;
 use App\Http\Controllers\Student\HomeController;
 use App\Http\Controllers\Student\LearnController;
@@ -65,8 +68,9 @@ Route::middleware(['auth', 'role:siswa'])->name('student.')->group(function () {
     // Modul Video
     Route::get('/video', [StudentVideoController::class, 'index'])->name('videos.index');
     Route::get('/video/{video}', [StudentVideoController::class, 'show'])->name('videos.show');
-    Route::get('/absen', fn () => redirect()->route('student.home'))->name('attendance.index');
-    Route::post('/absen', fn () => redirect()->route('student.home'))->name('attendance.submit');
+    // Presensi Kehadiran Siswa
+    Route::get('/absen', [StudentAttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/absen', [StudentAttendanceController::class, 'submit'])->name('attendance.submit');
 });
 
 // Area Guru / Admin (Role: Admin)
@@ -110,8 +114,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('kuis/{quiz}/soal', [AdminQuizController::class, 'storeQuestion'])->name('quizzes.questions.store');
     Route::delete('kuis/soal/{question}', [AdminQuizController::class, 'destroyQuestion'])->name('quizzes.questions.destroy');
     Route::post('kuis/generator-otomatis', [AdminQuizController::class, 'autoGenerate'])->name('quizzes.auto-generate');
-    Route::get('/absensi', fn () => redirect()->route('admin.dashboard'))->name('attendances.index');
-    Route::get('/hasil', fn () => redirect()->route('admin.dashboard'))->name('reports.index');
+    // Rekap Absensi
+    Route::get('/absensi', [AdminAttendanceController::class, 'index'])->name('attendances.index');
+    Route::post('/absensi/{student}', [AdminAttendanceController::class, 'update'])->name('attendances.update');
+    Route::get('/absensi-export', [AdminAttendanceController::class, 'exportCsv'])->name('attendances.export');
+
+    // Laporan Hasil Belajar
+    Route::get('/hasil', [AdminReportController::class, 'index'])->name('reports.index');
+    Route::get('/hasil-export', [AdminReportController::class, 'exportCsv'])->name('reports.export');
+    Route::get('/hasil/{student}/cetak', [AdminReportController::class, 'printReport'])->name('reports.print');
     Route::get('/profil', fn () => redirect()->route('admin.dashboard'))->name('profile');
 });
 
