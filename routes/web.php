@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MaterialController;
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,19 +41,32 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
 
 // Area Guru / Admin (Role: Admin)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/kategori', fn () => view('admin.dashboard'))->name('categories.index');
-    Route::get('/materi', fn () => view('admin.dashboard'))->name('materials.index');
-    Route::get('/video', fn () => view('admin.dashboard'))->name('videos.index');
-    Route::get('/permainan', fn () => view('admin.dashboard'))->name('games.index');
-    Route::get('/kuis', fn () => view('admin.dashboard'))->name('quizzes.index');
-    Route::get('/siswa', fn () => view('admin.dashboard'))->name('students.index');
-    Route::get('/absensi', fn () => view('admin.dashboard'))->name('attendances.index');
-    Route::get('/hasil', fn () => view('admin.dashboard'))->name('reports.index');
-    Route::get('/profil', fn () => view('admin.dashboard'))->name('profile');
+    // CRUD Kategori
+    Route::resource('kategori', CategoryController::class)
+        ->names('categories')
+        ->parameters(['kategori' => 'category']);
+
+    // CRUD Materi
+    Route::resource('materi', MaterialController::class)
+        ->names('materials')
+        ->parameters(['materi' => 'material']);
+
+    // CRUD Siswa
+    Route::resource('siswa', StudentController::class)
+        ->names('students')
+        ->parameters(['siswa' => 'student']);
+    Route::post('siswa/{student}/reset-pin', [StudentController::class, 'resetPin'])->name('students.reset-pin');
+    Route::get('siswa/{student}/kartu', [StudentController::class, 'printCard'])->name('students.card');
+
+    // Placeholder untuk modul berikutnya
+    Route::get('/video', fn () => redirect()->route('admin.dashboard'))->name('videos.index');
+    Route::get('/permainan', fn () => redirect()->route('admin.dashboard'))->name('games.index');
+    Route::get('/kuis', fn () => redirect()->route('admin.dashboard'))->name('quizzes.index');
+    Route::get('/absensi', fn () => redirect()->route('admin.dashboard'))->name('attendances.index');
+    Route::get('/hasil', fn () => redirect()->route('admin.dashboard'))->name('reports.index');
+    Route::get('/profil', fn () => redirect()->route('admin.dashboard'))->name('profile');
 });
 
 if (app()->environment('local')) {
