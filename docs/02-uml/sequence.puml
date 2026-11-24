@@ -1,0 +1,45 @@
+@startuml
+skinparam shadowing false
+skinparam monochrome true
+
+title Diagram Sequence: Jawab Kuis Bergambar (Siswa)
+
+actor Siswa
+boundary "UI Kuis (Blade)" as UI
+control "QuizController" as Controller
+entity "QuizBuilder" as Builder
+database "Database (SQLite/MySQL)" as DB
+
+Siswa -> UI : Buka Kuis (/kuis/{id})
+UI -> Controller : GET /kuis/{id}
+Controller -> Builder : buildQuizSession(quiz, user)
+Builder -> DB : Query Pertanyaan & Opsi Acak
+DB --> Builder : Data Opsi & Kunci Jawaban
+Builder --> Controller : Sesi Kuis & Soal Pertama
+Controller --> UI : Tampilkan Pertanyaan (Gambar tanpa Teks)
+
+Siswa -> UI : Tap Tombol "Dengar"
+UI -> UI : AudioManager memutar suara label target
+
+Siswa -> UI : Memilih Gambar Opsi (Tap ImageChoice)
+UI -> Controller : POST /api/quiz-attempts/{attempt}/answers
+Controller -> Controller : Validasi Jawaban & Hitung Percobaan
+Controller -> DB : Simpan ke quiz_answers
+DB --> Controller : Tersimpan
+Controller --> UI : Status Jawaban (Benar/Salah)
+
+alt Jawaban Benar
+  UI -> UI : FeedbackBar hijau "Benar! Hebat!", Tampilkan Tombol Lanjut
+else Jawaban Salah
+  UI -> UI : Opsi redup, FeedbackBar "Coba lagi ya."
+  opt Salah >= 2 kali
+    UI -> UI : Sorot opsi benar dengan outline tebal ("Lihat yang ini.")
+  end
+end
+
+Siswa -> UI : Tekan "Lanjutkan"
+UI -> Controller : Lanjut Soal Berikutnya / Finish
+Controller -> DB : Update quiz_attempts (Bintang & Nilai)
+Controller --> UI : Tampilkan Halaman Hasil (Stars + Pujian)
+
+@enduml

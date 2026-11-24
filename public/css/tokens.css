@@ -1,0 +1,57 @@
+:root {
+  /* Warna - Tema Tenang (Calm Default) */
+  --bg: #FBF8F3;
+  --surface: #FFFFFF;
+  --surface-alt: #F3EEE5;
+  --line: #D9D2C5;
+  --ink: #1F2933;
+  --ink-soft: #4B5563;
+
+  --primary: #2F6F9F;
+  --primary-strong: #25587F;
+  --on-primary: #FFFFFF;
+
+  --success: #246B4D;
+  --on-success: #FFFFFF;
+  --success-bg: #E3F2EA;
+
+  --hint-bg: #FFF4DB;
+  --hint-line: #C99A2E;
+
+  --danger: #B3261E;
+  --on-danger: #FFFFFF;
+
+  --focus: #1D4ED8;
+
+  /* Tint Kategori / Kartu Tile */
+  --tint-blue: #DCEBF7;
+  --tint-green: #DDF0E8;
+  --tint-yellow: #FCEFC7;
+  --tint-lavender: #E8E4F8;
+  --tint-peach: #FBE3D6;
+
+  /* Tipografi */
+  --font: "Lexend", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-scale: 1;
+  --fs-base: calc(1.25rem * var(--font-scale));      /* Siswa dasar 20px */
+  --fs-label: calc(1.5rem * var(--font-scale));     /* 24px */
+  --fs-title: calc(2rem * var(--font-scale));       /* 32px */
+  --fs-word: clamp(3rem, 9vw, 5rem);                /* Kata materi viewer */
+  --lh: 1.6;
+
+  /* Ruang & Ukuran Grid 8px */
+  --sp-1: 0.5rem;
+  --sp-2: 1rem;
+  --sp-3: 1.5rem;
+  --sp-4: 2rem;
+  --sp-5: 3rem;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --target-student: 64px;
+  --target-admin: 48px;
+  --border: 2px;
+
+  /* Animasi & Transisi */
+  --dur: 150ms;
+  --ease: ease-out;
+}

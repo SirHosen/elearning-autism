@@ -1,0 +1,48 @@
+@startuml
+skinparam shadowing false
+skinparam monochrome true
+
+title Diagram Aktivitas: Alur Utama Sistem EduAutis
+
+|Siswa|
+start
+:Buka Halaman Masuk;
+:Pilih Kartu "Saya Siswa";
+:Ketik Username & Tekan PIN Numpad;
+
+|Sistem|
+:Validasi Akun & Hash PIN;
+if (Akun Aktif & PIN Cocok?) then (Ya)
+  :Regenerasi Sesi & Buka Beranda Siswa;
+else (Tidak)
+  :Tampilkan Pesan Hangat "Nama atau PIN belum cocok";
+  stop
+endif
+
+|Siswa|
+:Pilih Menu Belajar;
+:Pilih Kategori (Hewan / Warna / Benda);
+
+|Sistem|
+:Tampilkan Viewer Materi (Segmentasi 1 Objek per Layar);
+
+|Siswa|
+:Tekan Tombol "Dengar" / Tap Gambar;
+
+|Sistem|
+:Putar Audio Rekaman Guru (Fallback TTS Bahasa Indonesia);
+
+|Siswa|
+:Tekan "Berikutnya" Hingga Materi Terakhir;
+:Tekan "Selesai" untuk Kembali;
+
+|Siswa|
+:Pilih Menu Absen;
+:Tekan Tombol "Saya Hadir";
+
+|Sistem|
+:Catat Kehadiran Hari Ini (Idempoten per Tanggal Server);
+:Tampilkan Status "Kamu sudah hadir hari ini";
+
+stop
+@enduml

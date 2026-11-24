@@ -1,0 +1,152 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam monochrome true
+
+class User {
+  +id: bigint
+  +name: string
+  +username: string
+  +email: string
+  +password: string
+  +role: enum(admin, siswa)
+  +class_name: string
+  +is_active: boolean
+  +last_login_at: datetime
+  +isStudent(): boolean
+  +isAdmin(): boolean
+}
+
+class UserSetting {
+  +user_id: bigint
+  +volume: int
+  +animation_level: enum(off, minimal, normal)
+  +font_scale: enum(normal, large, xlarge)
+  +theme: enum(calm, contrast)
+  +sfx_enabled: boolean
+}
+
+class Category {
+  +id: bigint
+  +name: string
+  +slug: string
+  +description: string
+  +color_key: enum
+  +sort_order: int
+  +is_active: boolean
+}
+
+class Material {
+  +id: bigint
+  +category_id: bigint
+  +label: string
+  +image_path: string
+  +audio_path: string
+  +short_sentence: string
+  +sort_order: int
+  +is_active: boolean
+}
+
+class Video {
+  +id: bigint
+  +category_id: bigint
+  +title: string
+  +source_type: enum(upload, youtube)
+  +video_path: string
+  +youtube_id: string
+  +sort_order: int
+  +is_active: boolean
+}
+
+class Game {
+  +id: bigint
+  +category_id: bigint
+  +title: string
+  +game_type: enum(pilih_benar, cocokkan, seret_tempatkan)
+  +option_count: int
+  +round_count: int
+  +instruction_text: string
+  +is_active: boolean
+}
+
+class GameSession {
+  +id: bigint
+  +user_id: bigint
+  +game_id: bigint
+  +rounds_total: int
+  +rounds_correct_first_try: int
+  +duration_seconds: int
+  +completed_at: datetime
+}
+
+class Quiz {
+  +id: bigint
+  +category_id: bigint
+  +title: string
+  +sort_order: int
+  +is_active: boolean
+}
+
+class QuizQuestion {
+  +id: bigint
+  +quiz_id: bigint
+  +correct_material_id: bigint
+  +prompt_text: string
+  +sort_order: int
+}
+
+class QuizQuestionOption {
+  +id: bigint
+  +question_id: bigint
+  +material_id: bigint
+}
+
+class QuizAttempt {
+  +id: bigint
+  +user_id: bigint
+  +quiz_id: bigint
+  +total_questions: int
+  +correct_first_try: int
+  +started_at: datetime
+  +finished_at: datetime
+}
+
+class QuizAnswer {
+  +id: bigint
+  +attempt_id: bigint
+  +question_id: bigint
+  +selected_material_id: bigint
+  +is_correct: boolean
+  +attempt_no: int
+}
+
+class Attendance {
+  +id: bigint
+  +user_id: bigint
+  +attendance_date: date
+  +status: enum(hadir, izin, sakit, alpa)
+  +checked_in_at: datetime
+  +source: enum(siswa, admin)
+  +recorded_by: bigint
+  +note: string
+}
+
+User "1" -- "1" UserSetting : has
+User "1" -- "0..*" Attendance : records
+User "1" -- "0..*" QuizAttempt : takes
+User "1" -- "0..*" GameSession : plays
+
+Category "1" -- "0..*" Material : contains
+Category "1" -- "0..*" Video : groups
+Category "1" -- "0..*" Game : feeds
+Category "1" -- "0..*" Quiz : scopes
+
+Quiz "1" -- "1..*" QuizQuestion : has
+QuizQuestion "1" -- "2..4" QuizQuestionOption : offers
+QuizQuestion "1" -- "1" Material : correct_answer
+QuizQuestionOption "1" -- "1" Material : references
+
+QuizAttempt "1" -- "1..*" QuizAnswer : logs
+Game "1" -- "0..*" GameSession : tracks
+
+@enduml
