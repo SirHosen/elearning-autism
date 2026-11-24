@@ -3,56 +3,87 @@
 @section('title', 'Ruang Belajar | EduAutis SLB B-C Wijayakusumah')
 @section('page_title', 'Ruang Belajar')
 
+@push('styles')
+<style>
+  .student-hero {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .student-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: var(--primary);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .student-greeting {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .student-subtitle {
+    color: var(--ink-soft);
+    font-size: 1.0625rem;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+</style>
+@endpush
+
 @section('content')
-<div style="text-align: center; margin-bottom: 32px;">
-  <p style="font-size: 13px; font-weight: 800; letter-spacing: 2px; color: var(--primary); margin-bottom: 6px;">RUANG BELAJAR EDUAUTIS</p>
-  <h2 style="font-size: var(--fs-title); margin-bottom: 8px;">Halo, {{ $user->name }}! 👋</h2>
-  <p style="color: var(--ink-soft); font-size: var(--fs-base); max-width: 520px; margin: 0 auto;">
+<div class="student-hero">
+  <p class="student-eyebrow">Ruang Belajar EduAutis</p>
+  <h2 class="student-greeting">Halo, {{ $user->name }}!</h2>
+  <p class="student-subtitle">
     Ayo belajar hal baru hari ini. Pilih kegiatan yang kamu sukai di bawah ini.
   </p>
 </div>
 
 <div class="tile-grid">
   <!-- 1. BELAJAR -->
-  <a href="{{ route('student.learn.index') }}" class="tile tile-blue" style="position: relative;">
-    <span class="tile-icon">🐾</span>
+  <a href="{{ route('student.learn.index') }}" class="tile tile-blue">
+    <div class="tile-monogram">B</div>
     <span class="tile-label">BELAJAR</span>
-    <small style="color: var(--ink-soft); font-size: 14px; margin-top: 4px;">Kenali hewan, warna, dan benda</small>
+    <span class="tile-desc">Kenali hewan, warna, dan benda sekitar</span>
   </a>
 
   <!-- 2. BERMAIN -->
   <a href="{{ route('student.games.index') }}" class="tile tile-green">
-    <span class="tile-icon">🎮</span>
+    <div class="tile-monogram">M</div>
     <span class="tile-label">BERMAIN</span>
-    <small style="color: var(--ink-soft); font-size: 14px; margin-top: 4px;">Permainan tebak gambar seru</small>
+    <span class="tile-desc">Permainan tebak gambar dan motorik seru</span>
   </a>
 
   <!-- 3. KUIS -->
   <a href="{{ route('student.quizzes.index') }}" class="tile tile-yellow">
-    <span class="tile-icon">⭐</span>
+    <div class="tile-monogram">K</div>
     <span class="tile-label">KUIS</span>
-    <small style="color: var(--ink-soft); font-size: 14px; margin-top: 4px;">Latihan kuis bergambar</small>
+    <span class="tile-desc">Latihan kuis bergambar dan kumpulkan bintang</span>
   </a>
 
   <!-- 4. VIDEO -->
   <a href="{{ route('student.videos.index') }}" class="tile tile-lavender">
-    <span class="tile-icon">🎬</span>
+    <div class="tile-monogram">V</div>
     <span class="tile-label">VIDEO</span>
-    <small style="color: var(--ink-soft); font-size: 14px; margin-top: 4px;">Tonton video pembelajaran</small>
+    <span class="tile-desc">Tonton video pembelajaran menarik dan bernyanyi</span>
   </a>
 
-  <!-- 5. ABSEN (Dengan Lencana Centang Jika Sudah Hadir) -->
+  <!-- 5. ABSEN -->
   <a href="{{ route('student.attendance.index') }}" class="tile tile-peach" style="position: relative;">
     @if ($hasAttendedToday)
-      <div style="position: absolute; top: 12px; right: 12px; background: var(--success); color: #fff; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; gap: 4px;">
-        <span>✓</span> <span>Sudah Hadir</span>
-      </div>
+      <span class="tile-badge-done">
+        <span>Sudah Hadir</span>
+      </span>
     @endif
-    <span class="tile-icon">📅</span>
+    <div class="tile-monogram">A</div>
     <span class="tile-label">ABSEN</span>
-    <small style="color: var(--ink-soft); font-size: 14px; margin-top: 4px;">
+    <span class="tile-desc">
       {{ $hasAttendedToday ? 'Kehadiranmu hari ini tercatat' : 'Tekan untuk mencatat kehadiranmu' }}
-    </small>
+    </span>
   </a>
 </div>
 @endsection

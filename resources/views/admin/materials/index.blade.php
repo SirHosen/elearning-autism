@@ -48,11 +48,11 @@
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
         @if ($m->audio_path)
           <span style="font-size: 11px; font-weight: 700; background: var(--success-bg); color: var(--success); padding: 3px 8px; border-radius: 10px;">
-            🎙 Rekaman Guru
+            Rekaman Guru
           </span>
         @else
           <span style="font-size: 11px; font-weight: 700; background: var(--tint-blue); color: var(--primary); padding: 3px 8px; border-radius: 10px;">
-            🤖 Suara Otomatis
+            Suara Otomatis
           </span>
         @endif
 

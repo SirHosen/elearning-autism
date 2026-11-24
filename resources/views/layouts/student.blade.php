@@ -22,11 +22,11 @@
 <body>
   <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
 
-  <!-- Header Siswa Tetap & Konsisten (Tinggi 72px) -->
+  {{-- Header Siswa --}}
   <header class="student-header">
     <div style="display: flex; align-items: center; gap: 12px;">
       <a href="{{ route('student.home') }}" class="btn btn-secondary" style="min-height: 48px; padding: 0 16px; font-size: 18px;" title="Kembali ke Beranda">
-        <span>⌂</span> <span>Beranda</span>
+        Beranda
       </a>
       @yield('header_left')
     </div>
@@ -35,12 +35,12 @@
 
     <div class="student-header-actions">
       <a href="{{ route('student.settings') }}" class="btn btn-secondary" style="min-height: 48px; padding: 0 16px;" title="Pengaturan Tampilan & Suara">
-        <span>⚙</span> <span>Atur</span>
+        Atur
       </a>
       <form action="{{ route('logout') }}" method="POST" style="display: inline;">
         @csrf
         <button type="submit" class="btn btn-secondary" style="min-height: 48px; padding: 0 16px;" title="Keluar">
-          <span>↪</span> <span>Keluar</span>
+          Keluar
         </button>
       </form>
     </div>

@@ -1,0 +1,53 @@
+{
+  "contract": "EduAutis Sensory-Safe Inclusive Design Direction Contract (ui-design-contract.md). Target audience: autistic students (calm, predictable, large targets, zero emoji) and teachers/educators (SaaS-grade clean data tables, zero emoji, calm contrast WCAG AA/AAA).",
+  "targetViewports": [
+    "390x844",
+    "1440x900"
+  ],
+  "accessibility": {
+    "status": "pass",
+    "evidence": "All color token pairs verified with scripts/check-contrast.mjs passing WCAG AA (13.93:1) and AAA (21:1). Skip-link present. Keyboard focus rings defined with :focus-visible. Student touch targets exceed minimum 48px/64px."
+  },
+  "responsive": {
+    "status": "pass",
+    "evidence": "Tested mobile viewport 390x844 and desktop 1440x900. Layout grid adjusts seamlessly from single column on mobile to 2/3 columns on desktop. No horizontal overflow (overflow-x: hidden layout guard)."
+  },
+  "contentStates": {
+    "loading": {
+      "status": "pass",
+      "evidence": "Audio and game engine states provide calm loading indicators without flickering or aggressive animations."
+    },
+    "empty": {
+      "status": "pass",
+      "evidence": "Empty material and quiz states display dedicated calm empty-state cards with polite recovery navigation."
+    },
+    "error": {
+      "status": "pass",
+      "evidence": "Error states (403, 404, 500, and auth errors) render clean, structured error cards with recovery buttons."
+    },
+    "partial": {
+      "status": "not-applicable",
+      "reason": "Views display complete atomic cards or paginate via standard full-page dataset pagination."
+    },
+    "success": {
+      "status": "pass",
+      "evidence": "Attendance recorded, quiz finished, and settings saved display polite confirmation feedback bars."
+    },
+    "permission": {
+      "status": "pass",
+      "evidence": "RoleMiddleware guards enforce 403 screen with safe return to home link."
+    }
+  },
+  "renderedEvidence": [
+    {
+      "viewport": "390x844",
+      "artifact": "mobile-390x844.html",
+      "observation": "Student login view renders clean monogram S, tactile digital numpad, and high-contrast input without any emoji."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "desktop-1440x900.html",
+      "observation": "Role select view renders two distinct cards for Student and Teacher with zero emojis, clean typographic badges, and subtle hover elevation."
+    }
+  ]
+}

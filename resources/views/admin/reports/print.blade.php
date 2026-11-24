@@ -105,7 +105,7 @@
 <body>
     <div class="no-print" style="margin-bottom: 20px; text-align: right;">
         <button onclick="window.print()" style="padding: 10px 20px; font-size: 14px; font-weight: 600; background: #1D4ED8; color: #fff; border: 0; border-radius: 6px; cursor: pointer;">
-            🖨️ Cetak Dokumen Rapor
+            Cetak Dokumen Rapor
         </button>
     </div>
 
@@ -137,7 +137,7 @@
         </div>
         <div class="stat-card">
             <div>Total Bintang</div>
-            <div class="val">⭐ {{ $summary['total_stars'] }}</div>
+            <div class="val">{{ $summary['total_stars'] }} Bintang</div>
         </div>
         <div class="stat-card">
             <div>Hari Hadir</div>
@@ -168,7 +168,7 @@
                     <td>{{ $q->created_at->format('d/m/Y H:i') }}</td>
                     <td>{{ $q->correct_first_try }} dari {{ $q->total_questions }}</td>
                     <td>{{ $pct }}%</td>
-                    <td>{{ str_repeat('⭐', $q->calculateStars()) }}</td>
+                    <td>{{ $q->calculateStars() }} Bintang</td>
                 </tr>
             @empty
                 <tr>
@@ -198,7 +198,7 @@
                     <td>{{ $g->created_at->format('d/m/Y H:i') }}</td>
                     <td>{{ $g->rounds_correct_first_try }} / {{ $g->rounds_total }}</td>
                     <td>{{ gmdate('i:s', $g->duration_seconds) }}</td>
-                    <td>{{ str_repeat('⭐', $g->stars_earned) }}</td>
+                    <td>{{ $g->stars_earned }} Bintang</td>
                 </tr>
             @empty
                 <tr>

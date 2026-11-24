@@ -20,7 +20,7 @@ class DashboardController extends Controller
             ->where('is_active', true)
             ->get();
 
-        $todayAttendances = Attendance::where('attendance_date', $today)->get();
+        $todayAttendances = Attendance::whereDate('attendance_date', $today)->get();
         $attendedUserIds = $todayAttendances->pluck('user_id')->toArray();
 
         $todayAttendedCount = $todayAttendances->where('status', 'hadir')->count();
