@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'app_name' => 'SLB B-C Wijayakusumah',
+    'greeting' => 'Halo, :name!',
+    'menu_learn' => 'Belajar',
+    'menu_play' => 'Bermain',
+    'menu_quiz' => 'Kuis',
+    'menu_video' => 'Video',
+    'menu_attendance' => 'Absen',
+    'hear' => 'Dengar',
+    'hearing' => 'Sedang berbunyi',
+    'sound_unavailable' => 'Suara tidak tersedia',
+    'correct' => 'Benar! Hebat!',
+    'try_again' => 'Coba lagi ya.',
+    'hint' => 'Lihat yang ini.',
+    'finish' => 'Selamat! Kamu sudah selesai.',
+    'stars_3' => 'Hebat sekali!',
+    'stars_2' => 'Bagus!',
+    'stars_1' => 'Terima kasih sudah belajar!',
+    'present_btn' => 'Saya Hadir',
+    'present_done' => 'Kamu sudah hadir hari ini.',
+    'present_status' => 'Hari ini tercatat: :status.',
+    'generic_error' => 'Ups, ada yang salah. Coba lagi ya.',
+    'empty_content' => 'Belum ada isinya. Minta bantuan guru ya.',
+    'login_failed' => 'Nama atau PIN belum cocok. Coba lagi ya.',
+    'throttle_wait' => 'Tunggu sebentar, lalu coba lagi.',
+];
