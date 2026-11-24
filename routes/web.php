@@ -4,12 +4,14 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
 use App\Http\Controllers\Admin\MaterialController;
+use App\Http\Controllers\Admin\QuizController as AdminQuizController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Student\GameController as StudentGameController;
 use App\Http\Controllers\Student\HomeController;
 use App\Http\Controllers\Student\LearnController;
+use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use App\Http\Controllers\Student\SettingController;
 use App\Http\Controllers\Student\VideoController as StudentVideoController;
 use Illuminate\Support\Facades\Route;
@@ -54,9 +56,12 @@ Route::middleware(['auth', 'role:siswa'])->name('student.')->group(function () {
     Route::get('/api/games/{game}/rounds', [StudentGameController::class, 'getRounds'])->name('games.rounds');
     Route::post('/api/games/{game}/sessions', [StudentGameController::class, 'storeSession'])->name('games.session');
 
-    // Placeholder rute untuk fase 2.6 - 2.7
-    Route::get('/kuis', fn () => redirect()->route('student.home'))->name('quizzes.index');
-    Route::get('/kuis/{quiz}', fn () => redirect()->route('student.home'))->name('quizzes.play');
+    // Modul Kuis
+    Route::get('/kuis', [StudentQuizController::class, 'index'])->name('quizzes.index');
+    Route::get('/kuis/{quiz}', [StudentQuizController::class, 'play'])->name('quizzes.play');
+    Route::post('/api/quizzes/{quiz}/attempts', [StudentQuizController::class, 'startAttempt'])->name('quizzes.start');
+    Route::post('/api/quiz-attempts/{attempt}/answers', [StudentQuizController::class, 'submitAnswer'])->name('quizzes.answer');
+    Route::post('/api/quiz-attempts/{attempt}/finish', [StudentQuizController::class, 'finishAttempt'])->name('quizzes.finish');
     // Modul Video
     Route::get('/video', [StudentVideoController::class, 'index'])->name('videos.index');
     Route::get('/video/{video}', [StudentVideoController::class, 'show'])->name('videos.show');
@@ -96,7 +101,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         ->names('games')
         ->parameters(['permainan' => 'game']);
     Route::post('permainan/{game}/toggle', [AdminGameController::class, 'toggleActive'])->name('games.toggle');
-    Route::get('/kuis', fn () => redirect()->route('admin.dashboard'))->name('quizzes.index');
+    // CRUD Kuis & Soal
+    Route::resource('kuis', AdminQuizController::class)
+        ->names('quizzes')
+        ->parameters(['kuis' => 'quiz']);
+    Route::post('kuis/{quiz}/toggle', [AdminQuizController::class, 'toggleActive'])->name('quizzes.toggle');
+    Route::get('kuis/{quiz}/soal', [AdminQuizController::class, 'questions'])->name('quizzes.questions');
+    Route::post('kuis/{quiz}/soal', [AdminQuizController::class, 'storeQuestion'])->name('quizzes.questions.store');
+    Route::delete('kuis/soal/{question}', [AdminQuizController::class, 'destroyQuestion'])->name('quizzes.questions.destroy');
+    Route::post('kuis/generator-otomatis', [AdminQuizController::class, 'autoGenerate'])->name('quizzes.auto-generate');
     Route::get('/absensi', fn () => redirect()->route('admin.dashboard'))->name('attendances.index');
     Route::get('/hasil', fn () => redirect()->route('admin.dashboard'))->name('reports.index');
     Route::get('/profil', fn () => redirect()->route('admin.dashboard'))->name('profile');
