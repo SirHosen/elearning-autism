@@ -10,7 +10,7 @@
     </div>
     <div>
         <a href="{{ route('admin.attendances.export', ['date' => $date]) }}" class="btn btn-secondary">
-            📥 Export CSV Absensi
+            Export CSV
         </a>
     </div>
 </div>
@@ -71,7 +71,7 @@
                     <td>
                         @if($att)
                             <span style="font-size: 0.875rem;">
-                                {{ $att->source === 'siswa' ? '📱 Mandiri' : '👨‍🏫 Guru' }}
+                                {{ $att->source === 'siswa' ? 'Mandiri' : 'Guru' }}
                             </span>
                         @else
                             -

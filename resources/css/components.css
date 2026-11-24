@@ -1,4 +1,4 @@
-/* Komponen Siswa & Admin */
+/* Komponen Siswa & Admin - EduAutis Design System */
 
 /* 1. BUTTONS */
 .btn {
@@ -7,16 +7,18 @@
   justify-content: center;
   gap: var(--sp-1);
   border: var(--border) solid transparent;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
+  line-height: 1.2;
   transition: background-color var(--dur) var(--ease),
               border-color var(--dur) var(--ease),
-              transform var(--dur) var(--ease);
+              transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
 }
 
-/* Tombol Siswa (Area Sentuh Min 64px) */
+/* Tombol Siswa (Area Sentuh Min 64px Sesuai Sensory Standard) */
 .btn-student {
   min-height: var(--target-student);
   padding: 0 var(--sp-4);
@@ -42,6 +44,7 @@
 
 .btn-secondary:hover {
   background-color: var(--surface-alt);
+  border-color: var(--primary);
 }
 
 .btn-soft {
@@ -50,9 +53,29 @@
   border-color: var(--success);
 }
 
+.btn-soft:hover {
+  background-color: #d1ecde;
+}
+
 .btn-danger {
   background-color: var(--danger);
   color: var(--on-danger);
+  border-color: #8c1d18;
+}
+
+.btn-danger:hover {
+  background-color: #962019;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+
+.btn-outline:hover {
+  background-color: var(--surface-alt);
+  color: var(--ink);
 }
 
 .btn[disabled], .btn.disabled {
@@ -66,29 +89,38 @@
   background-color: var(--surface);
   border: var(--border) solid var(--line);
   color: var(--primary);
-  padding: 12px 24px;
+  padding: 14px 28px;
   border-radius: var(--radius);
   font-size: var(--fs-label);
+  font-weight: 800;
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+
+.btn-speaker:hover {
+  border-color: var(--primary);
+  background-color: var(--surface-alt);
 }
 
 .btn-speaker.is-playing {
   border-color: var(--primary);
   background-color: var(--tint-blue);
+  color: var(--primary-strong);
 }
 
 /* 3. TILES NAVIGASI SISWA */
 .tile-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: 20px;
   max-width: 1100px;
   margin: 0 auto;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 540px) {
   .tile-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -101,47 +133,111 @@
 }
 
 .tile {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--sp-4);
+  align-items: flex-start;
+  text-align: left;
+  padding: 28px 24px;
   min-height: 180px;
   background-color: var(--surface);
   border: var(--border) solid var(--line);
   border-radius: var(--radius);
   text-decoration: none;
   color: var(--ink);
-  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+
+.tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
 }
 
 .tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(31, 41, 51, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(31, 41, 51, 0.09);
 }
 
-.tile-blue { background-color: var(--tint-blue); }
-.tile-green { background-color: var(--tint-green); }
-.tile-yellow { background-color: var(--tint-yellow); }
-.tile-lavender { background-color: var(--tint-lavender); }
-.tile-peach { background-color: var(--tint-peach); }
+.tile-blue::before { background-color: var(--primary); }
+.tile-green::before { background-color: var(--success); }
+.tile-yellow::before { background-color: #D97706; }
+.tile-lavender::before { background-color: #7C3AED; }
+.tile-peach::before { background-color: #EA580C; }
 
-.tile-icon {
-  font-size: 64px;
-  margin-bottom: var(--sp-2);
+.tile-blue:hover { border-color: var(--primary); }
+.tile-green:hover { border-color: var(--success); }
+.tile-yellow:hover { border-color: #D97706; }
+.tile-lavender:hover { border-color: #7C3AED; }
+.tile-peach:hover { border-color: #EA580C; }
+
+.tile-monogram {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  line-height: 1;
 }
+
+.tile-blue .tile-monogram { background-color: var(--tint-blue); color: var(--primary); }
+.tile-green .tile-monogram { background-color: var(--tint-green); color: var(--success); }
+.tile-yellow .tile-monogram { background-color: var(--tint-yellow); color: #B45309; }
+.tile-lavender .tile-monogram { background-color: var(--tint-lavender); color: #6D28D9; }
+.tile-peach .tile-monogram { background-color: var(--tint-peach); color: #C2410C; }
 
 .tile-label {
-  font-size: var(--fs-label);
+  font-size: 1.375rem;
   font-weight: 800;
   color: var(--ink);
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+.tile-desc {
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  margin-top: 2px;
+}
+
+.tile-badge-done {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: var(--success-bg);
+  color: var(--success);
+  border: 1px solid rgba(36, 107, 77, 0.25);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tile-badge-done::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--success);
 }
 
 /* 4. FEEDBACK BAR */
 .feedback-bar {
-  min-height: 56px;
-  padding: 12px 24px;
+  min-height: 52px;
+  padding: 12px 20px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -155,13 +251,13 @@
 .feedback-success {
   background-color: var(--success-bg);
   color: var(--success);
-  border-color: var(--success);
+  border-color: rgba(36, 107, 77, 0.25);
 }
 
 .feedback-hint {
   background-color: var(--hint-bg);
-  color: var(--ink);
-  border-color: var(--hint-line);
+  color: #854D0E;
+  border-color: rgba(201, 154, 46, 0.35);
 }
 
 /* 5. IMAGE CHOICE (KARTU PILIHAN KUIS/GAME) */
@@ -189,10 +285,11 @@
 
 .image-choice:hover {
   border-color: var(--primary);
+  transform: translateY(-2px);
 }
 
 .image-choice.is-dimmed {
-  opacity: 0.45;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
@@ -202,7 +299,7 @@
 }
 
 .image-choice.is-hinted {
-  border: 4px solid var(--hint-line);
+  border: 3px solid var(--hint-line);
   background-color: var(--hint-bg);
 }
 
@@ -210,24 +307,198 @@
 .numpad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 12px;
   max-width: 320px;
   margin: 0 auto;
 }
 
 .numpad-btn {
-  height: 72px;
-  font-size: 28px;
+  height: 68px;
+  font-size: 26px;
   font-weight: 800;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   background-color: var(--surface);
   border: var(--border) solid var(--line);
+  color: var(--ink);
   cursor: pointer;
   display: grid;
   place-items: center;
+  transition: all var(--dur) var(--ease);
 }
 
 .numpad-btn:hover {
   background-color: var(--surface-alt);
+  border-color: var(--primary);
+}
+
+.btn:active,
+.tile:active,
+.numpad-btn:active {
+  transform: translateY(1px);
+}
+
+/* 7. CARD & FORM CONTROL */
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-control {
+  width: 100%;
+  min-height: var(--target-admin);
+  padding: 0 14px;
+  background-color: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(47, 111, 159, 0.18);
+}
+
+/* 8. STAT CARD ADMIN */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 22px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  bottom: 0;
+  background-color: var(--line);
+}
+
+.stat-card:nth-child(1)::before { background-color: var(--primary); }
+.stat-card:nth-child(2)::before { background-color: var(--success); }
+.stat-card:nth-child(3)::before { background-color: #D97706; }
+.stat-card:nth-child(4)::before { background-color: #7C3AED; }
+
+.stat-card-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.stat-card-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+}
+
+/* 9. BADGE / PILL SYSTEM (ZERO EMOJI) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.badge-primary { background: var(--tint-blue); color: var(--primary); }
+.badge-success { background: var(--success-bg); color: var(--success); }
+.badge-warning { background: var(--hint-bg); color: #B45309; }
+.badge-danger  { background: #FEE2E2; color: #991B1B; }
+.badge-neutral { background: var(--surface-alt); color: var(--ink-soft); }
+
+/* 10. ADMIN TABLE SYSTEM */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.admin-table th {
+  background-color: var(--surface-alt);
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: middle;
+}
+
+.admin-table tr:hover td {
+  background-color: rgba(243, 238, 229, 0.4);
+}
+
+.table-container {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+/* 11. FILTER & SEARCH BAR */
+.filter-bar {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-bar input,
+.filter-bar select {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  color: var(--ink);
+  font-size: 0.875rem;
+}
+
+.filter-bar input:focus,
+.filter-bar select:focus {
+  outline: none;
   border-color: var(--primary);
 }

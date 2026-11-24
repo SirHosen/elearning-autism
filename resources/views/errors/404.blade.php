@@ -12,14 +12,14 @@
 </head>
 <body style="display: grid; place-items: center; min-height: 100vh; padding: 24px; background: var(--bg);">
   <div class="card" style="padding: 48px 32px; max-width: 520px; width: 100%; text-align: center; border-radius: var(--radius-xl); background: var(--surface); box-shadow: var(--shadow-sm);">
-    <div style="font-size: 80px; margin-bottom: 16px;">🛌</div>
+    <div style="width: 80px; height: 80px; border-radius: 20px; background: var(--tint-blue); color: var(--primary); font-size: 2rem; font-weight: 800; display: grid; place-items: center; margin: 0 auto 20px;">404</div>
     <h1 style="font-size: 1.875rem; color: var(--text); margin-bottom: 12px; line-height: 1.3;">Halaman Sedang Istirahat</h1>
     <p style="color: var(--text-muted); font-size: 1.125rem; margin-bottom: 32px; line-height: 1.5;">
       Ups, halaman yang kamu cari sedang tidur atau belum ada. Ayo kembali ke menu utama bersama teman-teman!
     </p>
     <div style="display: flex; justify-content: center;">
       <a href="/beranda" class="btn btn-primary" style="font-size: 1.25rem; font-weight: 700; padding: 16px 36px; border-radius: var(--radius-full); text-decoration: none;">
-        Kembali ke Menu Utama ⌂
+        Kembali ke Menu Utama
       </a>
     </div>
   </div>

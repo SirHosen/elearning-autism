@@ -14,7 +14,7 @@ class HomeController extends Controller
         $today = now()->format('Y-m-d');
 
         $attendanceToday = Attendance::where('user_id', $user->id)
-            ->where('attendance_date', $today)
+            ->whereDate('attendance_date', $today)
             ->first();
 
         return view('student.home', [

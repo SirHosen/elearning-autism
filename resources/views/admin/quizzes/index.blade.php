@@ -10,7 +10,7 @@
     </div>
     <div style="display: flex; gap: var(--space-3);">
         <button type="button" class="btn btn-secondary" onclick="document.getElementById('auto-quiz-modal').style.display='flex'">
-            ⚡ Generator Kuis Otomatis
+            Generator Kuis Otomatis
         </button>
         <a href="{{ route('admin.quizzes.create') }}" class="btn btn-primary">
             + Tambah Kuis Manual
