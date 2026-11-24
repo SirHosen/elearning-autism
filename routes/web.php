@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\GameController as AdminGameController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Student\GameController as StudentGameController;
 use App\Http\Controllers\Student\HomeController;
 use App\Http\Controllers\Student\LearnController;
 use App\Http\Controllers\Student\SettingController;
@@ -46,9 +48,13 @@ Route::middleware(['auth', 'role:siswa'])->name('student.')->group(function () {
     Route::get('/pengaturan', [SettingController::class, 'index'])->name('settings');
     Route::put('/pengaturan', [SettingController::class, 'update'])->name('settings.update');
 
-    // Placeholder rute untuk fase 2.4 - 2.7
-    Route::get('/bermain', fn () => redirect()->route('student.home'))->name('games.index');
-    Route::get('/bermain/{game}', fn () => redirect()->route('student.home'))->name('games.play');
+    // Modul Permainan
+    Route::get('/bermain', [StudentGameController::class, 'index'])->name('games.index');
+    Route::get('/bermain/{game}', [StudentGameController::class, 'play'])->name('games.play');
+    Route::get('/api/games/{game}/rounds', [StudentGameController::class, 'getRounds'])->name('games.rounds');
+    Route::post('/api/games/{game}/sessions', [StudentGameController::class, 'storeSession'])->name('games.session');
+
+    // Placeholder rute untuk fase 2.6 - 2.7
     Route::get('/kuis', fn () => redirect()->route('student.home'))->name('quizzes.index');
     Route::get('/kuis/{quiz}', fn () => redirect()->route('student.home'))->name('quizzes.play');
     // Modul Video
@@ -85,7 +91,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         ->names('videos')
         ->parameters(['video' => 'video']);
     Route::post('video/{video}/toggle', [AdminVideoController::class, 'toggleActive'])->name('videos.toggle');
-    Route::get('/permainan', fn () => redirect()->route('admin.dashboard'))->name('games.index');
+    // CRUD Permainan
+    Route::resource('permainan', AdminGameController::class)
+        ->names('games')
+        ->parameters(['permainan' => 'game']);
+    Route::post('permainan/{game}/toggle', [AdminGameController::class, 'toggleActive'])->name('games.toggle');
     Route::get('/kuis', fn () => redirect()->route('admin.dashboard'))->name('quizzes.index');
     Route::get('/absensi', fn () => redirect()->route('admin.dashboard'))->name('attendances.index');
     Route::get('/hasil', fn () => redirect()->route('admin.dashboard'))->name('reports.index');

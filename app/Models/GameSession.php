@@ -15,6 +15,7 @@ class GameSession extends Model
         'game_id',
         'rounds_total',
         'rounds_correct_first_try',
+        'stars_earned',
         'duration_seconds',
         'completed_at',
     ];
@@ -22,6 +23,7 @@ class GameSession extends Model
     protected $casts = [
         'rounds_total' => 'integer',
         'rounds_correct_first_try' => 'integer',
+        'stars_earned' => 'integer',
         'duration_seconds' => 'integer',
         'completed_at' => 'datetime',
     ];
@@ -34,5 +36,24 @@ class GameSession extends Model
     public function game(): BelongsTo
     {
         return $this->belongsTo(Game::class, 'game_id');
+    }
+
+    public static function calculateStars(int $totalRounds, int $correctFirstTry): int
+    {
+        if ($totalRounds <= 0) {
+            return 1;
+        }
+
+        $percentage = ($correctFirstTry / $totalRounds) * 100;
+
+        if ($percentage >= 100) {
+            return 3;
+        }
+
+        if ($percentage >= 70) {
+            return 2;
+        }
+
+        return 1;
     }
 }
