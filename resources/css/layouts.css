@@ -115,3 +115,23 @@
     border-bottom: var(--border) solid var(--line);
   }
 }
+
+/* Layout Guard: Menjamin tidak ada overflow horizontal pada viewport 360px */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@media (max-width: 480px) {
+  .student-container {
+    padding: var(--sp-2) var(--sp-1);
+  }
+
+  .student-header {
+    padding: 0 var(--sp-2);
+  }
+
+  .student-header-title {
+    font-size: 1.125rem;
+  }
+}
