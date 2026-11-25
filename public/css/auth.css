@@ -1,6 +1,7 @@
 /* ==========================================================================
    Sahabat Belajar (SLB B-C Wijayakusumah) - Auth Stylesheet
-   Background photo (bg.png) + frosted glass cards + Murid & Guru covers.
+   Unified glass surfaces over bg.png, child-friendly student PIN card,
+   and polished teacher login card.
    ========================================================================== */
 
 .auth-body {
@@ -16,7 +17,6 @@
   color: var(--ink);
 }
 
-/* Soft depth-of-field scrim so foreground cards pop clearly over sunny schoolyard */
 .auth-body::before {
   content: '';
   position: fixed;
@@ -25,14 +25,14 @@
   z-index: 0;
   background: linear-gradient(
     180deg,
-    rgba(240, 246, 252, 0.24) 0%,
+    rgba(240, 246, 252, 0.22) 0%,
     rgba(247, 244, 237, 0.42) 100%
   );
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
 
-/* ── Main Centered Stage ── */
+/* ── Main Stage ── */
 .auth-stage {
   position: relative;
   z-index: 1;
@@ -41,8 +41,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 32px 20px 36px;
-  gap: 22px;
+  padding: 24px 20px 28px;
+  gap: 18px;
 }
 
 /* ── Frosted Brand Pill ── */
@@ -98,7 +98,7 @@
 
 .role-header {
   text-align: center;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   padding: 16px 32px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.88);
@@ -158,15 +158,10 @@
     0 28px 56px -12px rgba(20, 42, 66, 0.24);
 }
 
-.role-card--student:hover {
-  border-color: var(--primary);
-}
+.role-card--student:hover { border-color: var(--primary); }
+.role-card--teacher:hover { border-color: var(--success); }
 
-.role-card--teacher:hover {
-  border-color: var(--success);
-}
-
-/* Illustration cover area */
+/* Shared Illustrated Cover Header */
 .role-card__cover {
   position: relative;
   width: 100%;
@@ -215,13 +210,8 @@
   box-shadow: 0 2px 8px rgba(20, 42, 66, 0.12);
 }
 
-.role-card--student .role-card__tag {
-  color: var(--primary-strong);
-}
-
-.role-card--teacher .role-card__tag {
-  color: var(--success);
-}
+.role-card--student .role-card__tag { color: var(--primary-strong); }
+.role-card--teacher .role-card__tag { color: var(--success); }
 
 .role-card__body {
   padding: 18px 10px 8px;
@@ -278,25 +268,26 @@
   color: #FFFFFF;
 }
 
-/* ── Single Card Login Views (/masuk/siswa & /masuk/guru) ── */
-.login-wrap {
-  width: 100%;
-  max-width: 430px;
+/* ── Top Navigation Row above Login Cards ── */
+.login-nav-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
-.login-back {
+.login-nav-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  align-self: flex-start;
-  margin-bottom: 14px;
-  padding: 7px 14px;
+  padding: 8px 16px;
+  min-height: 40px;
   background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.94);
   border-radius: 999px;
   color: var(--ink);
   text-decoration: none;
@@ -306,69 +297,319 @@
   transition: transform var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
 
-.login-back:hover {
+.login-nav-pill:hover {
   background: #FFFFFF;
-  transform: translateX(-2px);
+  transform: translateY(-1px);
 }
 
-.login-card {
-  position: relative;
+.login-nav-pill--accent-green {
+  color: var(--success);
+}
+
+.login-nav-pill--accent-blue {
+  color: var(--primary-strong);
+}
+
+/* ── Student Wide Interactive Card (/masuk/siswa) ── */
+.student-wrap {
+  width: 100%;
+  max-width: 780px;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-card {
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1.5px solid rgba(255, 255, 255, 0.95);
   border-radius: 24px;
-  padding: 34px 32px 30px;
-  overflow: hidden;
+  padding: 18px;
   box-shadow:
     0 8px 22px rgba(20, 42, 66, 0.09),
     0 24px 52px -12px rgba(20, 42, 66, 0.20);
 }
 
-.login-card__accent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
+.student-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.04fr;
+  gap: 20px;
+  align-items: stretch;
 }
 
-.login-card__accent--blue { background: var(--primary); }
-.login-card__accent--green { background: var(--success); }
-
-.login-card__head {
-  margin-bottom: 24px;
+.sl-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.login-role-pill {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-bottom: 12px;
+.sl-left__content {
+  padding: 4px 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
 }
 
-.login-role-pill--blue {
-  background: var(--tint-blue);
-  color: var(--primary-strong);
+.sl-head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.login-role-pill--green {
-  background: var(--success-bg);
-  color: var(--success);
-}
-
-.login-card__title {
+.sl-title {
   font-size: 1.625rem;
   font-weight: 700;
   color: var(--ink);
   letter-spacing: -0.02em;
-  margin: 0 0 6px;
+  margin: 0 0 4px;
+  line-height: 1.2;
+}
+
+.sl-desc {
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Gentle Voice Assist Button */
+.sl-voice-btn {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1.5px solid #C8DDF0;
+  background: #EDF4FA;
+  color: var(--primary-strong);
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+.sl-voice-btn:hover {
+  background: var(--tint-blue);
+  border-color: var(--primary);
+}
+
+.sl-voice-btn.is-speaking {
+  background: var(--primary);
+  border-color: var(--primary-strong);
+  color: #FFFFFF;
+}
+
+.sl-voice-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Right PIN Keypad Panel */
+.sl-right {
+  background: #F4F8FC;
+  border: 1.5px solid #DCE7F2;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sl-pin-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sl-pin-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sl-pin-toggle {
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid #C8D9EA;
+  background: #FFFFFF;
+  color: var(--primary-strong);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease);
+}
+
+.sl-pin-toggle:hover {
+  background: #E8F2FA;
+}
+
+.sl-pin-toggle.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+}
+
+/* 6 Interactive PIN Box Slots */
+.pin-slots {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.pin-box {
+  height: 46px;
+  border-radius: 12px;
+  border: 2px dashed #C3D4E6;
+  background: rgba(255, 255, 255, 0.85);
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-strong);
+  transition:
+    border-color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.pin-box:nth-child(-n+4) {
+  border-style: solid;
+  border-color: #CBD5E1;
+}
+
+.pin-box.is-filled {
+  border-style: solid;
+  border-color: var(--primary);
+  background: #FFFFFF;
+  transform: scale(1.03);
+  box-shadow: 0 2px 6px rgba(47, 111, 159, 0.14);
+}
+
+.pin-box.is-just-entered {
+  background: var(--tint-blue);
+  color: var(--primary-strong);
+}
+
+/* Tactile Keypad */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+
+.keypad-btn {
+  min-height: 60px;
+  border-radius: 14px;
+  border: 1.5px solid #D3DFEB;
+  border-bottom-width: 3px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1.375rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.keypad-btn:hover {
+  background: #EBF3FA;
+  border-color: var(--primary);
+}
+
+.keypad-btn:active,
+.keypad-btn.is-pressed {
+  transform: translateY(1px);
+  border-bottom-width: 1.5px;
+  background: #DCEBF7;
+}
+
+.keypad-btn--clear {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--danger);
+  background: #FFF8F8;
+  border-color: #E8CBC8;
+}
+
+.keypad-btn--clear:hover {
+  background: #FEE2E2;
+  border-color: var(--danger);
+}
+
+.keypad-btn--submit {
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--primary);
+  border-color: var(--primary-strong);
+  color: var(--on-primary);
+}
+
+.keypad-btn--submit:hover {
+  background: var(--primary-strong);
+  border-color: #1D4564;
+  color: #FFFFFF;
+}
+
+/* ── Teacher Login Card (/masuk/guru) ── */
+.teacher-wrap {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+}
+
+.teacher-card {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 14px;
+  box-shadow:
+    0 8px 22px rgba(20, 42, 66, 0.09),
+    0 24px 52px -12px rgba(20, 42, 66, 0.20);
+}
+
+.teacher-card .role-card__cover {
+  aspect-ratio: 16 / 7.5;
+}
+
+.teacher-card .role-card__illus {
+  object-position: center 18%;
+}
+
+.teacher-body {
+  padding: 20px 14px 14px;
+}
+
+.teacher-head {
+  margin-bottom: 20px;
+}
+
+.teacher-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 4px;
   line-height: 1.25;
 }
 
-.login-card__desc {
+.teacher-desc {
   font-size: 0.9375rem;
   color: var(--ink-soft);
   margin: 0;
@@ -387,7 +628,7 @@
   color: #78350F;
   font-size: 0.875rem;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   line-height: 1.45;
 }
 
@@ -405,17 +646,17 @@
   margin-top: 1px;
 }
 
-/* Form Elements */
+/* Shared Form Controls */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 .login-field {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 6px;
 }
 
 .login-label-row {
@@ -436,6 +677,32 @@
   font-weight: 600;
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
+}
+
+.login-caps-badge {
+  display: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--hint-bg);
+  border: 1px solid var(--hint-line);
+  color: #78350F;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.login-caps-badge.is-visible {
+  display: inline-block;
+}
+
+.login-valid-tag {
+  display: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.login-valid-tag.is-visible {
+  display: inline-block;
 }
 
 .login-input-wrap {
@@ -569,138 +836,13 @@
   transform: translateY(1px);
 }
 
-/* Student PIN Dots & Keypad */
-.pin-tray {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  min-height: 50px;
-  padding: 10px 16px;
-  background: #F9F7F3;
-  border: 1.5px solid #D9D2C5;
-  border-radius: 14px;
-}
-
-.pin-slot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #C8BFB0;
-  background: var(--surface);
-  transition:
-    background-color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
-}
-
-.pin-slot--optional {
-  border-style: dashed;
-  opacity: 0.7;
-}
-
-.pin-slot.is-filled {
-  background: var(--primary);
-  border-color: var(--primary);
-  border-style: solid;
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.keypad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 6px;
-}
-
-.keypad-btn {
-  min-height: 64px;
-  border-radius: 14px;
-  border: 1.5px solid #D9D2C5;
-  border-bottom-width: 3px;
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 1.375rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  transition:
-    background-color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
-}
-
-.keypad-btn:hover {
-  background: #F7F4ED;
-  border-color: var(--primary);
-}
-
-.keypad-btn:active {
-  transform: translateY(1px);
-  border-bottom-width: 1.5px;
-}
-
-.keypad-btn--clear {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: var(--danger);
-  background: #FFF9F9;
-  border-color: #E8CBC8;
-}
-
-.keypad-btn--clear:hover {
-  background: #FEE2E2;
-  border-color: var(--danger);
-}
-
-.keypad-btn--submit {
-  font-size: 1rem;
-  font-weight: 700;
-  background: var(--primary);
-  border-color: var(--primary-strong);
-  color: var(--on-primary);
-}
-
-.keypad-btn--submit:hover {
-  background: var(--primary-strong);
-  border-color: #1D4564;
-}
-
-/* Frosted switch pill below login card */
-.login-switch-alt {
-  align-self: center;
-  margin-top: 16px;
-  padding: 7px 16px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.92);
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--ink-soft);
-  box-shadow: 0 3px 10px rgba(20, 42, 66, 0.08);
-}
-
-.login-switch-alt a {
-  color: var(--primary-strong);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.login-switch-alt a:hover {
-  text-decoration: underline;
-}
-
 /* Minimal Frosted School Footer */
 .auth-footer {
   position: relative;
   z-index: 1;
   display: flex;
   justify-content: center;
-  padding: 0 20px 24px;
+  padding: 0 20px 22px;
 }
 
 .auth-footer span {
@@ -716,10 +858,21 @@
 }
 
 /* ── Responsive ── */
+@media (max-width: 740px) {
+  .student-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .student-wrap {
+    max-width: 460px;
+  }
+}
+
 @media (max-width: 640px) {
   .auth-stage {
-    padding: 20px 16px 28px;
-    gap: 18px;
+    padding: 18px 14px 24px;
+    gap: 16px;
   }
 
   .role-header {
@@ -731,8 +884,17 @@
     gap: 16px;
   }
 
-  .login-card {
-    padding: 28px 22px 24px;
+  .student-card,
+  .teacher-card {
+    padding: 12px;
     border-radius: 20px;
+  }
+
+  .teacher-body {
+    padding: 18px 10px 10px;
+  }
+
+  .pin-box {
+    height: 42px;
   }
 }
