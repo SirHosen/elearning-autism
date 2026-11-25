@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Ruang Belajar | EduAutis SLB B-C Wijayakusumah')
+@section('title', 'Ruang Belajar | Sahabat Belajar')
 @section('page_title', 'Ruang Belajar')
 
 @push('styles')
@@ -36,7 +36,7 @@
 
 @section('content')
 <div class="student-hero">
-  <p class="student-eyebrow">Ruang Belajar EduAutis</p>
+  <p class="student-eyebrow">SLB B-C Wijayakusumah</p>
   <h2 class="student-greeting">Halo, {{ $user->name }}!</h2>
   <p class="student-subtitle">
     Ayo belajar hal baru hari ini. Pilih kegiatan yang kamu sukai di bawah ini.

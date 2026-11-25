@@ -111,7 +111,7 @@
 
     <div class="header">
         <h1>SLB B-C WIJAYAKUSUMAH</h1>
-        <h2>Laporan Hasil Belajar Siswa (Platform EduAutis)</h2>
+        <h2>Laporan Hasil Belajar Siswa (Sahabat Belajar)</h2>
         <p>Jl. Wijayakusumah, Sumedang &bull; Tanggal Cetak: {{ now()->translatedFormat('d F Y') }}</p>
     </div>
 
@@ -121,7 +121,7 @@
             <p><strong>Nama Pengguna (Username):</strong> {{ $student->username }}</p>
         </div>
         <div>
-            <p><strong>Peran:</strong> Siswa Berkebutuhan Khusus (Autisme)</p>
+            <p><strong>Satuan Pendidikan:</strong> SLB B-C Wijayakusumah</p>
             <p><strong>Status Belajar:</strong> Aktif</p>
         </div>
     </div>

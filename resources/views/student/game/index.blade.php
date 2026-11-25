@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Permainan Edukasi | EduAutis')
+@section('title', 'Permainan Edukasi | Sahabat Belajar')
 @section('page_title', 'Permainan Edukasi')
 
 @section('content')

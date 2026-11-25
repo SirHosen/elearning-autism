@@ -34,7 +34,7 @@
 
   <div class="card">
     <div>
-      <div class="header">KARTU MASUK RUANG BELAJAR EDUAUTIS</div>
+      <div class="header">KARTU MASUK SAHABAT BELAJAR</div>
       <div class="school">SLB B-C Wijayakusumah</div>
     </div>
 

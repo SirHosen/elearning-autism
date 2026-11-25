@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Kategori Kosong | EduAutis')
+@section('title', 'Kategori Kosong | Sahabat Belajar')
 @section('page_title', $category->name)
 
 @section('header_left')

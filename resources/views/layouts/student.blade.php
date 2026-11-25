@@ -11,7 +11,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title', 'EduAutis | SLB B-C Wijayakusumah')</title>
+  <title>@yield('title', 'Sahabat Belajar | SLB B-C Wijayakusumah')</title>
   <link rel="stylesheet" href="/css/tokens.css">
   <link rel="stylesheet" href="/css/themes.css">
   <link rel="stylesheet" href="/css/base.css">
@@ -31,7 +31,7 @@
       @yield('header_left')
     </div>
 
-    <h1 class="student-header-title">@yield('page_title', 'EduAutis')</h1>
+    <h1 class="student-header-title">@yield('page_title', 'Sahabat Belajar')</h1>
 
     <div class="student-header-actions">
       <a href="{{ route('student.settings') }}" class="btn btn-secondary" style="min-height: 48px; padding: 0 16px;" title="Pengaturan Tampilan & Suara">

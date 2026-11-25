@@ -1,58 +1,58 @@
 {
-  "contract": "EduAutis Sensory-Safe Inclusive Design Direction Contract (ui-design-contract.md). Target audience: autistic students (calm, predictable, large touch targets >= 64px, zero emoji) and teachers/educators (editorial split-canvas portal & clean data workspaces, WCAG AA/AAA).",
+  "contract": "Sahabat Belajar (SLB B-C Wijayakusumah) UI Design Contract (ui-design-contract.md). Direct role selection (Murid / Guru) and clean focused student & teacher login cards, zero emojis, zero buzzwords, sensory-safe tokens, WCAG AA/AAA.",
   "targetViewports": [
     "390x844",
     "1440x900"
   ],
   "accessibility": {
     "status": "pass",
-    "evidence": "Verified with scripts/check-contrast.mjs passing WCAG AA (13.93:1 calm canvas) and AAA (21.00:1 high-contrast). Auth forms support physical keyboard input, visible 3px :focus-visible outline, aria-describedby error binding, aria-pressed password toggle, and >= 64px student keypad buttons."
+    "evidence": "Verified with scripts/check-contrast.mjs passing WCAG AA (calm tokens) and AAA (high-contrast tokens). Skip link present, :focus-visible rings enforced, aria-describedby validation errors, >= 64px student keypad keys."
   },
   "responsive": {
     "status": "pass",
-    "evidence": "Auth split-shell (.auth-shell) transitions from 42%/58% horizontal desktop grid (1440x900) to stacked single-column card with form-first ordering at <= 879px (390x844) and zero horizontal overflow."
+    "evidence": "Role grid adjusts cleanly from 2-column desktop (max-width 680px) to 1-column mobile (<= 640px). Single login card (max-width 430px) centers cleanly on both desktop and mobile viewports without horizontal overflow."
   },
   "contentStates": {
     "loading": {
       "status": "pass",
-      "evidence": "Auth views render static server-rendered Blade markup without layout shift; audio/game/quiz subviews use calm loading indicators."
+      "evidence": "Server-rendered Blade auth views render directly without async layout shift."
     },
     "empty": {
       "status": "pass",
-      "evidence": "Empty material and quiz states display calm empty-state cards with return actions."
+      "evidence": "Empty content states in student/admin pages remain clear with polite action links."
     },
     "error": {
       "status": "pass",
-      "evidence": "Auth error banners (.auth-alert) and field validation messages (.auth-error) display warm non-alarming amber feedback and inline recovery hints."
+      "evidence": "Auth alerts (.login-alert) and inline error text (.login-error) show soft amber feedback and clear recovery messages."
     },
     "partial": {
       "status": "not-applicable",
-      "reason": "Authentication forms render complete self-contained cards without partial loading chunks."
+      "reason": "Authentication cards render complete forms atomically."
     },
     "success": {
       "status": "pass",
-      "evidence": "Successful authentication redirects directly to /beranda (student) or /admin (teacher) verified by AuthTest (8/8 tests passing)."
+      "evidence": "Successful student and teacher authentication redirects verified via PHPUnit AuthTest (8/8 passing)."
     },
     "permission": {
       "status": "pass",
-      "evidence": "Guest and role middlewares redirect authenticated/unauthorized roles safely to 403 or intended dashboard."
+      "evidence": "Role and guest middleware route redirects and 403 handler tested cleanly."
     }
   },
   "renderedEvidence": [
     {
       "viewport": "390x844",
       "artifact": "mobile-390x844.html",
-      "observation": "Rendered auth.login-student shows form-first mobile ordering, Segmented Switcher tabs, Username field, 6-slot tactile PIN tray, and 12-key 64px keypad with zero emojis."
+      "observation": "Rendered auth.login-student shows clean Sahabat Belajar school header, back link, focused student login card with 6-slot PIN tray and 64px tactile keypad, zero emojis."
     },
     {
       "viewport": "1440x900",
       "artifact": "desktop-1440x900.html",
-      "observation": "Rendered auth.role-select displays balanced 42%/58% editorial split shell with deep slate learning pillars pane and crisp horizontal role selection tiles ('Saya Siswa' and 'Saya Guru') with zero emojis."
+      "observation": "Rendered auth.role-select shows clean warm greeting and two direct role cards (Murid / Saya Siswa and Guru / Saya Guru) with soft abstract color bands and zero gimmick text."
     },
     {
       "viewport": "1440x900",
       "artifact": "login-teacher.html",
-      "observation": "Rendered auth.login-teacher displays deep pine architectural pane alongside elevated white login panel with segmented role tabs, password show/hide toggle, and emerald submit action."
+      "observation": "Rendered auth.login-teacher shows clean focused teacher login card with Email, Kata Sandi + Lihat toggle, Ingat saya checkbox, and solid green Masuk button."
     }
   ]
 }

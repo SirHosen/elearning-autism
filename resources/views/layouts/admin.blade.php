@@ -43,7 +43,7 @@
   <div class="admin-layout">
     <aside class="admin-sidebar">
       <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
-        <div style="width: 42px; height: 42px; border-radius: 12px; background: var(--primary); color: #fff; display: grid; place-items: center; font-weight: 900; font-size: 18px;">EA</div>
+        <div style="width: 42px; height: 42px; border-radius: 12px; background: var(--primary); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 16px;">SB</div>
         <div>
           <b style="font-size: 15px; display: block;">SLB B-C Wijayakusumah</b>
           <small style="color: var(--ink-soft); font-size: 12px;">Panel Pengelolaan Guru</small>

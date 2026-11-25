@@ -6,7 +6,7 @@
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
     <div>
         <h1 style="margin: 0; font-size: 1.5rem;">Kelola Kuis Bergambar</h1>
-        <p style="margin: var(--space-1) 0 0 0; color: var(--text-muted); font-size: 0.9375rem;">Kuis visual-audio ramah autis dengan opsi murni gambar tanpa beban membaca.</p>
+        <p style="margin: var(--space-1) 0 0 0; color: var(--text-muted); font-size: 0.9375rem;">Kuis gambar dan suara yang sederhana serta mudah dipahami siswa.</p>
     </div>
     <div style="display: flex; gap: var(--space-3);">
         <button type="button" class="btn btn-secondary" onclick="document.getElementById('auto-quiz-modal').style.display='flex'">

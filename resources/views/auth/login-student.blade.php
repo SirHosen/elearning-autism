@@ -1,78 +1,35 @@
 @extends('layouts.guest')
 
-@section('title', 'Masuk Siswa | EduAutis SLB B-C Wijayakusumah')
+@section('title', 'Masuk Siswa | Sahabat Belajar')
 
 @section('content')
-<div class="auth-shell">
+<div class="login-wrap">
+  <a href="{{ route('login') }}" class="login-back">
+    <span aria-hidden="true">&larr;</span>
+    <span>Kembali</span>
+  </a>
 
-  {{-- Panel Kiri: Panduan Singkat untuk Siswa & Pendamping --}}
-  <aside class="auth-aside">
-    <div>
-      <span class="auth-aside__eyebrow">Area Belajar Siswa</span>
-      <h2 class="auth-aside__title">Siap Belajar Bersama Hari Ini</h2>
-      <p class="auth-aside__lead">
-        Gunakan kartu akun dari Bapak atau Ibu Guru untuk masuk ke ruang belajarmu dengan mudah.
-      </p>
-    </div>
+  <div class="login-card">
+    <div class="login-card__accent login-card__accent--blue"></div>
 
-    <div class="auth-preview-box">
-      <div class="auth-preview-box__label">Langkah Masuk</div>
-      <ul class="auth-preview-list">
-        <li class="auth-preview-item">
-          <span class="auth-preview-item__left">
-            <span class="auth-swatch auth-swatch--blue" aria-hidden="true"></span>
-            <span>Ketik nama pengguna kamu</span>
-          </span>
-          <span class="auth-preview-num">01</span>
-        </li>
-        <li class="auth-preview-item">
-          <span class="auth-preview-item__left">
-            <span class="auth-swatch auth-swatch--green" aria-hidden="true"></span>
-            <span>Tekan 4–6 angka PIN rahasia</span>
-          </span>
-          <span class="auth-preview-num">02</span>
-        </li>
-        <li class="auth-preview-item">
-          <span class="auth-preview-item__left">
-            <span class="auth-swatch auth-swatch--amber" aria-hidden="true"></span>
-            <span>Tekan tombol Masuk warna biru</span>
-          </span>
-          <span class="auth-preview-num">03</span>
-        </li>
-      </ul>
-    </div>
-
-    <div class="auth-aside__meta">
-      <span>Dapat memakai keyboard angka</span>
-      <span>SLB B-C Wijayakusumah</span>
-    </div>
-  </aside>
-
-  {{-- Panel Kanan: Formulir Masuk Siswa --}}
-  <section class="auth-panel" aria-labelledby="student-login-heading">
-    <nav class="auth-tabs" aria-label="Navigasi Halaman Masuk">
-      <a href="{{ route('login') }}" class="auth-tab">Pilih Peran</a>
-      <a href="{{ route('login.student') }}" class="auth-tab is-active is-active--blue" aria-current="page">Masuk Siswa</a>
-      <a href="{{ route('login.teacher') }}" class="auth-tab">Masuk Guru</a>
-    </nav>
-
-    <div class="auth-head">
-      <h1 id="student-login-heading" class="auth-head__title">Masuk Siswa</h1>
-      <p class="auth-head__desc">Masukkan nama pengguna dan 4–6 angka PIN kamu.</p>
+    <div class="login-card__head">
+      <span class="login-role-pill login-role-pill--blue">Murid</span>
+      <h1 class="login-card__title">Masuk Siswa</h1>
+      <p class="login-card__desc">Isi nama pengguna dan angka PIN kamu.</p>
     </div>
 
     @if ($errors->has('auth'))
-      <div class="auth-alert" role="alert">
-        <span class="auth-alert__dot" aria-hidden="true">!</span>
+      <div class="login-alert" role="alert">
+        <span class="login-alert__dot" aria-hidden="true">!</span>
         <span>{{ $errors->first('auth') }}</span>
       </div>
     @endif
 
-    <form id="studentLoginForm" action="{{ route('login.student.submit') }}" method="POST" class="auth-form">
+    <form id="studentLoginForm" action="{{ route('login.student.submit') }}" method="POST" class="login-form">
       @csrf
 
-      <div class="auth-field">
-        <label for="username" class="auth-label">Nama Pengguna Kamu</label>
+      <div class="login-field">
+        <label for="username" class="login-label">Nama Pengguna Kamu</label>
         <input
           type="text"
           id="username"
@@ -82,22 +39,22 @@
           autofocus
           autocomplete="username"
           placeholder="Contoh: siswa_a"
-          class="auth-input auth-input--student @error('username') is-invalid @enderror"
+          class="login-input login-input--student @error('username') is-invalid @enderror"
           @error('username') aria-describedby="username-error" @enderror
         >
         @error('username')
-          <span id="username-error" class="auth-error">{{ $message }}</span>
+          <span id="username-error" class="login-error">{{ $message }}</span>
         @enderror
       </div>
 
-      <div class="auth-field">
-        <div class="auth-label-row">
-          <span class="auth-label">PIN Rahasia Kamu</span>
-          <span id="pinCountLabel" class="auth-hint-tag">0 / 6 angka</span>
+      <div class="login-field">
+        <div class="login-label-row">
+          <span class="login-label">PIN Kamu</span>
+          <span id="pinCountLabel" class="login-count-tag">0 / 6</span>
         </div>
         <input type="hidden" id="pinInput" name="pin" value="">
 
-        <div id="pinIndicator" class="pin-tray" aria-label="Indikator jumlah angka PIN yang dimasukkan">
+        <div id="pinIndicator" class="pin-tray" aria-label="Jumlah angka PIN yang dimasukkan">
           <span class="pin-slot"></span>
           <span class="pin-slot"></span>
           <span class="pin-slot"></span>
@@ -106,7 +63,7 @@
           <span class="pin-slot pin-slot--optional"></span>
         </div>
         @error('pin')
-          <span class="auth-error">{{ $message }}</span>
+          <span class="login-error">{{ $message }}</span>
         @enderror
 
         <div class="keypad" role="group" aria-label="Papan angka PIN">
@@ -125,8 +82,11 @@
         </div>
       </div>
     </form>
-  </section>
+  </div>
 
+  <p class="login-switch-alt">
+    Bukan murid? <a href="{{ route('login.teacher') }}">Masuk sebagai guru</a>
+  </p>
 </div>
 @endsection
 
@@ -140,7 +100,7 @@
 
   function updateIndicator() {
     pinInput.value = pin;
-    pinCountLabel.textContent = pin.length + ' / ' + maxPin + ' angka';
+    pinCountLabel.textContent = pin.length + ' / ' + maxPin;
 
     const slots = pinIndicator.querySelectorAll('.pin-slot');
     slots.forEach((slot, index) => {

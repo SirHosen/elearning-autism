@@ -74,7 +74,7 @@
             <div class="form-group" style="margin-bottom: var(--space-4);">
                 <label for="instruction_text" class="form-label" style="font-weight: 600;">Teks Instruksi Suara / Layar (Opsional)</label>
                 <input type="text" name="instruction_text" id="instruction_text" class="form-control" value="{{ old('instruction_text') }}" placeholder="Contoh: Pilih gambar yang sesuai">
-                <small style="color: var(--text-muted); display: block; margin-top: var(--space-1);">Jika dikosongkan, sistem akan menggunakan instruksi standar yang ramah autis.</small>
+                <small style="color: var(--text-muted); display: block; margin-top: var(--space-1);">Jika dikosongkan, sistem akan menggunakan instruksi standar yang jelas untuk siswa.</small>
                 @error('instruction_text')
                     <div style="color: var(--danger); font-size: 0.8125rem; margin-top: var(--space-1);">{{ $message }}</div>
                 @enderror

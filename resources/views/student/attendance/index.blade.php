@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Presensi Kehadiran Siswa | EduAutis')
+@section('title', 'Presensi Kehadiran Siswa | Sahabat Belajar')
 @section('page_title', 'Presensi Kehadiran')
 
 @section('content')

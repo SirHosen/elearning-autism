@@ -1,6 +1,6 @@
 @extends('layouts.student')
 
-@section('title', 'Video Edukasi | EduAutis')
+@section('title', 'Video Edukasi | Sahabat Belajar')
 @section('page_title', 'Video Edukasi')
 
 @section('content')

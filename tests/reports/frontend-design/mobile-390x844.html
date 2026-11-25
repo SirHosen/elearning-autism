@@ -3,101 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Masuk Siswa | EduAutis SLB B-C Wijayakusumah</title>
+  <title>Masuk Siswa | Sahabat Belajar</title>
   <link rel="stylesheet" href="/css/tokens.css">
   <link rel="stylesheet" href="/css/themes.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layouts.css">
-  <link rel="stylesheet" href="/css/auth.css?v=1795586251">
+  <link rel="stylesheet" href="/css/auth.css?v=1795586790">
   </head>
 <body class="auth-body">
   <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
 
-  <header class="auth-topbar">
-    <div class="auth-topbar__inner">
-      <a href="http://localhost:8000/masuk" class="auth-brand">
-        <span class="auth-brand__mark" aria-hidden="true">
-          <span class="auth-brand__layer-back"></span>
-          <span class="auth-brand__layer-front"></span>
-        </span>
-        <span class="auth-brand__text">
-          <span class="auth-brand__name">EduAutis</span>
-          <span class="auth-brand__org">SLB B-C Wijayakusumah</span>
-        </span>
-      </a>
-
-      <div class="auth-sensory-pill" aria-label="Desain ramah sensori aktif">
-        <span class="auth-sensory-pill__dot" aria-hidden="true"></span>
-        <span>Desain Ramah Sensori</span>
-      </div>
-    </div>
-  </header>
-
   <main id="main-content" class="auth-stage">
-    <div class="auth-shell">
+    <a href="http://localhost:8000/masuk" class="auth-site-brand">
+      <span class="auth-site-brand__name">Sahabat Belajar</span>
+      <span class="auth-site-brand__sep" aria-hidden="true"></span>
+      <span class="auth-site-brand__school">SLB B-C Wijayakusumah</span>
+    </a>
 
-  
-  <aside class="auth-aside">
-    <div>
-      <span class="auth-aside__eyebrow">Area Belajar Siswa</span>
-      <h2 class="auth-aside__title">Siap Belajar Bersama Hari Ini</h2>
-      <p class="auth-aside__lead">
-        Gunakan kartu akun dari Bapak atau Ibu Guru untuk masuk ke ruang belajarmu dengan mudah.
-      </p>
-    </div>
+    <div class="login-wrap">
+  <a href="http://localhost:8000/masuk" class="login-back">
+    <span aria-hidden="true">&larr;</span>
+    <span>Kembali</span>
+  </a>
 
-    <div class="auth-preview-box">
-      <div class="auth-preview-box__label">Langkah Masuk</div>
-      <ul class="auth-preview-list">
-        <li class="auth-preview-item">
-          <span class="auth-preview-item__left">
-            <span class="auth-swatch auth-swatch--blue" aria-hidden="true"></span>
-            <span>Ketik nama pengguna kamu</span>
-          </span>
-          <span class="auth-preview-num">01</span>
-        </li>
-        <li class="auth-preview-item">
-          <span class="auth-preview-item__left">
-            <span class="auth-swatch auth-swatch--green" aria-hidden="true"></span>
-            <span>Tekan 4–6 angka PIN rahasia</span>
-          </span>
-          <span class="auth-preview-num">02</span>
-        </li>
-        <li class="auth-preview-item">
-          <span class="auth-preview-item__left">
-            <span class="auth-swatch auth-swatch--amber" aria-hidden="true"></span>
-            <span>Tekan tombol Masuk warna biru</span>
-          </span>
-          <span class="auth-preview-num">03</span>
-        </li>
-      </ul>
-    </div>
+  <div class="login-card">
+    <div class="login-card__accent login-card__accent--blue"></div>
 
-    <div class="auth-aside__meta">
-      <span>Dapat memakai keyboard angka</span>
-      <span>SLB B-C Wijayakusumah</span>
-    </div>
-  </aside>
-
-  
-  <section class="auth-panel" aria-labelledby="student-login-heading">
-    <nav class="auth-tabs" aria-label="Navigasi Halaman Masuk">
-      <a href="http://localhost:8000/masuk" class="auth-tab">Pilih Peran</a>
-      <a href="http://localhost:8000/masuk/siswa" class="auth-tab is-active is-active--blue" aria-current="page">Masuk Siswa</a>
-      <a href="http://localhost:8000/masuk/guru" class="auth-tab">Masuk Guru</a>
-    </nav>
-
-    <div class="auth-head">
-      <h1 id="student-login-heading" class="auth-head__title">Masuk Siswa</h1>
-      <p class="auth-head__desc">Masukkan nama pengguna dan 4–6 angka PIN kamu.</p>
+    <div class="login-card__head">
+      <span class="login-role-pill login-role-pill--blue">Murid</span>
+      <h1 class="login-card__title">Masuk Siswa</h1>
+      <p class="login-card__desc">Isi nama pengguna dan angka PIN kamu.</p>
     </div>
 
     
-    <form id="studentLoginForm" action="http://localhost:8000/masuk/siswa" method="POST" class="auth-form">
+    <form id="studentLoginForm" action="http://localhost:8000/masuk/siswa" method="POST" class="login-form">
       <input type="hidden" name="_token" value="" autocomplete="off">
-      <div class="auth-field">
-        <label for="username" class="auth-label">Nama Pengguna Kamu</label>
+      <div class="login-field">
+        <label for="username" class="login-label">Nama Pengguna Kamu</label>
         <input
           type="text"
           id="username"
@@ -107,18 +50,18 @@
           autofocus
           autocomplete="username"
           placeholder="Contoh: siswa_a"
-          class="auth-input auth-input--student "
+          class="login-input login-input--student "
                   >
               </div>
 
-      <div class="auth-field">
-        <div class="auth-label-row">
-          <span class="auth-label">PIN Rahasia Kamu</span>
-          <span id="pinCountLabel" class="auth-hint-tag">0 / 6 angka</span>
+      <div class="login-field">
+        <div class="login-label-row">
+          <span class="login-label">PIN Kamu</span>
+          <span id="pinCountLabel" class="login-count-tag">0 / 6</span>
         </div>
         <input type="hidden" id="pinInput" name="pin" value="">
 
-        <div id="pinIndicator" class="pin-tray" aria-label="Indikator jumlah angka PIN yang dimasukkan">
+        <div id="pinIndicator" class="pin-tray" aria-label="Jumlah angka PIN yang dimasukkan">
           <span class="pin-slot"></span>
           <span class="pin-slot"></span>
           <span class="pin-slot"></span>
@@ -143,13 +86,16 @@
         </div>
       </div>
     </form>
-  </section>
+  </div>
 
+  <p class="login-switch-alt">
+    Bukan murid? <a href="http://localhost:8000/masuk/guru">Masuk sebagai guru</a>
+  </p>
 </div>
   </main>
 
-  <footer class="auth-bottom">
-    <p>&copy; 2026 SLB B-C Wijayakusumah Sumedang &middot; Platform Pembelajaran Inklusif Visual-Audio &middot; WCAG 2.1 AA</p>
+  <footer class="auth-footer">
+    <span>SLB B-C Wijayakusumah Sumedang</span>
   </footer>
 
   <script>
@@ -161,7 +107,7 @@
 
   function updateIndicator() {
     pinInput.value = pin;
-    pinCountLabel.textContent = pin.length + ' / ' + maxPin + ' angka';
+    pinCountLabel.textContent = pin.length + ' / ' + maxPin;
 
     const slots = pinIndicator.querySelectorAll('.pin-slot');
     slots.forEach((slot, index) => {
