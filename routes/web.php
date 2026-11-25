@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\GameController as AdminGameController;
 use App\Http\Controllers\Admin\MaterialController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\QuizController as AdminQuizController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\StudentController;
@@ -123,7 +124,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/hasil', [AdminReportController::class, 'index'])->name('reports.index');
     Route::get('/hasil-export', [AdminReportController::class, 'exportCsv'])->name('reports.export');
     Route::get('/hasil/{student}/cetak', [AdminReportController::class, 'printReport'])->name('reports.print');
-    Route::get('/profil', fn () => redirect()->route('admin.dashboard'))->name('profile');
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 if (app()->environment('local')) {

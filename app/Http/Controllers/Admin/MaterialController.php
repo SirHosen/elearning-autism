@@ -31,8 +31,14 @@ class MaterialController extends Controller
             $query->where('label', 'like', '%'.$request->input('q').'%');
         }
 
+        if ($request->input('audio_type') === 'recorded') {
+            $query->whereNotNull('audio_path');
+        } elseif ($request->input('audio_type') === 'tts') {
+            $query->whereNull('audio_path');
+        }
+
         $materials = $query->paginate(15)->withQueryString();
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::withCount('materials')->orderBy('name')->get();
 
         return view('admin.materials.index', compact('materials', 'categories'));
     }

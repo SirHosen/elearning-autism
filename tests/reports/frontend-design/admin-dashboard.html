@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="YaPB4Lk1DJM77QV48y8qKpcr3LXMDv7T0c7bMMz8">
+  <title>Ringkasan Panel Guru | Sahabat Belajar</title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/themes.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layouts.css?v=1795589341">
+  <link rel="stylesheet" href="/css/admin.css?v=1795589575">
+  </head>
+<body>
+  <a href="#admin-main" class="skip-link">Lewati ke konten panel</a>
+
+  
+  <div class="adm-shell">
+    <div id="admSidebarBackdrop" class="adm-sidebar-backdrop" aria-hidden="true"></div>
+
+    <aside id="admSidebar" class="adm-sidebar" aria-label="Menu navigasi panel guru">
+      <a href="http://localhost/admin" class="adm-brand">
+        <div class="adm-brand__logo" aria-hidden="true">SB</div>
+        <div>
+          <span class="adm-brand__title">Sahabat Belajar</span>
+          <span class="adm-brand__sub">Panel Pengelolaan Guru</span>
+        </div>
+      </a>
+
+      <nav class="adm-nav">
+        <div class="adm-nav__group">Utama</div>
+        <a href="http://localhost/admin" class="adm-nav__link is-active">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="9" rx="1.5"/>
+              <rect x="14" y="3" width="7" height="5" rx="1.5"/>
+              <rect x="14" y="12" width="7" height="9" rx="1.5"/>
+              <rect x="3" y="16" width="7" height="5" rx="1.5"/>
+            </svg>
+            <span>Ringkasan</span>
+          </span>
+        </a>
+
+        <div class="adm-nav__group">Kurikulum &amp; Konten</div>
+        <a href="http://localhost/admin/kategori" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Kategori</span>
+          </span>
+        </a>
+        <a href="http://localhost/admin/materi" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span>Materi Belajar</span>
+          </span>
+                      <span class="adm-nav__badge">30</span>
+                  </a>
+        <a href="http://localhost/admin/video" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2.5"/>
+              <polygon points="10 9 16 12 10 15 10 9"/>
+            </svg>
+            <span>Video</span>
+          </span>
+        </a>
+        <a href="http://localhost/admin/permainan" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="6" y1="12" x2="10" y2="12"/>
+              <line x1="8" y1="10" x2="8" y2="14"/>
+              <line x1="15" y1="13" x2="15.01" y2="13"/>
+              <line x1="18" y1="11" x2="18.01" y2="11"/>
+              <rect x="2" y="6" width="20" height="12" rx="4"/>
+            </svg>
+            <span>Permainan</span>
+          </span>
+        </a>
+        <a href="http://localhost/admin/kuis" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <span>Kuis</span>
+          </span>
+                      <span class="adm-nav__badge">1</span>
+                  </a>
+
+        <div class="adm-nav__group">Siswa &amp; Evaluasi</div>
+        <a href="http://localhost/admin/siswa" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span>Data Siswa</span>
+          </span>
+                      <span class="adm-nav__badge">3</span>
+                  </a>
+        <a href="http://localhost/admin/absensi" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+              <path d="M9 16l2 2 4-4"/>
+            </svg>
+            <span>Rekap Absensi</span>
+          </span>
+                      <span class="adm-nav__badge adm-nav__badge--warn" title="Belum presensi hari ini">2</span>
+                  </a>
+        <a href="http://localhost/admin/hasil" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span>Hasil Belajar</span>
+          </span>
+        </a>
+
+        <div class="adm-nav__group">Akun</div>
+        <a href="http://localhost/admin/profil" class="adm-nav__link ">
+          <span class="adm-nav__link-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>Profil Guru</span>
+          </span>
+        </a>
+      </nav>
+
+      <div class="adm-sidebar__footer">
+        <div style="font-size: 0.75rem; color: rgba(226, 232, 240, 0.75); padding: 0 4px;">
+          SLB B-C Wijayakusumah &bull; Sumedang
+        </div>
+        <form action="http://localhost/keluar" method="POST">
+          <input type="hidden" name="_token" value="YaPB4Lk1DJM77QV48y8qKpcr3LXMDv7T0c7bMMz8" autocomplete="off">          <button type="submit" class="adm-logout-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Keluar Panel</span>
+          </button>
+        </form>
+      </div>
+    </aside>
+
+    <div class="adm-workspace">
+      <header class="adm-topbar">
+        <div class="adm-topbar__left">
+          <button type="button" id="admDrawerBtn" class="adm-drawer-btn" aria-controls="admSidebar" aria-expanded="false">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+            <span>Menu</span>
+          </button>
+
+          <nav class="adm-breadcrumb" aria-label="Breadcrumb">
+            <span>Panel Pengelolaan Guru</span>
+            <span class="adm-breadcrumb__sep">/</span>
+            <span class="adm-breadcrumb__current">Ringkasan</span>
+          </nav>
+        </div>
+
+        <div class="adm-topbar__right">
+          <a href="http://localhost/admin/materi/create" class="adm-quick-link">+ Materi</a>
+          <a href="http://localhost/admin/siswa/create" class="adm-quick-link">+ Siswa</a>
+          <a href="http://localhost/admin/absensi" class="adm-quick-link">Absensi</a>
+          <a href="http://localhost/admin/profil" class="adm-user-chip" title="Kelola Profil Guru">
+            <span class="adm-user-chip__avatar" aria-hidden="true">GS</span>
+            <span>Guru SLB BC</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="admin-main" class="adm-main">
+                
+        <div class="adm-page-head">
+  <div>
+    <p class="adm-eyebrow">Operasional Kelas &bull; Rabu, 25 November 2026</p>
+    <h1 class="adm-title">Selamat Bekerja, Guru SLB BC</h1>
+    <p class="adm-subtitle">Pusat kendali terpadu untuk kehadiran harian, kesiapan materi lintas modul, dan evaluasi hasil belajar siswa.</p>
+  </div>
+
+  <div class="adm-head-actions">
+    <a href="http://localhost/admin/absensi" class="adm-btn adm-btn--secondary">Rekap Absensi</a>
+    <a href="http://localhost/admin/materi/create" class="adm-btn adm-btn--primary">+ Tambah Materi</a>
+  </div>
+</div>
+
+
+<div class="adm-kpi-grid">
+  <div class="adm-kpi-card adm-kpi-card--blue">
+    <div class="adm-kpi-card__head">
+      <span class="adm-kpi-card__label">Siswa Aktif</span>
+      <a href="http://localhost/admin/siswa" class="adm-pill adm-pill--info">Kelola &rarr;</a>
+    </div>
+    <strong class="adm-kpi-card__val">3</strong>
+    <span class="adm-kpi-card__sub">Tersebar di 2 kelompok kelas</span>
+  </div>
+
+  <div class="adm-kpi-card adm-kpi-card--green">
+    <div class="adm-kpi-card__head">
+      <span class="adm-kpi-card__label">Kehadiran Hari Ini</span>
+      <span class="adm-pill adm-pill--success">33%</span>
+    </div>
+    <strong class="adm-kpi-card__val">1 / 3</strong>
+    <div class="adm-meter" aria-hidden="true">
+      <div class="adm-meter__fill" style="width: 33%;"></div>
+    </div>
+    <span class="adm-kpi-card__sub">
+      Izin: 0 &bull; Sakit: 0 &bull; Belum: 2
+    </span>
+  </div>
+
+  <div class="adm-kpi-card adm-kpi-card--forest">
+    <div class="adm-kpi-card__head">
+      <span class="adm-kpi-card__label">Bank Konten Aktif</span>
+      <a href="http://localhost/admin/kategori" class="adm-pill adm-pill--neutral">3 Kategori</a>
+    </div>
+    <strong class="adm-kpi-card__val">30 Materi</strong>
+    <span class="adm-kpi-card__sub">
+      0 Video &bull; 3 Game &bull; 1 Kuis
+    </span>
+  </div>
+
+  <div class="adm-kpi-card adm-kpi-card--purple">
+    <div class="adm-kpi-card__head">
+      <span class="adm-kpi-card__label">Evaluasi 7 Hari</span>
+      <a href="http://localhost/admin/hasil" class="adm-pill adm-pill--purple">Rapor &rarr;</a>
+    </div>
+    <strong class="adm-kpi-card__val">0</strong>
+    <span class="adm-kpi-card__sub">
+      0 kuis selesai &bull; 0 sesi permainan
+    </span>
+  </div>
+
+  <div class="adm-kpi-card adm-kpi-card--amber">
+    <div class="adm-kpi-card__head">
+      <span class="adm-kpi-card__label">Skor Kuis 7 Hari</span>
+      <span class="adm-pill adm-pill--warning">Rata-rata</span>
+    </div>
+    <strong class="adm-kpi-card__val">0%</strong>
+    <span class="adm-kpi-card__sub">Akurasi percobaan pertama siswa</span>
+  </div>
+</div>
+
+
+<div class="adm-grid-aside">
+  <section class="adm-panel">
+    <div class="adm-panel__head">
+      <div>
+        <h2 class="adm-panel__title">Tren Kehadiran &amp; Aktivitas Belajar (7 Hari Terakhir)</h2>
+        <p class="adm-panel__sub">Perbandingan jumlah siswa hadir dan sesi latihan interaktif per hari</p>
+      </div>
+      <div style="display: flex; gap: 12px; font-size: 0.75rem; font-weight: 700;">
+        <span style="display: inline-flex; align-items: center; gap: 5px; color: var(--adm-forest);">
+          <span style="width: 10px; height: 10px; border-radius: 3px; background: #246B4D; display: inline-block;"></span> Hadir
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; color: var(--primary-strong);">
+          <span style="width: 10px; height: 10px; border-radius: 3px; background: #2F6F9F; display: inline-block;"></span> Kuis &amp; Game
+        </span>
+      </div>
+    </div>
+    <div class="adm-panel__body">
+      <svg viewBox="0 0 640 210" width="100%" height="210" role="img" aria-label="Grafik tren kehadiran dan aktivitas 7 hari">
+                                    <line x1="28" y1="20" x2="620" y2="20" stroke="#E8E2D6" stroke-dasharray="4 4" stroke-width="1"/>
+                            <line x1="28" y1="68.333333333333" x2="620" y2="68.333333333333" stroke="#E8E2D6" stroke-dasharray="4 4" stroke-width="1"/>
+                            <line x1="28" y1="116.66666666667" x2="620" y2="116.66666666667" stroke="#E8E2D6" stroke-dasharray="4 4" stroke-width="1"/>
+                            <line x1="28" y1="165" x2="620" y2="165" stroke="#E8E2D6" stroke-dasharray="4 4" stroke-width="1"/>
+        
+                            <rect x="48" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Kam (19/11): 0 Hadir</title>
+          </rect>
+          <rect x="72" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Kam (19/11): 0 Kuis &amp; Game</title>
+          </rect>
+                              <text x="70" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2933">Kam</text>
+          <text x="70" y="201" text-anchor="middle" font-size="10" fill="#4B5563">19/11</text>
+                            <rect x="132" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Jum (20/11): 0 Hadir</title>
+          </rect>
+          <rect x="156" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Jum (20/11): 0 Kuis &amp; Game</title>
+          </rect>
+                              <text x="154" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2933">Jum</text>
+          <text x="154" y="201" text-anchor="middle" font-size="10" fill="#4B5563">20/11</text>
+                            <rect x="216" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Sab (21/11): 0 Hadir</title>
+          </rect>
+          <rect x="240" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Sab (21/11): 0 Kuis &amp; Game</title>
+          </rect>
+                              <text x="238" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2933">Sab</text>
+          <text x="238" y="201" text-anchor="middle" font-size="10" fill="#4B5563">21/11</text>
+                            <rect x="300" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Min (22/11): 0 Hadir</title>
+          </rect>
+          <rect x="324" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Min (22/11): 0 Kuis &amp; Game</title>
+          </rect>
+                              <text x="322" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2933">Min</text>
+          <text x="322" y="201" text-anchor="middle" font-size="10" fill="#4B5563">22/11</text>
+                            <rect x="384" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Sen (23/11): 0 Hadir</title>
+          </rect>
+          <rect x="408" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Sen (23/11): 0 Kuis &amp; Game</title>
+          </rect>
+                              <text x="406" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2933">Sen</text>
+          <text x="406" y="201" text-anchor="middle" font-size="10" fill="#4B5563">23/11</text>
+                            <rect x="468" y="20" width="20" height="145" rx="5" fill="#246B4D">
+            <title>Sel (24/11): 1 Hadir</title>
+          </rect>
+          <rect x="492" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Sel (24/11): 0 Kuis &amp; Game</title>
+          </rect>
+                      <text x="478" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#17523A">1</text>
+                              <text x="490" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2933">Sel</text>
+          <text x="490" y="201" text-anchor="middle" font-size="10" fill="#4B5563">24/11</text>
+                            <rect x="552" y="20" width="20" height="145" rx="5" fill="#246B4D">
+            <title>Rab (25/11): 1 Hadir</title>
+          </rect>
+          <rect x="576" y="162" width="20" height="3" rx="5" fill="#E5E7EB">
+            <title>Rab (25/11): 0 Kuis &amp; Game</title>
+          </rect>
+                      <text x="562" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#17523A">1</text>
+                              <text x="574" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2933">Rab</text>
+          <text x="574" y="201" text-anchor="middle" font-size="10" fill="#4B5563">25/11</text>
+              </svg>
+    </div>
+  </section>
+
+  <section class="adm-panel">
+    <div class="adm-panel__head">
+      <div>
+        <h2 class="adm-panel__title">Belum Presensi Hari Ini</h2>
+        <p class="adm-panel__sub">Catat kehadiran siswa langsung dari ringkasan</p>
+      </div>
+      <a href="http://localhost/admin/absensi" class="adm-btn adm-btn--secondary adm-btn--xs">Semua &rarr;</a>
+    </div>
+    <div class="adm-panel__body">
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                      <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface-alt); border-radius: 10px; flex-wrap: wrap;">
+              <div>
+                <div style="font-weight: 700; font-size: 0.9375rem; color: var(--ink);">Siswa Demo B</div>
+                <div style="font-size: 0.75rem; color: var(--ink-soft);">Kelas 1 &bull; <code>siswa_b</code></div>
+              </div>
+              <form action="http://localhost/admin/absensi/3" method="POST" style="display: inline-flex; gap: 6px;">
+                <input type="hidden" name="_token" value="YaPB4Lk1DJM77QV48y8qKpcr3LXMDv7T0c7bMMz8" autocomplete="off">                <input type="hidden" name="date" value="2026-11-25">
+                <button type="submit" name="status" value="hadir" class="adm-btn adm-btn--primary adm-btn--xs" title="Tandai Hadir">Hadir</button>
+                <button type="submit" name="status" value="izin" class="adm-btn adm-btn--secondary adm-btn--xs" title="Tandai Izin">Izin</button>
+                <button type="submit" name="status" value="sakit" class="adm-btn adm-btn--secondary adm-btn--xs" title="Tandai Sakit">Sakit</button>
+              </form>
+            </div>
+                      <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface-alt); border-radius: 10px; flex-wrap: wrap;">
+              <div>
+                <div style="font-weight: 700; font-size: 0.9375rem; color: var(--ink);">Siswa Demo C</div>
+                <div style="font-size: 0.75rem; color: var(--ink-soft);">Kelas 2 &bull; <code>siswa_c</code></div>
+              </div>
+              <form action="http://localhost/admin/absensi/4" method="POST" style="display: inline-flex; gap: 6px;">
+                <input type="hidden" name="_token" value="YaPB4Lk1DJM77QV48y8qKpcr3LXMDv7T0c7bMMz8" autocomplete="off">                <input type="hidden" name="date" value="2026-11-25">
+                <button type="submit" name="status" value="hadir" class="adm-btn adm-btn--primary adm-btn--xs" title="Tandai Hadir">Hadir</button>
+                <button type="submit" name="status" value="izin" class="adm-btn adm-btn--secondary adm-btn--xs" title="Tandai Izin">Izin</button>
+                <button type="submit" name="status" value="sakit" class="adm-btn adm-btn--secondary adm-btn--xs" title="Tandai Sakit">Sakit</button>
+              </form>
+            </div>
+                  </div>
+          </div>
+  </section>
+</div>
+
+
+<section class="adm-panel" style="margin-bottom: 24px;">
+  <div class="adm-panel__head">
+    <div>
+      <h2 class="adm-panel__title">Matriks Kesiapan Kurikulum per Kategori</h2>
+      <p class="adm-panel__sub">Keterhubungan setiap kategori ke modul Materi, Video, Permainan, dan Kuis siswa</p>
+    </div>
+    <a href="http://localhost/admin/kategori/create" class="adm-btn adm-btn--secondary adm-btn--sm">+ Kategori Baru</a>
+  </div>
+
+  <div style="overflow-x: auto;">
+    <table class="adm-table">
+      <thead>
+        <tr>
+          <th>Kategori</th>
+          <th>Materi Visual/Audio</th>
+          <th>Video Edukasi</th>
+          <th>Permainan</th>
+          <th>Kuis Bergambar</th>
+          <th>Kesiapan Generator Kuis</th>
+          <th style="text-align: right;">Tindak Cepat</th>
+        </tr>
+      </thead>
+      <tbody>
+                            <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="tile-blue" style="width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+                <div>
+                  <strong style="color: var(--ink);">Hewan</strong>
+                  <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>/belajar/hewan</code></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="http://localhost/admin/materi?category_id=1" class="adm-pill adm-pill--info">
+                10 Materi (10 Aktif)
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/video?category_id=1" class="adm-pill adm-pill--purple">
+                0 Video
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/permainan?category_id=1" class="adm-pill adm-pill--success">
+                1 Permainan
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/kuis?category_id=1" class="adm-pill adm-pill--warning">
+                1 Kuis
+              </a>
+            </td>
+            <td>
+                              <span class="adm-pill adm-pill--success">Siap Otomatis (&ge;3 Materi)</span>
+                          </td>
+            <td style="text-align: right;">
+              <div class="adm-actions">
+                <a href="http://localhost/admin/materi/create?category_id=1" class="adm-btn adm-btn--secondary adm-btn--xs">+ Materi</a>
+                <a href="http://localhost/admin/kategori/1/edit" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
+              </div>
+            </td>
+          </tr>
+                            <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="tile-green" style="width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+                <div>
+                  <strong style="color: var(--ink);">Warna</strong>
+                  <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>/belajar/warna</code></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="http://localhost/admin/materi?category_id=2" class="adm-pill adm-pill--info">
+                10 Materi (10 Aktif)
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/video?category_id=2" class="adm-pill adm-pill--purple">
+                0 Video
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/permainan?category_id=2" class="adm-pill adm-pill--success">
+                1 Permainan
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/kuis?category_id=2" class="adm-pill adm-pill--warning">
+                0 Kuis
+              </a>
+            </td>
+            <td>
+                              <span class="adm-pill adm-pill--success">Siap Otomatis (&ge;3 Materi)</span>
+                          </td>
+            <td style="text-align: right;">
+              <div class="adm-actions">
+                <a href="http://localhost/admin/materi/create?category_id=2" class="adm-btn adm-btn--secondary adm-btn--xs">+ Materi</a>
+                <a href="http://localhost/admin/kategori/2/edit" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
+              </div>
+            </td>
+          </tr>
+                            <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="tile-yellow" style="width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+                <div>
+                  <strong style="color: var(--ink);">Benda</strong>
+                  <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>/belajar/benda</code></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="http://localhost/admin/materi?category_id=3" class="adm-pill adm-pill--info">
+                10 Materi (10 Aktif)
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/video?category_id=3" class="adm-pill adm-pill--purple">
+                0 Video
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/permainan?category_id=3" class="adm-pill adm-pill--success">
+                1 Permainan
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/kuis?category_id=3" class="adm-pill adm-pill--warning">
+                0 Kuis
+              </a>
+            </td>
+            <td>
+                              <span class="adm-pill adm-pill--success">Siap Otomatis (&ge;3 Materi)</span>
+                          </td>
+            <td style="text-align: right;">
+              <div class="adm-actions">
+                <a href="http://localhost/admin/materi/create?category_id=3" class="adm-btn adm-btn--secondary adm-btn--xs">+ Materi</a>
+                <a href="http://localhost/admin/kategori/3/edit" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
+              </div>
+            </td>
+          </tr>
+                            <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="tile-lavender" style="width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+                <div>
+                  <strong style="color: var(--ink);">Huruf</strong>
+                  <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>/belajar/huruf</code></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="http://localhost/admin/materi?category_id=4" class="adm-pill adm-pill--info">
+                0 Materi (0 Aktif)
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/video?category_id=4" class="adm-pill adm-pill--purple">
+                0 Video
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/permainan?category_id=4" class="adm-pill adm-pill--success">
+                0 Permainan
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/kuis?category_id=4" class="adm-pill adm-pill--warning">
+                0 Kuis
+              </a>
+            </td>
+            <td>
+                              <span class="adm-pill adm-pill--warning">Butuh 3 Materi Lagi</span>
+                          </td>
+            <td style="text-align: right;">
+              <div class="adm-actions">
+                <a href="http://localhost/admin/materi/create?category_id=4" class="adm-btn adm-btn--secondary adm-btn--xs">+ Materi</a>
+                <a href="http://localhost/admin/kategori/4/edit" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
+              </div>
+            </td>
+          </tr>
+                            <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="tile-peach" style="width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+                <div>
+                  <strong style="color: var(--ink);">Angka</strong>
+                  <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>/belajar/angka</code></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="http://localhost/admin/materi?category_id=5" class="adm-pill adm-pill--info">
+                0 Materi (0 Aktif)
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/video?category_id=5" class="adm-pill adm-pill--purple">
+                0 Video
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/permainan?category_id=5" class="adm-pill adm-pill--success">
+                0 Permainan
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/kuis?category_id=5" class="adm-pill adm-pill--warning">
+                0 Kuis
+              </a>
+            </td>
+            <td>
+                              <span class="adm-pill adm-pill--warning">Butuh 3 Materi Lagi</span>
+                          </td>
+            <td style="text-align: right;">
+              <div class="adm-actions">
+                <a href="http://localhost/admin/materi/create?category_id=5" class="adm-btn adm-btn--secondary adm-btn--xs">+ Materi</a>
+                <a href="http://localhost/admin/kategori/5/edit" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
+              </div>
+            </td>
+          </tr>
+                            <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="tile-blue" style="width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+                <div>
+                  <strong style="color: var(--ink);">Kegiatan Sehari-hari</strong>
+                  <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>/belajar/kegiatan</code></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <a href="http://localhost/admin/materi?category_id=6" class="adm-pill adm-pill--info">
+                0 Materi (0 Aktif)
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/video?category_id=6" class="adm-pill adm-pill--purple">
+                0 Video
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/permainan?category_id=6" class="adm-pill adm-pill--success">
+                0 Permainan
+              </a>
+            </td>
+            <td>
+              <a href="http://localhost/admin/kuis?category_id=6" class="adm-pill adm-pill--warning">
+                0 Kuis
+              </a>
+            </td>
+            <td>
+                              <span class="adm-pill adm-pill--warning">Butuh 3 Materi Lagi</span>
+                          </td>
+            <td style="text-align: right;">
+              <div class="adm-actions">
+                <a href="http://localhost/admin/materi/create?category_id=6" class="adm-btn adm-btn--secondary adm-btn--xs">+ Materi</a>
+                <a href="http://localhost/admin/kategori/6/edit" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
+              </div>
+            </td>
+          </tr>
+              </tbody>
+    </table>
+  </div>
+</section>
+
+
+<div class="adm-grid-aside">
+  <section class="adm-panel">
+    <div class="adm-panel__head">
+      <div>
+        <h2 class="adm-panel__title">Evaluasi Kuis &amp; Permainan Terbaru</h2>
+        <p class="adm-panel__sub">Klik Rapor untuk membuka analisis perkembangan tiap siswa</p>
+      </div>
+      <a href="http://localhost/admin/hasil" class="adm-btn adm-btn--secondary adm-btn--xs">Lihat Semua Rapor &rarr;</a>
+    </div>
+    <div style="overflow-x: auto;">
+      <table class="adm-table">
+        <thead>
+          <tr>
+            <th>Siswa</th>
+            <th>Modul</th>
+            <th>Capaian</th>
+            <th>Bintang</th>
+            <th style="text-align: right;">Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+                      <tr>
+              <td colspan="5" style="text-align: center; padding: 28px; color: var(--ink-soft);">
+                Belum ada riwayat pengerjaan kuis maupun permainan.
+              </td>
+            </tr>
+                  </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="adm-panel">
+    <div class="adm-panel__head">
+      <div>
+        <h2 class="adm-panel__title">Pintasan Kerja Guru</h2>
+        <p class="adm-panel__sub">Akses instan penyusunan konten &amp; laporan</p>
+      </div>
+    </div>
+    <div class="adm-panel__body" style="display: flex; flex-direction: column; gap: 10px;">
+      <a href="http://localhost/admin/kuis" class="adm-btn adm-btn--secondary" style="justify-content: space-between;">
+        <span>Kelola &amp; Generator Kuis</span>
+        <span>&rarr;</span>
+      </a>
+      <a href="http://localhost/admin/permainan/create" class="adm-btn adm-btn--secondary" style="justify-content: space-between;">
+        <span>Buat Permainan Edukasi</span>
+        <span>&rarr;</span>
+      </a>
+      <a href="http://localhost/admin/video/create" class="adm-btn adm-btn--secondary" style="justify-content: space-between;">
+        <span>Tambah Video Pembelajaran</span>
+        <span>&rarr;</span>
+      </a>
+      <a href="http://localhost/admin/absensi-export?date=2026-11-25" class="adm-btn adm-btn--secondary" style="justify-content: space-between;">
+        <span>Unduh CSV Absensi Hari Ini</span>
+        <span>&darr;</span>
+      </a>
+      <a href="http://localhost/admin/hasil-export" class="adm-btn adm-btn--primary" style="justify-content: space-between;">
+        <span>Unduh Rekap Nilai Siswa (CSV)</span>
+        <span>&darr;</span>
+      </a>
+    </div>
+  </section>
+</div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const btn = document.getElementById('admDrawerBtn');
+      const sidebar = document.getElementById('admSidebar');
+      const backdrop = document.getElementById('admSidebarBackdrop');
+      if (!btn || !sidebar || !backdrop) return;
+
+      function setOpen(open) {
+        sidebar.classList.toggle('is-open', open);
+        backdrop.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
+      btn.addEventListener('click', () => setOpen(!sidebar.classList.contains('is-open')));
+      backdrop.addEventListener('click', () => setOpen(false));
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setOpen(false);
+      });
+    })();
+  </script>
+  </body>
+</html>

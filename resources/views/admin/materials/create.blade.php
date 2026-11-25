@@ -1,64 +1,88 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Materi | Panel Guru')
+@section('title', 'Tambah Materi | Panel Pengelolaan Guru')
+@section('page_title', 'Tambah Materi')
 
 @section('content')
-<div style="max-width: 680px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 32px;">
-  <h2 style="font-size: 22px; margin-bottom: 6px;">Tambah Materi Pembelajaran</h2>
-  <p style="color: var(--ink-soft); font-size: 14px; margin-bottom: 24px;">Unggah ilustrasi gambar bersih dan rekaman suara guru.</p>
-
-  <form action="{{ route('admin.materials.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <div style="margin-bottom: 18px;">
-      <label for="category_id" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Kategori Materi</label>
-      <select id="category_id" name="category_id" required style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-        <option value="">Pilih Kategori...</option>
-        @foreach ($categories as $cat)
-          <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
-        @endforeach
-      </select>
-      @error('category_id')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
+<div class="adm-form-shell">
+  <div class="adm-page-head">
+    <div>
+      <a href="{{ route('admin.materials.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Materi</a>
+      <h1 class="adm-title">Tambah Materi Pembelajaran</h1>
+      <p class="adm-subtitle">Unggah ilustrasi gambar bersih beserta rekaman suara guru (atau gunakan suara otomatis).</p>
     </div>
+  </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="label" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Nama Objek / Materi</label>
-      <input type="text" id="label" name="label" value="{{ old('label') }}" required placeholder="Contoh: Kucing, Merah, Bola"
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      @error('label')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
-    </div>
+  <div class="adm-form-card">
+    <form action="{{ route('admin.materials.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+      <div class="adm-form-grid-2">
+        <div class="adm-field">
+          <label for="category_id" class="adm-label">Kategori Materi *</label>
+          <select id="category_id" name="category_id" class="adm-select" required>
+            <option value="">Pilih Kategori...</option>
+            @foreach ($categories as $cat)
+              <option value="{{ $cat->id }}" {{ old('category_id', request('category_id')) == $cat->id ? 'selected' : '' }}>
+                {{ $cat->name }}
+              </option>
+            @endforeach
+          </select>
+          @error('category_id')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="short_sentence" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Contoh Kalimat Sederhana (Opsional)</label>
-      <input type="text" id="short_sentence" name="short_sentence" value="{{ old('short_sentence') }}" placeholder="Contoh: Ini kucing lucu."
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      @error('short_sentence')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
-    </div>
+        <div class="adm-field">
+          <label for="label" class="adm-label">Nama Objek / Materi *</label>
+          <input type="text" id="label" name="label" class="adm-input" value="{{ old('label') }}" required placeholder="Contoh: Kucing, Merah, Bola">
+          @error('label')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+      </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="image" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Foto / Ilustrasi Gambar (Maks 4 MB)</label>
-      <input type="file" id="image" name="image" required accept="image/jpeg,image/png,image/webp"
-             style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-alt);">
-      <small style="color: var(--ink-soft); display: block; margin-top: 4px;">Format yang didukung: JPG, PNG, WebP (otomatis dioptimasi ke WebP 1024px).</small>
-      @error('image')<small style="color: var(--danger); font-weight: 700; display: block; margin-top: 4px;">{{ $message }}</small>@enderror
-    </div>
+      <div class="adm-field">
+        <label for="short_sentence" class="adm-label">Contoh Kalimat Sederhana (Opsional)</label>
+        <input type="text" id="short_sentence" name="short_sentence" class="adm-input" value="{{ old('short_sentence') }}" placeholder="Contoh: Ini kucing berbulu lembut.">
+        @error('short_sentence')<span class="adm-error">{{ $message }}</span>@enderror
+      </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="audio" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Rekaman Suara Guru (Opsional, Maks 3 MB)</label>
-      <input type="file" id="audio" name="audio" accept="audio/mpeg,audio/mp3,audio/ogg,audio/wav"
-             style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface-alt);">
-      <small style="color: var(--ink-soft); display: block; margin-top: 4px;">Jika dikosongkan, sistem otomatis menggunakan suara Text-to-Speech bahasa Indonesia.</small>
-      @error('audio')<small style="color: var(--danger); font-weight: 700; display: block; margin-top: 4px;">{{ $message }}</small>@enderror
-    </div>
+      <div class="adm-field">
+        <label for="image" class="adm-label">Foto / Ilustrasi Gambar (Maks 4 MB) *</label>
+        <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+          <img id="imagePreviewThumb" src="" alt="Pratinjau gambar" style="display: none; width: 72px; height: 72px; object-fit: contain; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface-alt); padding: 4px;">
+          <input type="file" id="image" name="image" required accept="image/jpeg,image/png,image/webp" class="adm-input" style="flex: 1; padding: 9px 12px; background: var(--surface-alt);">
+        </div>
+        <span class="adm-help">Format yang didukung: JPG, PNG, WebP (otomatis dioptimasi ke WebP 1024px).</span>
+        @error('image')<span class="adm-error">{{ $message }}</span>@enderror
+      </div>
 
-    <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
-      <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', '1') ? 'checked' : '' }} style="width: 18px; height: 18px;">
-      <label for="is_active" style="font-weight: 700; font-size: 14px;">Aktifkan materi ini agar dapat dipelajari siswa</label>
-    </div>
+      <div class="adm-field">
+        <label for="audio" class="adm-label">Rekaman Suara Guru (Opsional, Maks 3 MB)</label>
+        <input type="file" id="audio" name="audio" accept="audio/mpeg,audio/mp3,audio/ogg,audio/wav" class="adm-input" style="padding: 9px 12px; background: var(--surface-alt);">
+        <span class="adm-help">Jika dikosongkan, sistem otomatis membacakan nama objek memakai suara bahasa Indonesia.</span>
+        @error('audio')<span class="adm-error">{{ $message }}</span>@enderror
+      </div>
 
-    <div style="display: flex; gap: 12px;">
-      <button type="submit" class="btn btn-primary" style="min-height: 44px; padding: 0 20px;">Simpan Materi</button>
-      <a href="{{ route('admin.materials.index') }}" class="btn btn-secondary" style="min-height: 44px; padding: 0 16px;">Batal</a>
-    </div>
-  </form>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', '1') ? 'checked' : '' }} style="width: 18px; height: 18px;">
+        <label for="is_active" style="font-weight: 700; font-size: 0.875rem; color: var(--ink);">Aktifkan materi ini agar dapat dipelajari siswa</label>
+      </div>
+
+      <div class="adm-form-footer">
+        <a href="{{ route('admin.materials.index') }}" class="adm-btn adm-btn--secondary">Batal</a>
+        <button type="submit" class="adm-btn adm-btn--primary">Simpan Materi</button>
+      </div>
+    </form>
+  </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+  document.getElementById('image')?.addEventListener('change', function(e) {
+    const file = e.target.files?.[0];
+    const thumb = document.getElementById('imagePreviewThumb');
+    if (file && thumb) {
+      thumb.src = URL.createObjectURL(file);
+      thumb.style.display = 'block';
+    }
+  });
+</script>
+@endpush

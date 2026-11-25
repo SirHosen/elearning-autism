@@ -1,53 +1,61 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Siswa | Panel Guru')
+@section('title', 'Tambah Siswa | Panel Pengelolaan Guru')
+@section('page_title', 'Tambah Siswa')
 
 @section('content')
-<div style="max-width: 600px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 32px;">
-  <h2 style="font-size: 22px; margin-bottom: 6px;">Tambah Akun Siswa</h2>
-  <p style="color: var(--ink-soft); font-size: 14px; margin-bottom: 24px;">Buat akun siswa agar dapat mengakses ruang belajar.</p>
-
-  <form action="{{ route('admin.students.store') }}" method="POST">
-    @csrf
-    <div style="margin-bottom: 18px;">
-      <label for="name" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Nama Lengkap / Panggilan Siswa</label>
-      <input type="text" id="name" name="name" value="{{ old('name') }}" required placeholder="Contoh: Budi Santoso"
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      @error('name')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
+<div class="adm-form-shell">
+  <div class="adm-page-head">
+    <div>
+      <a href="{{ route('admin.students.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Siswa</a>
+      <h1 class="adm-title">Tambah Akun Siswa</h1>
+      <p class="adm-subtitle">Buat akun masuk sederhana berbasis nama pengguna dan PIN angka 4&ndash;6 digit.</p>
     </div>
+  </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="username" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Nama Pengguna (Username Login)</label>
-      <input type="text" id="username" name="username" value="{{ old('username') }}" required placeholder="Contoh: budi"
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      <small style="color: var(--ink-soft); display: block; margin-top: 4px;">Huruf kecil tanpa spasi, unik untuk tiap anak.</small>
-      @error('username')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
-    </div>
+  <div class="adm-form-card">
+    <form action="{{ route('admin.students.store') }}" method="POST">
+      @csrf
+      <div class="adm-form-grid-2">
+        <div class="adm-field">
+          <label for="name" class="adm-label">Nama Lengkap / Panggilan Siswa *</label>
+          <input type="text" id="name" name="name" class="adm-input" value="{{ old('name') }}" required placeholder="Contoh: Budi Santoso">
+          @error('name')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="class_name" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Jenjang / Kelas (Opsional)</label>
-      <input type="text" id="class_name" name="class_name" value="{{ old('class_name') }}" placeholder="Contoh: Kelas 1, SDLB B, SDLB C"
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      @error('class_name')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
-    </div>
+        <div class="adm-field">
+          <label for="username" class="adm-label">Nama Pengguna (Username Login) *</label>
+          <input type="text" id="username" name="username" class="adm-input" value="{{ old('username') }}" required placeholder="Contoh: budi">
+          <span class="adm-help">Huruf kecil tanpa spasi, unik untuk setiap anak.</span>
+          @error('username')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+      </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="pin" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">PIN Angka (4-6 Digit, Opsional)</label>
-      <input type="text" id="pin" name="pin" value="{{ old('pin') }}" placeholder="Kosongkan untuk membuat PIN acak otomatis"
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      <small style="color: var(--ink-soft); display: block; margin-top: 4px;">Jika dikosongkan, sistem akan membuat 4 digit angka acak yang bisa dicetak.</small>
-      @error('pin')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
-    </div>
+      <div class="adm-form-grid-2">
+        <div class="adm-field">
+          <label for="class_name" class="adm-label">Jenjang / Kelas (Opsional)</label>
+          <input type="text" id="class_name" name="class_name" class="adm-input" value="{{ old('class_name') }}" placeholder="Contoh: Kelas 1, SDLB B, SDLB C">
+          @error('class_name')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
 
-    <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
-      <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', '1') ? 'checked' : '' }} style="width: 18px; height: 18px;">
-      <label for="is_active" style="font-weight: 700; font-size: 14px;">Akun aktif (dapat langsung masuk ke sistem)</label>
-    </div>
+        <div class="adm-field">
+          <label for="pin" class="adm-label">PIN Angka (4&ndash;6 Digit, Opsional)</label>
+          <input type="text" id="pin" name="pin" class="adm-input" value="{{ old('pin') }}" placeholder="Kosongkan untuk PIN acak otomatis">
+          <span class="adm-help">Jika dikosongkan, sistem membuat PIN 4 digit yang siap dicetak.</span>
+          @error('pin')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+      </div>
 
-    <div style="display: flex; gap: 12px;">
-      <button type="submit" class="btn btn-primary" style="min-height: 44px; padding: 0 20px;">Buat Akun Siswa</button>
-      <a href="{{ route('admin.students.index') }}" class="btn btn-secondary" style="min-height: 44px; padding: 0 16px;">Batal</a>
-    </div>
-  </form>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', '1') ? 'checked' : '' }} style="width: 18px; height: 18px;">
+        <label for="is_active" style="font-weight: 700; font-size: 0.875rem; color: var(--ink);">Akun aktif (dapat langsung masuk ke ruang belajar)</label>
+      </div>
+
+      <div class="adm-form-footer">
+        <a href="{{ route('admin.students.index') }}" class="adm-btn adm-btn--secondary">Batal</a>
+        <button type="submit" class="adm-btn adm-btn--primary">Buat Akun Siswa</button>
+      </div>
+    </form>
+  </div>
 </div>
 @endsection

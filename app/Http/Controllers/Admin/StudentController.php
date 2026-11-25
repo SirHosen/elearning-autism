@@ -15,7 +15,13 @@ class StudentController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = User::where('role', 'siswa')->orderBy('name');
+        $query = User::where('role', 'siswa')
+            ->withCount([
+                'attendances as attended_days_count' => fn ($q) => $q->where('status', 'hadir'),
+                'quizAttempts as completed_quizzes_count' => fn ($q) => $q->whereNotNull('finished_at'),
+                'gameSessions',
+            ])
+            ->orderBy('name');
 
         if ($request->filled('q')) {
             $q = $request->input('q');
@@ -26,9 +32,30 @@ class StudentController extends Controller
             });
         }
 
-        $students = $query->paginate(15)->withQueryString();
+        if ($request->filled('class_name')) {
+            $query->where('class_name', $request->input('class_name'));
+        }
 
-        return view('admin.students.index', compact('students'));
+        if ($request->input('status') === 'active') {
+            $query->where('is_active', true);
+        } elseif ($request->input('status') === 'inactive') {
+            $query->where('is_active', false);
+        }
+
+        $students = $query->paginate(15)->withQueryString();
+        $classes = User::where('role', 'siswa')
+            ->whereNotNull('class_name')
+            ->distinct()
+            ->orderBy('class_name')
+            ->pluck('class_name');
+
+        $summaryStats = [
+            'total' => User::where('role', 'siswa')->count(),
+            'active' => User::where('role', 'siswa')->where('is_active', true)->count(),
+            'inactive' => User::where('role', 'siswa')->where('is_active', false)->count(),
+        ];
+
+        return view('admin.students.index', compact('students', 'classes', 'summaryStats'));
     }
 
     public function create(): View

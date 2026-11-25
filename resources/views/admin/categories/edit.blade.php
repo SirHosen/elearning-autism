@@ -1,56 +1,63 @@
 @extends('layouts.admin')
 
-@section('title', 'Ubah Kategori | Panel Guru')
+@section('title', 'Ubah Kategori | Panel Pengelolaan Guru')
+@section('page_title', 'Ubah Kategori')
 
 @section('content')
-<div style="max-width: 640px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 32px;">
-  <h2 style="font-size: 22px; margin-bottom: 6px;">Ubah Kategori</h2>
-  <p style="color: var(--ink-soft); font-size: 14px; margin-bottom: 24px;">Perbarui data kategori pembelajaran.</p>
-
-  <form action="{{ route('admin.categories.update', $category) }}" method="POST">
-    @csrf
-    @method('PUT')
-    <div style="margin-bottom: 18px;">
-      <label for="name" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Nama Kategori</label>
-      <input type="text" id="name" name="name" value="{{ old('name', $category->name) }}" required
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      @error('name')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
+<div class="adm-form-shell">
+  <div class="adm-page-head">
+    <div>
+      <a href="{{ route('admin.categories.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Kategori</a>
+      <h1 class="adm-title">Ubah Kategori: {{ $category->name }}</h1>
+      <p class="adm-subtitle">Perbarui identitas, slug URL, dan warna kartu pembelajaran.</p>
     </div>
+  </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="slug" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Slug URL</label>
-      <input type="text" id="slug" name="slug" value="{{ old('slug', $category->slug) }}"
-             style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      @error('slug')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
-    </div>
+  <div class="adm-form-card">
+    <form action="{{ route('admin.categories.update', $category) }}" method="POST">
+      @csrf
+      @method('PUT')
+      <div class="adm-form-grid-2">
+        <div class="adm-field">
+          <label for="name" class="adm-label">Nama Kategori *</label>
+          <input type="text" id="name" name="name" class="adm-input" value="{{ old('name', $category->name) }}" required>
+          @error('name')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="color_key" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Warna Kartu Tile</label>
-      <select id="color_key" name="color_key" required style="width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-        <option value="blue" {{ old('color_key', $category->color_key) === 'blue' ? 'selected' : '' }}>Biru Tenang (Blue)</option>
-        <option value="green" {{ old('color_key', $category->color_key) === 'green' ? 'selected' : '' }}>Hijau Daun (Green)</option>
-        <option value="yellow" {{ old('color_key', $category->color_key) === 'yellow' ? 'selected' : '' }}>Kuning Hangat (Yellow)</option>
-        <option value="lavender" {{ old('color_key', $category->color_key) === 'lavender' ? 'selected' : '' }}>Lavender Lembut</option>
-        <option value="peach" {{ old('color_key', $category->color_key) === 'peach' ? 'selected' : '' }}>Peach Cerah</option>
-      </select>
-      @error('color_key')<small style="color: var(--danger); font-weight: 700;">{{ $message }}</small>@enderror
-    </div>
+        <div class="adm-field">
+          <label for="slug" class="adm-label">Slug URL</label>
+          <input type="text" id="slug" name="slug" class="adm-input" value="{{ old('slug', $category->slug) }}">
+          @error('slug')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+      </div>
 
-    <div style="margin-bottom: 18px;">
-      <label for="description" style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px;">Deskripsi Singkat</label>
-      <textarea id="description" name="description" rows="3"
-                style="width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">{{ old('description', $category->description) }}</textarea>
-    </div>
+      <div class="adm-field">
+        <label for="color_key" class="adm-label">Warna Kartu Tile Siswa *</label>
+        <select id="color_key" name="color_key" class="adm-select" required>
+          <option value="blue" {{ old('color_key', $category->color_key) === 'blue' ? 'selected' : '' }}>Biru Tenang (Blue)</option>
+          <option value="green" {{ old('color_key', $category->color_key) === 'green' ? 'selected' : '' }}>Hijau Daun (Green)</option>
+          <option value="yellow" {{ old('color_key', $category->color_key) === 'yellow' ? 'selected' : '' }}>Kuning Hangat (Yellow)</option>
+          <option value="lavender" {{ old('color_key', $category->color_key) === 'lavender' ? 'selected' : '' }}>Lavender Lembut</option>
+          <option value="peach" {{ old('color_key', $category->color_key) === 'peach' ? 'selected' : '' }}>Peach Cerah</option>
+        </select>
+        @error('color_key')<span class="adm-error">{{ $message }}</span>@enderror
+      </div>
 
-    <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
-      <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $category->is_active) ? 'checked' : '' }} style="width: 18px; height: 18px;">
-      <label for="is_active" style="font-weight: 700; font-size: 14px;">Aktifkan kategori ini agar terlihat oleh siswa</label>
-    </div>
+      <div class="adm-field">
+        <label for="description" class="adm-label">Deskripsi Singkat</label>
+        <textarea id="description" name="description" class="adm-textarea" rows="3">{{ old('description', $category->description) }}</textarea>
+      </div>
 
-    <div style="display: flex; gap: 12px;">
-      <button type="submit" class="btn btn-primary" style="min-height: 44px; padding: 0 20px;">Perbarui Kategori</button>
-      <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary" style="min-height: 44px; padding: 0 16px;">Batal</a>
-    </div>
-  </form>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $category->is_active) ? 'checked' : '' }} style="width: 18px; height: 18px;">
+        <label for="is_active" style="font-weight: 700; font-size: 0.875rem; color: var(--ink);">Aktifkan kategori ini agar terlihat oleh siswa</label>
+      </div>
+
+      <div class="adm-form-footer">
+        <a href="{{ route('admin.categories.index') }}" class="adm-btn adm-btn--secondary">Batal</a>
+        <button type="submit" class="adm-btn adm-btn--primary">Perbarui Kategori</button>
+      </div>
+    </form>
+  </div>
 </div>
 @endsection

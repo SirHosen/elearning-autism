@@ -14,7 +14,7 @@ class GameController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Game::with('category')->latest();
+        $query = Game::with('category')->withCount('sessions')->latest();
 
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);

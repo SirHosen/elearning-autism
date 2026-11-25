@@ -1,109 +1,120 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Soal: ' . $quiz->title)
+@section('title', 'Kelola Soal: ' . $quiz->title . ' | Panel Pengelolaan Guru')
+@section('page_title', 'Kelola Soal Kuis')
 
 @section('content')
-<div style="margin-bottom: var(--space-6);">
-    <a href="{{ route('admin.quizzes.index') }}" style="color: var(--text-muted); text-decoration: none; font-size: 0.9375rem;">&larr; Kembali ke Daftar Kuis</a>
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-2);">
-        <div>
-            <h1 style="margin: 0; font-size: 1.5rem;">Kelola Soal: {{ $quiz->title }}</h1>
-            <p style="margin: var(--space-1) 0 0 0; color: var(--text-muted); font-size: 0.9375rem;">
-                Kategori: <strong>{{ $quiz->category?->name ?? 'Umum' }}</strong> &bull; Total Soal: <strong>{{ $quiz->questions->count() }}</strong>
-            </p>
-        </div>
+<div class="adm-page-head">
+  <div>
+    <a href="{{ route('admin.quizzes.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Kuis</a>
+    <h1 class="adm-title">Kelola Soal: {{ $quiz->title }}</h1>
+    <p class="adm-subtitle">
+      Kategori: <strong>{{ $quiz->category?->name ?? 'Umum' }}</strong> &bull; Total Soal: <strong>{{ $quiz->questions->count() }}</strong>
+    </p>
+  </div>
+  @if($quiz->category)
+    <div class="adm-head-actions">
+      <a href="{{ route('admin.materials.index', ['category_id' => $quiz->category_id]) }}" class="adm-btn adm-btn--secondary">
+        Lihat Bank Materi {{ $quiz->category->name }}
+      </a>
     </div>
+  @endif
 </div>
 
-<div style="display: grid; grid-template-columns: 1fr 380px; gap: var(--space-8); align-items: start;">
-    {{-- Daftar Soal Tersedia --}}
-    <div>
-        <h2 style="font-size: 1.25rem; margin-bottom: var(--space-4);">Daftar Soal Kuis</h2>
-
-        @forelse($quiz->questions as $index => $question)
-            <div class="card" style="margin-bottom: var(--space-4); padding: var(--space-4);">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3);">
-                    <div>
-                        <span class="badge" style="background: var(--surface-alt); font-weight: 700; margin-right: var(--space-2);">
-                            Soal #{{ $index + 1 }}
-                        </span>
-                        <strong style="font-size: 1.125rem;">{{ $question->prompt_text }}</strong>
-                    </div>
-                    <form action="{{ route('admin.quizzes.questions.destroy', $question) }}" method="POST" onsubmit="return confirm('Hapus soal ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger" style="padding: var(--space-1) var(--space-2); font-size: 0.8125rem;">Hapus</button>
-                    </form>
-                </div>
-
-                <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: center; margin-top: var(--space-2);">
-                    @foreach($question->options as $option)
-                        @php $isCorrect = $option->material_id === $question->correct_material_id; @endphp
-                        <div style="display: flex; flex-direction: column; align-items: center; padding: var(--space-2); border: 2px solid {{ $isCorrect ? 'var(--success, #246B4D)' : 'var(--border)' }}; border-radius: var(--radius-md); background: {{ $isCorrect ? 'var(--success-bg, #E3F2EA)' : 'var(--surface-alt)' }};">
-                            <img src="{{ asset('storage/' . $option->material->image_path) }}" alt="{{ $option->material->label }}" style="width: 60px; height: 60px; object-fit: contain;">
-                            <span style="font-size: 0.8125rem; font-weight: 600; margin-top: var(--space-1); color: var(--text);">
-                                {{ $option->material->label }}
-                                @if($isCorrect) &check; @endif
-                            </span>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @empty
-            <div class="card" style="text-align: center; padding: var(--space-8); color: var(--text-muted);">
-                Belum ada soal pada kuis ini. Tambahkan soal manual melalui formulir di samping.
-            </div>
-        @endforelse
-    </div>
-
-    {{-- Form Tambah Soal Manual --}}
-    <div class="card" style="padding: var(--space-5);">
-        <h3 style="margin-top: 0; font-size: 1.125rem; margin-bottom: var(--space-4);">+ Tambah Soal Manual</h3>
-
-        <form action="{{ route('admin.quizzes.questions.store', $quiz) }}" method="POST">
+<div class="adm-grid-aside">
+  {{-- Daftar Soal Tersedia --}}
+  <div>
+    @forelse($quiz->questions as $index => $question)
+      <article class="adm-panel">
+        <div class="adm-panel__head">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="adm-pill adm-pill--info">Soal #{{ $index + 1 }}</span>
+            <strong style="font-size: 1rem; color: var(--ink);">{{ $question->prompt_text }}</strong>
+          </div>
+          <form action="{{ route('admin.quizzes.questions.destroy', $question) }}" method="POST" onsubmit="return confirm('Hapus soal ini?')">
             @csrf
+            @method('DELETE')
+            <button type="submit" class="adm-btn adm-btn--danger adm-btn--xs">Hapus</button>
+          </form>
+        </div>
 
-            <div class="form-group" style="margin-bottom: var(--space-4);">
-                <label for="prompt_text" class="form-label" style="font-weight: 600;">Pertanyaan *</label>
-                <input type="text" name="prompt_text" id="prompt_text" class="form-control" value="{{ old('prompt_text', 'Mana yang merupakan ...?') }}" required>
-                @error('prompt_text')
-                    <div style="color: var(--danger); font-size: 0.8125rem; margin-top: var(--space-1);">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="adm-panel__body">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: stretch;">
+            @foreach($question->options as $option)
+              @php $isCorrect = $option->material_id === $question->correct_material_id; @endphp
+              <div style="min-width: 98px; display: flex; flex-direction: column; align-items: center; padding: 10px; border: 2px solid {{ $isCorrect ? 'var(--success)' : 'var(--line)' }}; border-radius: 12px; background: {{ $isCorrect ? 'var(--success-bg)' : 'var(--surface-alt)' }};">
+                <img src="{{ asset('storage/' . $option->material->image_path) }}" alt="{{ $option->material->label }}" style="width: 64px; height: 64px; object-fit: contain;">
+                <span style="font-size: 0.8125rem; font-weight: 700; margin-top: 6px; color: var(--ink);">
+                  {{ $option->material->label }}
+                </span>
+                @if($isCorrect)
+                  <span class="adm-pill adm-pill--success" style="margin-top: 4px; font-size: 0.6875rem;">Kunci Benar</span>
+                @endif
+              </div>
+            @endforeach
+          </div>
+        </div>
+      </article>
+    @empty
+      <div class="adm-panel">
+        <div class="adm-panel__body" style="text-align: center; padding: 40px 24px; color: var(--ink-soft);">
+          Belum ada soal pada kuis ini. Tambahkan soal melalui formulir di samping kanan.
+        </div>
+      </div>
+    @endforelse
+  </div>
 
-            <div class="form-group" style="margin-bottom: var(--space-4);">
-                <label for="correct_material_id" class="form-label" style="font-weight: 600;">Jawaban Benar (Kunci) *</label>
-                <select name="correct_material_id" id="correct_material_id" class="form-control" required>
-                    <option value="">-- Pilih Materi Kunci --</option>
-                    @foreach($quiz->category?->materials ?? [] as $m)
-                        <option value="{{ $m->id }}" {{ old('correct_material_id') == $m->id ? 'selected' : '' }}>
-                            {{ $m->label }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('correct_material_id')
-                    <div style="color: var(--danger); font-size: 0.8125rem; margin-top: var(--space-1);">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="form-group" style="margin-bottom: var(--space-6);">
-                <label class="form-label" style="font-weight: 600;">Pilihan Jawaban (Pilih 2-4 materi) *</label>
-                <small style="color: var(--text-muted); display: block; margin-bottom: var(--space-2);">Pastikan materi jawaban benar dicentang.</small>
-                <div style="display: flex; flex-direction: column; gap: var(--space-2); max-height: 220px; overflow-y: auto; padding: var(--space-2); border: 1px solid var(--border); border-radius: var(--radius-sm);">
-                    @foreach($quiz->category?->materials ?? [] as $m)
-                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer; font-size: 0.9375rem;">
-                            <input type="checkbox" name="option_ids[]" value="{{ $m->id }}" {{ (is_array(old('option_ids')) && in_array($m->id, old('option_ids'))) ? 'checked' : '' }}>
-                            <span>{{ $m->label }}</span>
-                        </label>
-                    @endforeach
-                </div>
-                @error('option_ids')
-                    <div style="color: var(--danger); font-size: 0.8125rem; margin-top: var(--space-1);">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan Soal</button>
-        </form>
+  {{-- Form Tambah Soal Manual --}}
+  <section class="adm-panel">
+    <div class="adm-panel__head">
+      <div>
+        <h2 class="adm-panel__title">+ Tambah Soal Manual</h2>
+        <p class="adm-panel__sub">Pilih kunci jawaban dan 2&ndash;4 gambar opsi</p>
+      </div>
     </div>
+    <div class="adm-panel__body">
+      <form action="{{ route('admin.quizzes.questions.store', $quiz) }}" method="POST">
+        @csrf
+
+        <div class="adm-field">
+          <label for="prompt_text" class="adm-label">Pertanyaan Suara / Layar *</label>
+          <input type="text" name="prompt_text" id="prompt_text" class="adm-input" value="{{ old('prompt_text', 'Mana yang merupakan ...?') }}" required>
+          @error('prompt_text')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="adm-field">
+          <label for="correct_material_id" class="adm-label">Jawaban Benar (Kunci) *</label>
+          <select name="correct_material_id" id="correct_material_id" class="adm-select" required>
+            <option value="">-- Pilih Materi Kunci --</option>
+            @foreach($quiz->category?->materials ?? [] as $m)
+              <option value="{{ $m->id }}" {{ old('correct_material_id') == $m->id ? 'selected' : '' }}>
+                {{ $m->label }}
+              </option>
+            @endforeach
+          </select>
+          @error('correct_material_id')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="adm-field">
+          <label class="adm-label">Pilihan Gambar (Pilih 2&ndash;4 materi) *</label>
+          <span class="adm-help" style="margin-bottom: 8px; margin-top: 0;">Pastikan materi kunci ikut dicentang.</span>
+          <div style="display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; padding: 8px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface-alt);">
+            @forelse($quiz->category?->materials ?? [] as $m)
+              <label style="display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); cursor: pointer; font-size: 0.875rem; font-weight: 600;">
+                <input type="checkbox" name="option_ids[]" value="{{ $m->id }}" {{ (is_array(old('option_ids')) && in_array($m->id, old('option_ids'))) ? 'checked' : '' }} style="width: 17px; height: 17px;">
+                <img src="/storage/{{ $m->image_path }}" alt="{{ $m->label }}" style="width: 28px; height: 28px; object-fit: contain; border-radius: 6px; background: var(--surface-alt);">
+                <span>{{ $m->label }}</span>
+              </label>
+            @empty
+              <span style="font-size: 0.8125rem; color: var(--ink-soft);">Belum ada materi aktif pada kategori ini.</span>
+            @endforelse
+          </div>
+          @error('option_ids')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+
+        <button type="submit" class="adm-btn adm-btn--primary" style="width: 100%;">Simpan Soal Kuis</button>
+      </form>
+    </div>
+  </section>
 </div>
 @endsection

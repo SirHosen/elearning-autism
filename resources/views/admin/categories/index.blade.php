@@ -1,65 +1,91 @@
 @extends('layouts.admin')
 
-@section('title', 'Kategori Pembelajaran | Panel Guru')
+@section('title', 'Kategori Materi | Panel Pengelolaan Guru')
+@section('page_title', 'Kategori')
 
 @section('content')
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap;">
+<div class="adm-page-head">
   <div>
-    <h2 style="font-size: 24px; margin-bottom: 4px;">Kategori Materi</h2>
-    <p style="color: var(--ink-soft); font-size: 14px;">Kelola kelompok materi yang dapat diakses oleh siswa.</p>
+    <p class="adm-eyebrow">Struktur Kurikulum</p>
+    <h1 class="adm-title">Kategori Pembelajaran</h1>
+    <p class="adm-subtitle">Kelompok materi yang terhubung ke halaman Belajar, Video, Permainan, dan Kuis siswa.</p>
   </div>
-  <a href="{{ route('admin.categories.create') }}" class="btn btn-primary" style="min-height: 44px; padding: 0 18px; font-size: 15px;">
-    + Tambah Kategori
-  </a>
+  <div class="adm-head-actions">
+    <a href="{{ route('admin.categories.create') }}" class="adm-btn adm-btn--primary">+ Tambah Kategori</a>
+  </div>
 </div>
 
-<div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow-x: auto;">
-  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+<div class="adm-table-wrap">
+  <table class="adm-table">
     <thead>
-      <tr style="background: var(--surface-alt); border-bottom: 1px solid var(--line); color: var(--ink-soft);">
-        <th style="padding: 14px 16px;">Warna</th>
-        <th style="padding: 14px 16px;">Nama Kategori</th>
-        <th style="padding: 14px 16px;">Slug</th>
-        <th style="padding: 14px 16px;">Materi</th>
-        <th style="padding: 14px 16px;">Status</th>
-        <th style="padding: 14px 16px; text-align: right;">Aksi</th>
+      <tr>
+        <th>Warna</th>
+        <th>Nama Kategori &amp; Rute</th>
+        <th>Materi</th>
+        <th>Video</th>
+        <th>Permainan</th>
+        <th>Kuis</th>
+        <th>Status</th>
+        <th style="text-align: right;">Aksi</th>
       </tr>
     </thead>
     <tbody>
       @forelse ($categories as $cat)
-        <tr style="border-bottom: 1px solid var(--line);">
-          <td style="padding: 14px 16px;">
-            <span class="tile-{{ $cat->color_key }}" style="display: inline-block; width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--line);"></span>
+        <tr>
+          <td>
+            <span class="tile-{{ $cat->color_key }}" style="display: inline-block; width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--line);"></span>
           </td>
-          <td style="padding: 14px 16px; font-weight: 700;">
-            {{ $cat->name }}
+          <td>
+            <strong style="color: var(--ink); font-size: 0.9375rem;">{{ $cat->name }}</strong>
             @if ($cat->description)
-              <small style="display: block; font-weight: normal; color: var(--ink-soft); font-size: 12px;">{{ $cat->description }}</small>
+              <div style="font-size: 0.8125rem; color: var(--ink-soft); margin-top: 2px;">{{ $cat->description }}</div>
             @endif
+            <div style="font-size: 0.75rem; color: var(--primary-strong); margin-top: 2px;"><code>/belajar/{{ $cat->slug }}</code></div>
           </td>
-          <td style="padding: 14px 16px; color: var(--ink-soft);">/belajar/{{ $cat->slug }}</td>
-          <td style="padding: 14px 16px;">{{ $cat->materials_count }} materi</td>
-          <td style="padding: 14px 16px;">
+          <td>
+            <a href="{{ route('admin.materials.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--info">
+              {{ $cat->materials_count }} materi
+            </a>
+          </td>
+          <td>
+            <a href="{{ route('admin.videos.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--purple">
+              {{ $cat->videos_count }} video
+            </a>
+          </td>
+          <td>
+            <a href="{{ route('admin.games.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--success">
+              {{ $cat->games_count }} game
+            </a>
+          </td>
+          <td>
+            <a href="{{ route('admin.quizzes.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--warning">
+              {{ $cat->quizzes_count }} kuis
+            </a>
+          </td>
+          <td>
             @if ($cat->is_active)
-              <span style="background: var(--success-bg); color: var(--success); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">Aktif</span>
+              <span class="adm-pill adm-pill--success">Aktif</span>
             @else
-              <span style="background: #eee; color: #777; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">Nonaktif</span>
+              <span class="adm-pill adm-pill--neutral">Nonaktif</span>
             @endif
           </td>
-          <td style="padding: 14px 16px; text-align: right;">
-            <div style="display: inline-flex; gap: 8px;">
-              <a href="{{ route('admin.categories.edit', $cat) }}" class="btn btn-secondary" style="min-height: 36px; padding: 0 12px; font-size: 13px;">Ubah</a>
+          <td style="text-align: right;">
+            <div class="adm-actions">
+              <a href="{{ route('admin.materials.create', ['category_id' => $cat->id]) }}" class="adm-btn adm-btn--secondary adm-btn--sm">+ Materi</a>
+              <a href="{{ route('admin.categories.edit', $cat) }}" class="adm-btn adm-btn--secondary adm-btn--sm">Ubah</a>
               <form action="{{ route('admin.categories.destroy', $cat) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-danger" style="min-height: 36px; padding: 0 12px; font-size: 13px;">Hapus</button>
+                <button type="submit" class="adm-btn adm-btn--danger adm-btn--sm">Hapus</button>
               </form>
             </div>
           </td>
         </tr>
       @empty
         <tr>
-          <td colspan="6" style="padding: 32px; text-align: center; color: var(--ink-soft);">Belum ada kategori. Silakan tambahkan kategori baru.</td>
+          <td colspan="8" style="padding: 36px; text-align: center; color: var(--ink-soft);">
+            Belum ada kategori. Silakan tambahkan kategori baru.
+          </td>
         </tr>
       @endforelse
     </tbody>

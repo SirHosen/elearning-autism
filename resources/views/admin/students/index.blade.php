@@ -1,29 +1,57 @@
 @extends('layouts.admin')
 
-@section('title', 'Data Siswa | Panel Guru')
+@section('title', 'Data Siswa | Panel Pengelolaan Guru')
+@section('page_title', 'Data Siswa')
 
 @section('content')
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap;">
+<div class="adm-page-head">
   <div>
-    <h2 style="font-size: 24px; margin-bottom: 4px;">Data Akun Siswa</h2>
-    <p style="color: var(--ink-soft); font-size: 14px;">Kelola akun masuk siswa dan cetak kartu PIN digital.</p>
+    <p class="adm-eyebrow">Direktori Peserta Didik</p>
+    <h1 class="adm-title">Data Akun Siswa</h1>
+    <p class="adm-subtitle">Kelola akun masuk siswa, pantau partisipasi belajar, cetak kartu PIN, dan buka rapor hasil belajar.</p>
   </div>
-  <a href="{{ route('admin.students.create') }}" class="btn btn-primary" style="min-height: 44px; padding: 0 18px; font-size: 15px;">
-    + Tambah Siswa Baru
-  </a>
+  <div class="adm-head-actions">
+    <a href="{{ route('admin.attendances.index') }}" class="adm-btn adm-btn--secondary">Rekap Absensi</a>
+    <a href="{{ route('admin.students.create') }}" class="adm-btn adm-btn--primary">+ Tambah Siswa Baru</a>
+  </div>
 </div>
 
-<!-- Banner Flash PIN Baru (Tampil Sekali) -->
+{{-- Ringkasan Statistik Siswa --}}
+<div class="adm-kpi-grid" style="margin-bottom: 20px;">
+  <div class="adm-kpi-card adm-kpi-card--blue">
+    <span class="adm-kpi-card__label">Total Terdaftar</span>
+    <strong class="adm-kpi-card__val">{{ $summaryStats['total'] }}</strong>
+    <span class="adm-kpi-card__sub">Seluruh akun peserta didik</span>
+  </div>
+  <div class="adm-kpi-card adm-kpi-card--green">
+    <span class="adm-kpi-card__label">Akun Aktif</span>
+    <strong class="adm-kpi-card__val">{{ $summaryStats['active'] }}</strong>
+    <span class="adm-kpi-card__sub">Dapat masuk ke ruang belajar siswa</span>
+  </div>
+  <div class="adm-kpi-card adm-kpi-card--amber">
+    <span class="adm-kpi-card__label">Akun Nonaktif</span>
+    <strong class="adm-kpi-card__val">{{ $summaryStats['inactive'] }}</strong>
+    <span class="adm-kpi-card__sub">Ditangguhkan sementara</span>
+  </div>
+</div>
+
+{{-- Banner Flash PIN Baru (Tampil Sekali) --}}
 @if (session('generated_pin'))
-  <div style="background: var(--tint-yellow); border: 2px solid var(--hint-line); border-radius: var(--radius-sm); padding: 20px; margin-bottom: 24px;">
+  <div style="background: var(--tint-yellow); border: 2px solid var(--hint-line); border-radius: var(--adm-radius); padding: 20px; margin-bottom: 20px;">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
       <div>
-        <p style="font-size: 13px; font-weight: 800; color: #8A6508; letter-spacing: 1px; margin-bottom: 4px;">KARTU PIN DIGITAL SISWA (HANYA TAMPIL SEKALI)</p>
-        <h3 style="font-size: 20px; margin-bottom: 6px;">{{ session('student_name') }} (Username: <code>{{ session('student_username') }}</code>)</h3>
-        <p style="font-size: 16px; margin: 0;">PIN Masuk: <strong style="font-size: 24px; letter-spacing: 4px; color: var(--primary);">{{ session('generated_pin') }}</strong></p>
+        <p style="font-size: 0.75rem; font-weight: 700; color: #78350F; letter-spacing: 0.8px; margin: 0 0 4px;">
+          KARTU PIN DIGITAL SISWA (HANYA TAMPIL SEKALI)
+        </p>
+        <h2 style="font-size: 1.25rem; margin: 0 0 6px; color: var(--ink);">
+          {{ session('student_name') }} (Username: <code>{{ session('student_username') }}</code>)
+        </h2>
+        <p style="font-size: 1rem; margin: 0; color: var(--ink);">
+          PIN Masuk: <strong style="font-size: 1.5rem; letter-spacing: 4px; color: var(--primary-strong);">{{ session('generated_pin') }}</strong>
+        </p>
       </div>
       <div>
-        <a href="{{ route('admin.students.card', session('student_id')) }}" target="_blank" class="btn btn-primary" style="min-height: 42px; padding: 0 16px;">
+        <a href="{{ route('admin.students.card', session('student_id')) }}" target="_blank" class="adm-btn adm-btn--primary">
           Cetak Kartu PIN
         </a>
       </div>
@@ -31,69 +59,99 @@
   </div>
 @endif
 
-<!-- Pencarian Siswa -->
-<div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
-  <form action="{{ route('admin.students.index') }}" method="GET" style="display: flex; gap: 12px; flex-wrap: wrap;">
-    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama siswa, username, atau kelas..."
-           style="flex: 1; min-width: 240px; min-height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-    <button type="submit" class="btn btn-secondary" style="min-height: 42px; padding: 0 16px;">Cari</button>
-    @if (request('q'))
-      <a href="{{ route('admin.students.index') }}" class="btn btn-secondary" style="min-height: 42px; padding: 0 12px;">Reset</a>
-    @endif
-  </form>
-</div>
+{{-- Filter & Pencarian Siswa --}}
+<form action="{{ route('admin.students.index') }}" method="GET" class="adm-filter-bar">
+  <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama siswa, username, atau kelas..." class="adm-input" style="flex: 1; min-width: 220px;">
+  <select name="class_name" class="adm-select" onchange="this.form.submit()">
+    <option value="">Semua Kelas</option>
+    @foreach($classes as $cls)
+      <option value="{{ $cls }}" {{ request('class_name') === $cls ? 'selected' : '' }}>{{ $cls }}</option>
+    @endforeach
+  </select>
+  <select name="status" class="adm-select" onchange="this.form.submit()">
+    <option value="">Semua Status</option>
+    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option>
+    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Nonaktif</option>
+  </select>
+  <button type="submit" class="adm-btn adm-btn--secondary adm-btn--sm">Cari</button>
+  @if (request()->hasAny(['q', 'class_name', 'status']))
+    <a href="{{ route('admin.students.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm">Reset</a>
+  @endif
+</form>
 
-<div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow-x: auto;">
-  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+<div class="adm-table-wrap">
+  <table class="adm-table">
     <thead>
-      <tr style="background: var(--surface-alt); border-bottom: 1px solid var(--line); color: var(--ink-soft);">
-        <th style="padding: 14px 16px;">Nama Siswa</th>
-        <th style="padding: 14px 16px;">Username</th>
-        <th style="padding: 14px 16px;">Kelas</th>
-        <th style="padding: 14px 16px;">Status</th>
-        <th style="padding: 14px 16px;">Terakhir Masuk</th>
-        <th style="padding: 14px 16px; text-align: right;">Aksi</th>
+      <tr>
+        <th>Nama Siswa &amp; Username</th>
+        <th>Kelas</th>
+        <th>Aktivitas Belajar</th>
+        <th>Terakhir Masuk</th>
+        <th>Status</th>
+        <th style="text-align: right;">Aksi</th>
       </tr>
     </thead>
     <tbody>
       @forelse ($students as $s)
-        <tr style="border-bottom: 1px solid var(--line);">
-          <td style="padding: 14px 16px; font-weight: 700;">{{ $s->name }}</td>
-          <td style="padding: 14px 16px;"><code>{{ $s->username }}</code></td>
-          <td style="padding: 14px 16px;">{{ $s->class_name ?? '-' }}</td>
-          <td style="padding: 14px 16px;">
+        @php
+          $initials = collect(explode(' ', trim($s->name)))
+            ->filter()
+            ->map(fn ($w) => strtoupper(substr($w, 0, 1)))
+            ->take(2)
+            ->implode('');
+        @endphp
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="adm-avatar" aria-hidden="true">{{ $initials ?: 'S' }}</span>
+              <div>
+                <strong style="color: var(--ink);">{{ $s->name }}</strong>
+                <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>{{ $s->username }}</code></div>
+              </div>
+            </div>
+          </td>
+          <td>{{ $s->class_name ?? '-' }}</td>
+          <td>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span class="adm-pill adm-pill--success">{{ $s->attended_days_count ?? 0 }} Hadir</span>
+              <span class="adm-pill adm-pill--warning">{{ $s->completed_quizzes_count ?? 0 }} Kuis</span>
+              <span class="adm-pill adm-pill--info">{{ $s->game_sessions_count ?? 0 }} Game</span>
+            </div>
+          </td>
+          <td style="color: var(--ink-soft);">
+            {{ $s->last_login_at ? $s->last_login_at->translatedFormat('d M Y, H:i') : 'Belum pernah' }}
+          </td>
+          <td>
             @if ($s->is_active)
-              <span style="background: var(--success-bg); color: var(--success); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">Aktif</span>
+              <span class="adm-pill adm-pill--success">Aktif</span>
             @else
-              <span style="background: #eee; color: #777; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">Nonaktif</span>
+              <span class="adm-pill adm-pill--neutral">Nonaktif</span>
             @endif
           </td>
-          <td style="padding: 14px 16px; color: var(--ink-soft);">
-            {{ $s->last_login_at ? $s->last_login_at->translatedFormat('d M Y H:i') : 'Belum pernah' }}
-          </td>
-          <td style="padding: 14px 16px; text-align: right;">
-            <div style="display: inline-flex; gap: 8px;">
-              <a href="{{ route('admin.students.card', $s) }}" target="_blank" class="btn btn-secondary" style="min-height: 36px; padding: 0 10px; font-size: 13px;" title="Cetak Kartu PIN">
-                Kartu
-              </a>
+          <td style="text-align: right;">
+            <div class="adm-actions">
+              <a href="{{ route('admin.reports.index', ['student_id' => $s->id]) }}" class="adm-btn adm-btn--blue adm-btn--xs" title="Lihat Rapor Siswa">Rapor</a>
+              <a href="{{ route('admin.students.card', $s) }}" target="_blank" class="adm-btn adm-btn--secondary adm-btn--xs" title="Cetak Kartu PIN">Kartu</a>
               <form action="{{ route('admin.students.reset-pin', $s) }}" method="POST" onsubmit="return confirm('Reset PIN untuk {{ $s->name }}?')">
                 @csrf
-                <button type="submit" class="btn btn-secondary" style="min-height: 36px; padding: 0 10px; font-size: 13px;">Reset PIN</button>
+                <button type="submit" class="adm-btn adm-btn--secondary adm-btn--xs">Reset PIN</button>
               </form>
-              <a href="{{ route('admin.students.edit', $s) }}" class="btn btn-secondary" style="min-height: 36px; padding: 0 10px; font-size: 13px;">Ubah</a>
+              <a href="{{ route('admin.students.edit', $s) }}" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
             </div>
           </td>
         </tr>
       @empty
         <tr>
-          <td colspan="6" style="padding: 32px; text-align: center; color: var(--ink-soft);">Tidak ada data siswa.</td>
+          <td colspan="6" style="padding: 36px; text-align: center; color: var(--ink-soft);">
+            Tidak ada data siswa yang sesuai filter.
+          </td>
         </tr>
       @endforelse
     </tbody>
   </table>
 </div>
 
-<div style="margin-top: 24px;">
+<div style="margin-top: 20px;">
   {{ $students->links() }}
 </div>
 @endsection

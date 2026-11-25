@@ -63,6 +63,16 @@
       "viewport": "1440x900",
       "artifact": "student-learn-viewer.html",
       "observation": "Rendered student.learn.viewer for /belajar/hewan/1 shows segmented capsule progress track, custom Montessori flat picture-book SVG artwork (hewan-1.svg), interactive tap-to-speak picture frame, 64px Dengar button with sound-wave equalizer, interactive short sentence audio card, and tactile step navigation."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "admin-dashboard.html",
+      "observation": "Rendered admin.dashboard displays deep forest-slate educator sidebar with live operational counts, sticky workspace topbar, 5-KPI summary grid with attendance meter, 7-day SVG activity trend chart, inline quick-attendance buttons, cross-module curriculum readiness matrix, and recent evaluation stream."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "admin-reports.html",
+      "observation": "Rendered admin.reports.index displays class-wide performance matrix (students, attendance days, quiz count, average score, game sessions, total stars) with direct links to individual student reports and print view."
     }
   ]
 }

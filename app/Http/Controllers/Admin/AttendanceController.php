@@ -16,15 +16,41 @@ class AttendanceController extends Controller
     {
         $date = $request->input('date', now()->toDateString());
 
-        $students = User::where('role', 'siswa')
-            ->orderBy('name')
-            ->get();
+        $studentsQuery = User::where('role', 'siswa')->orderBy('name');
+        if ($request->filled('class_name')) {
+            $studentsQuery->where('class_name', $request->input('class_name'));
+        }
+
+        $students = $studentsQuery->get();
+        $classes = User::where('role', 'siswa')
+            ->whereNotNull('class_name')
+            ->distinct()
+            ->orderBy('class_name')
+            ->pluck('class_name');
 
         $attendances = Attendance::whereDate('attendance_date', $date)
             ->get()
             ->keyBy('user_id');
 
-        return view('admin.attendances.index', compact('students', 'attendances', 'date'));
+        $statusSummary = [
+            'total' => $students->count(),
+            'hadir' => 0,
+            'izin' => 0,
+            'sakit' => 0,
+            'alpa' => 0,
+            'belum' => 0,
+        ];
+
+        foreach ($students as $student) {
+            $st = $attendances->get($student->id)?->status;
+            if ($st && isset($statusSummary[$st])) {
+                $statusSummary[$st]++;
+            } else {
+                $statusSummary['belum']++;
+            }
+        }
+
+        return view('admin.attendances.index', compact('students', 'attendances', 'date', 'classes', 'statusSummary'));
     }
 
     public function update(Request $request, User $student): RedirectResponse

@@ -1,80 +1,94 @@
 @extends('layouts.admin')
 
-@section('title', 'Materi Pembelajaran | Panel Guru')
+@section('title', 'Materi Pembelajaran | Panel Pengelolaan Guru')
+@section('page_title', 'Materi Belajar')
 
 @section('content')
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px; flex-wrap: wrap;">
+<div class="adm-page-head">
   <div>
-    <h2 style="font-size: 24px; margin-bottom: 4px;">Materi Belajar Visual & Audio</h2>
-    <p style="color: var(--ink-soft); font-size: 14px;">Daftar kartu objek pengenalan hewan, warna, dan benda.</p>
+    <p class="adm-eyebrow">Bank Kartu Visual &amp; Audio</p>
+    <h1 class="adm-title">Materi Belajar Visual &amp; Audio</h1>
+    <p class="adm-subtitle">Daftar objek pembelajaran yang digunakan langsung pada modul Belajar, Permainan, dan Kuis Bergambar.</p>
   </div>
-  <a href="{{ route('admin.materials.create') }}" class="btn btn-primary" style="min-height: 44px; padding: 0 18px; font-size: 15px;">
-    + Tambah Materi
-  </a>
+  <div class="adm-head-actions">
+    <a href="{{ route('admin.quizzes.index') }}" class="adm-btn adm-btn--secondary">Generator Kuis &rarr;</a>
+    <a href="{{ route('admin.materials.create', ['category_id' => request('category_id')]) }}" class="adm-btn adm-btn--primary">+ Tambah Materi</a>
+  </div>
 </div>
 
-<!-- Filter & Pencarian -->
-<div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px;">
-  <form action="{{ route('admin.materials.index') }}" method="GET" style="display: flex; gap: 12px; flex-wrap: wrap;">
-    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama materi..."
-           style="flex: 1; min-width: 220px; min-height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-    <select name="category_id" style="min-height: 42px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);">
-      <option value="">Semua Kategori</option>
-      @foreach ($categories as $c)
-        <option value="{{ $c->id }}" {{ request('category_id') == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
-      @endforeach
-    </select>
-    <button type="submit" class="btn btn-secondary" style="min-height: 42px; padding: 0 16px;">Filter</button>
-    @if (request()->hasAny(['q', 'category_id']))
-      <a href="{{ route('admin.materials.index') }}" class="btn btn-secondary" style="min-height: 42px; padding: 0 12px;">Reset</a>
-    @endif
-  </form>
-</div>
+{{-- Filter & Pencarian --}}
+<form action="{{ route('admin.materials.index') }}" method="GET" class="adm-filter-bar">
+  <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama materi (mis. Kucing, Bola)..." class="adm-input" style="flex: 1; min-width: 220px;">
+  <select name="category_id" class="adm-select" onchange="this.form.submit()">
+    <option value="">Semua Kategori</option>
+    @foreach ($categories as $c)
+      <option value="{{ $c->id }}" {{ request('category_id') == $c->id ? 'selected' : '' }}>
+        {{ $c->name }} ({{ $c->materials_count }})
+      </option>
+    @endforeach
+  </select>
+  <select name="audio_type" class="adm-select" onchange="this.form.submit()">
+    <option value="">Semua Sumber Suara</option>
+    <option value="recorded" {{ request('audio_type') === 'recorded' ? 'selected' : '' }}>Rekaman Guru</option>
+    <option value="tts" {{ request('audio_type') === 'tts' ? 'selected' : '' }}>Suara Otomatis (TTS)</option>
+  </select>
+  <button type="submit" class="adm-btn adm-btn--secondary adm-btn--sm">Filter</button>
+  @if (request()->hasAny(['q', 'category_id', 'audio_type']))
+    <a href="{{ route('admin.materials.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm">Reset</a>
+  @endif
+</form>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px;">
+<div class="adm-media-grid">
   @forelse ($materials as $m)
-    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column;">
-      <div style="height: 140px; background: var(--surface-alt); border-radius: 8px; display: grid; place-items: center; overflow: hidden; margin-bottom: 12px;">
-        <img src="/storage/{{ $m->image_path }}" alt="{{ $m->label }}" style="max-height: 120px; max-width: 100%; object-fit: contain;">
+    <article class="adm-media-card">
+      <div class="adm-media-card__thumb">
+        <img src="/storage/{{ $m->image_path }}" alt="{{ $m->label }}">
       </div>
-      <h3 style="font-size: 18px; margin-bottom: 4px;">{{ $m->label }}</h3>
-      <span style="font-size: 13px; color: var(--primary); font-weight: 700; margin-bottom: 8px;">
-        {{ $m->category->name }}
-      </span>
-      <p style="font-size: 13px; color: var(--ink-soft); flex: 1; margin-bottom: 12px;">
-        {{ $m->short_sentence ?? '-' }}
+
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+        <div>
+          <h3 style="margin: 0; font-size: 1.0625rem; font-weight: 700; color: var(--ink);">{{ $m->label }}</h3>
+          <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-strong);">{{ $m->category->name }}</span>
+        </div>
+        @if ($m->is_active)
+          <span class="adm-pill adm-pill--success">Aktif</span>
+        @else
+          <span class="adm-pill adm-pill--neutral">Nonaktif</span>
+        @endif
+      </div>
+
+      <p style="margin: 0; font-size: 0.8125rem; color: var(--ink-soft); flex: 1; line-height: 1.4;">
+        {{ $m->short_sentence ?? 'Belum ada kalimat pendamping.' }}
       </p>
 
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
         @if ($m->audio_path)
-          <span style="font-size: 11px; font-weight: 700; background: var(--success-bg); color: var(--success); padding: 3px 8px; border-radius: 10px;">
-            Rekaman Guru
-          </span>
+          <span class="adm-pill adm-pill--success">Rekaman Guru</span>
         @else
-          <span style="font-size: 11px; font-weight: 700; background: var(--tint-blue); color: var(--primary); padding: 3px 8px; border-radius: 10px;">
-            Suara Otomatis
-          </span>
+          <span class="adm-pill adm-pill--info">Suara Otomatis</span>
         @endif
 
-        @if ($m->is_active)
-          <span style="font-size: 11px; font-weight: 700; color: var(--success);">Aktif</span>
-        @else
-          <span style="font-size: 11px; font-weight: 700; color: #888;">Nonaktif</span>
-        @endif
+        <button type="button"
+                class="adm-btn adm-btn--secondary adm-btn--xs adm-preview-audio-btn"
+                data-label="{{ $m->label }}"
+                data-audio="{{ $m->audio_path ? '/storage/' . $m->audio_path : '' }}"
+                title="Uji suara pelafalan">
+          Putar Suara
+        </button>
       </div>
 
-      <div style="display: flex; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px;">
-        <a href="{{ route('admin.materials.edit', $m) }}" class="btn btn-secondary" style="flex: 1; min-height: 36px; font-size: 13px;">Ubah</a>
+      <div style="display: flex; gap: 8px; padding-top: 10px; border-top: 1px solid var(--line);">
+        <a href="{{ route('admin.materials.edit', $m) }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="flex: 1;">Ubah</a>
         <form action="{{ route('admin.materials.destroy', $m) }}" method="POST" style="flex: 1;" onsubmit="return confirm('Hapus materi {{ $m->label }}?')">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-danger" style="width: 100%; min-height: 36px; font-size: 13px;">Hapus</button>
+          <button type="submit" class="adm-btn adm-btn--danger adm-btn--sm" style="width: 100%;">Hapus</button>
         </form>
       </div>
-    </div>
+    </article>
   @empty
-    <div style="grid-column: 1/-1; background: var(--surface); padding: 48px; border: 1px dashed var(--line); border-radius: var(--radius-sm); text-align: center; color: var(--ink-soft);">
-      Materi tidak ditemukan. Silakan tambahkan materi baru.
+    <div style="grid-column: 1 / -1; background: var(--surface); padding: 48px; border: 1px dashed var(--line); border-radius: var(--adm-radius); text-align: center; color: var(--ink-soft);">
+      Materi tidak ditemukan. Silakan tambahkan materi baru atau ubah filter pencarian.
     </div>
   @endforelse
 </div>
@@ -83,3 +97,45 @@
   {{ $materials->links() }}
 </div>
 @endsection
+
+@push('scripts')
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    let activeAudio = null;
+    document.querySelectorAll('.adm-preview-audio-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const audioUrl = btn.dataset.audio;
+        const labelText = btn.dataset.label;
+
+        if (activeAudio) {
+          activeAudio.pause();
+          activeAudio = null;
+        }
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+
+        if (audioUrl) {
+          activeAudio = new Audio(audioUrl);
+          btn.textContent = 'Memutar...';
+          activeAudio.onended = activeAudio.onerror = function() {
+            btn.textContent = 'Putar Suara';
+          };
+          activeAudio.play().catch(function() {
+            btn.textContent = 'Putar Suara';
+          });
+        } else if ('speechSynthesis' in window && labelText) {
+          const u = new SpeechSynthesisUtterance(labelText);
+          u.lang = 'id-ID';
+          u.rate = 0.85;
+          btn.textContent = 'Berbicara...';
+          u.onend = u.onerror = function() {
+            btn.textContent = 'Putar Suara';
+          };
+          window.speechSynthesis.speak(u);
+        }
+      });
+    });
+  });
+</script>
+@endpush
