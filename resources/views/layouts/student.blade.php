@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layouts.css?v={{ @filemtime(public_path('css/layouts.css')) ?: '2' }}">
+  <link rel="stylesheet" href="/css/student.css?v={{ @filemtime(public_path('css/student.css')) ?: '1' }}">
   @stack('styles')
 </head>
 <body class="student-body">
@@ -55,6 +56,13 @@
     @yield('content')
   </main>
 
+  @php
+    $studentAudioSettings = [
+      'volume' => $setting?->volume ?? 70,
+      'sfx_enabled' => (bool) ($setting?->sfx_enabled ?? false),
+    ];
+  @endphp
+  <script type="application/json" id="user-settings-data">@json($studentAudioSettings)</script>
   <script src="/js/core/audio-manager.js" type="module"></script>
   @stack('scripts')
 </body>

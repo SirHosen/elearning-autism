@@ -4,47 +4,81 @@
 @section('page_title', 'Permainan Edukasi')
 
 @section('content')
-<div style="max-width: 960px; margin: 0 auto;">
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
-    <a href="{{ route('student.home') }}" class="btn btn-secondary" style="font-size: 0.9375rem; font-weight: 700; padding: 10px 20px; border-radius: 999px;">
-      &larr; Kembali ke Beranda
+<div class="st-page-shell">
+  <div class="st-page-bar">
+    <a href="{{ route('student.home') }}" class="st-back-pill">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      <span>Kembali ke Beranda</span>
     </a>
-    <span class="badge badge-success" style="font-size: 0.8125rem; padding: 6px 14px;">
+
+    <span class="st-topic-pill st-topic-pill--green">
       Permainan Aktif
     </span>
   </div>
 
+  <div class="st-intro-banner">
+    <div class="st-intro-banner__text">
+      <h2>Ayo Bermain Sambil Belajar</h2>
+      <p>Pilih satu permainan di bawah ini dan ikuti petunjuk suara dengan santai.</p>
+    </div>
+    <div class="st-intro-banner__art" style="background: var(--tint-green);" aria-hidden="true">
+      <svg viewBox="0 0 80 80" width="60" height="60" fill="none">
+        <path d="M22 30 L58 30 L58 60 L22 60 Z" rx="8" fill="#246B4D"/>
+        <circle cx="40" cy="24" r="9" fill="#FBBF24"/>
+        <rect x="26" y="34" width="28" height="22" rx="6" fill="#FFFFFF"/>
+        <polygon points="40,38 43,43 49,44 45,48 46,53 40,50 34,53 35,48 31,44 37,43" fill="#246B4D"/>
+      </svg>
+    </div>
+  </div>
+
   @if($games->isEmpty())
-    <div class="card" style="text-align: center; padding: 48px 24px; max-width: 500px; margin: 0 auto;">
-      <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px;">Belum Ada Permainan</h2>
-      <p style="color: var(--ink-soft); margin-bottom: 24px;">Bapak/Ibu guru akan menambahkan permainan edukasi di sini segera.</p>
-      <a href="{{ route('student.home') }}" class="btn btn-primary" style="border-radius: 999px;">Kembali ke Menu Utama</a>
+    <div class="st-empty-card">
+      <h2 style="font-size: 1.375rem; font-weight: 700; margin: 0 0 8px;">Belum Ada Permainan</h2>
+      <p style="color: var(--ink-soft); margin: 0 0 24px;">Bapak/Ibu guru akan menambahkan permainan edukasi di sini segera.</p>
+      <a href="{{ route('student.home') }}" class="btn btn-student btn-primary" style="border-radius: 999px;">Kembali ke Menu Utama</a>
     </div>
   @else
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+    <div class="st-hub-grid">
       @foreach($games as $game)
-        <a href="{{ route('student.games.play', $game) }}" class="card" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; padding: 24px; border-radius: 16px; border-top: 4px solid var(--success); transition: transform 0.2s ease, box-shadow 0.2s ease;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-            <span class="badge badge-neutral" style="font-size: 0.75rem;">
-              {{ $game->category->name }}
-            </span>
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--tint-green); color: var(--success); font-weight: 800; font-size: 1rem; display: grid; place-items: center;">
-              {{ strtoupper(substr($game->game_type, 0, 1)) }}
-            </div>
+        <a href="{{ route('student.games.play', $game) }}" class="st-hub-card st-hub-card--green">
+          <div class="st-hub-card__stage st-hub-card__stage--green">
+            <span class="st-hub-card__badge">{{ $game->category->name }}</span>
+
+            @if($game->game_type === 'cocokkan')
+              <svg class="st-hub-card__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+                <rect x="18" y="34" width="42" height="58" rx="12" fill="#FFFFFF" stroke="#246B4D" stroke-width="3.5"/>
+                <circle cx="39" cy="56" r="11" fill="#FBBF24"/>
+                <rect x="68" y="34" width="42" height="58" rx="12" fill="#246B4D"/>
+                <line x1="77" y1="62" x2="101" y2="62" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="64" cy="63" r="8" fill="#E53935"/>
+              </svg>
+            @elseif($game->game_type === 'seret_tempatkan')
+              <svg class="st-hub-card__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+                <rect x="22" y="28" width="38" height="38" rx="10" fill="#2F6F9F"/>
+                <polygon points="41,37 48,54 34,54" fill="#FFFFFF"/>
+                <path d="M64 48 L78 58 L70 58 L70 72" stroke="#246B4D" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="68" y="64" width="40" height="40" rx="10" fill="#FFFFFF" stroke="#246B4D" stroke-width="3.5" stroke-dasharray="6 4"/>
+              </svg>
+            @else
+              <svg class="st-hub-card__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+                <rect x="20" y="34" width="36" height="48" rx="10" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="3"/>
+                <rect x="46" y="26" width="40" height="56" rx="12" fill="#FFFFFF" stroke="#246B4D" stroke-width="4"/>
+                <polygon points="66,38 70,48 80,49 72,56 75,66 66,60 57,66 60,56 52,49 62,48" fill="#FBBF24"/>
+                <circle cx="88" cy="78" r="14" fill="#2F6F9F"/>
+                <polyline points="82 78 86 82 95 73" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            @endif
           </div>
-          <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 800; color: var(--text);">
-            {{ $game->title }}
-          </h3>
-          <p style="margin: 0 0 20px 0; color: var(--ink-soft); font-size: 0.9375rem; line-height: 1.45; flex-grow: 1;">
-            {{ $game->instruction_text }}
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 14px; margin-top: auto;">
-            <span style="font-size: 0.8125rem; color: var(--ink-soft); font-weight: 600;">
-              {{ $game->round_count }} Ronde
-            </span>
-            <span style="color: var(--success); font-weight: 800; font-size: 0.9375rem;">
-              Mulai Main &rarr;
-            </span>
+
+          <h3 class="st-hub-card__title">{{ $game->title }}</h3>
+          <p class="st-hub-card__desc">{{ $game->instruction_text }}</p>
+
+          <div class="st-hub-card__footer">
+            <span class="st-hub-card__meta">{{ $game->round_count }} Ronde</span>
+            <span class="st-hub-card__cta">Mulai Main &rarr;</span>
           </div>
         </a>
       @endforeach

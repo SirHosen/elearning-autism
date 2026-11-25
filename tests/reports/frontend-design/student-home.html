@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="csrf-token" content="">
+  <meta name="csrf-token" content="dOIjdiMkjZK2CNFEFque925xIrvibNWBkL28PWjI">
   <title>Ruang Belajar | Sahabat Belajar</title>
   <link rel="stylesheet" href="/css/tokens.css">
   <link rel="stylesheet" href="/css/themes.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/layouts.css?v=1795588335">
+  <link rel="stylesheet" href="/css/layouts.css?v=1795589283">
+  <link rel="stylesheet" href="/css/student.css?v=1795588893">
   <style>
   /* ── Greeting Welcome Card ── */
   .home-welcome {
@@ -98,7 +99,7 @@
     line-height: 1.5;
   }
 
-  /* Tactile Voice Welcome Button (Tap-only, zero autoplay) */
+  /* Tactile Voice Welcome Button (Tap-only, manual playback) */
   .home-voice-btn {
     flex-shrink: 0;
     min-height: 64px;
@@ -458,8 +459,8 @@
   <header class="student-header">
     <div class="student-header-inner">
       <div class="student-header-left">
-        <a href="http://localhost:8000/beranda"
-           class="student-nav-btn "
+        <a href="http://localhost/beranda"
+           class="student-nav-btn is-active"
            title="Kembali ke Beranda">
           Beranda
         </a>
@@ -468,13 +469,13 @@
       <h1 class="student-header-title">Ruang Belajar</h1>
 
       <div class="student-header-actions">
-        <a href="http://localhost:8000/pengaturan"
+        <a href="http://localhost/pengaturan"
            class="student-nav-btn "
            title="Pengaturan Tampilan & Suara">
           Atur
         </a>
-        <form action="http://localhost:8000/keluar" method="POST" style="display: inline;">
-          <input type="hidden" name="_token" value="" autocomplete="off">          <button type="submit" class="student-nav-btn student-nav-btn--logout" title="Keluar">
+        <form action="http://localhost/keluar" method="POST" style="display: inline;">
+          <input type="hidden" name="_token" value="dOIjdiMkjZK2CNFEFque925xIrvibNWBkL28PWjI" autocomplete="off">          <button type="submit" class="student-nav-btn student-nav-btn--logout" title="Keluar">
             Keluar
           </button>
         </form>
@@ -488,9 +489,7 @@
   <div class="home-welcome__text">
     <div class="home-welcome__meta">
       <span class="home-school-pill">SLB B-C Wijayakusumah</span>
-              <a href="http://localhost:8000/absen" class="home-status-pill home-status-pill--pending">
-          Belum Absen &middot; Ketuk di sini
-        </a>
+              <span class="home-status-pill home-status-pill--done">Sudah Hadir Hari Ini</span>
           </div>
     <h2 class="home-greeting">Halo, Siswa Demo A!</h2>
     <p class="home-subtitle">Pilih kegiatan yang mau kamu lakukan hari ini.</p>
@@ -515,7 +514,7 @@
 <div class="home-bento">
 
   
-  <a href="http://localhost:8000/belajar" class="act-card act-card--featured act-card--blue">
+  <a href="http://localhost/belajar" class="act-card act-card--featured act-card--blue">
     <div class="act-card__info">
       <span class="act-card__title">BELAJAR</span>
       <span class="act-card__desc">Kenali hewan, warna, dan benda sekitar</span>
@@ -547,7 +546,7 @@
   </a>
 
   
-  <a href="http://localhost:8000/bermain" class="act-card act-card--featured act-card--green">
+  <a href="http://localhost/bermain" class="act-card act-card--featured act-card--green">
     <div class="act-card__info">
       <span class="act-card__title">BERMAIN</span>
       <span class="act-card__desc">Permainan tebak gambar seru</span>
@@ -576,7 +575,7 @@
   </a>
 
   
-  <a href="http://localhost:8000/kuis" class="act-card act-card--compact act-card--yellow">
+  <a href="http://localhost/kuis" class="act-card act-card--compact act-card--yellow">
     <div class="act-card__art" aria-hidden="true">
       <svg viewBox="0 0 148 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Kartu Kuis -->
@@ -601,7 +600,7 @@
   </a>
 
   
-  <a href="http://localhost:8000/video" class="act-card act-card--compact act-card--lavender">
+  <a href="http://localhost/video" class="act-card act-card--compact act-card--lavender">
     <div class="act-card__art" aria-hidden="true">
       <svg viewBox="0 0 148 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Bingkai Tablet / Layar -->
@@ -624,7 +623,8 @@
   </a>
 
   
-  <a href="http://localhost:8000/absen" class="act-card act-card--compact act-card--peach act-card--absen ">
+  <a href="http://localhost/absen" class="act-card act-card--compact act-card--peach act-card--absen act-card--attended">
+          <span class="act-badge-done">Sudah Hadir</span>
         <div class="act-card__art" aria-hidden="true">
       <svg viewBox="0 0 148 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Badan Kalender -->
@@ -648,10 +648,10 @@
     <div class="act-card__info">
       <span class="act-card__title">ABSEN</span>
       <span class="act-card__desc">
-        Tekan untuk mencatat kehadiranmu
+        Kehadiranmu hari ini tercatat
       </span>
       <span class="act-card__pill">
-        Saya Hadir &rarr;
+        Lihat Status &rarr;
       </span>
     </div>
   </a>
@@ -659,6 +659,7 @@
 </div>
   </main>
 
+    <script type="application/json" id="user-settings-data">{"volume":70,"sfx_enabled":false}</script>
   <script src="/js/core/audio-manager.js" type="module"></script>
   <script>
   const btnHomeVoice = document.getElementById('btnHomeVoice');

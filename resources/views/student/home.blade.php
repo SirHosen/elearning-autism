@@ -92,7 +92,7 @@
     line-height: 1.5;
   }
 
-  /* Tactile Voice Welcome Button (Tap-only, zero autoplay) */
+  /* Tactile Voice Welcome Button (Tap-only, manual playback) */
   .home-voice-btn {
     flex-shrink: 0;
     min-height: 64px;

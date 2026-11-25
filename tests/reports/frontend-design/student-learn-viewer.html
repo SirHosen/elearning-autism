@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="calm" data-font-scale="normal" data-motion="minimal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="9Mn1kncW5P3kFgYgBl9dTOLnN7yl9RQcxbU2IDyU">
+  <title>Kucing | Belajar Hewan</title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/themes.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layouts.css?v=1795589283">
+  <link rel="stylesheet" href="/css/student.css?v=1795588893">
+  </head>
+<body class="student-body">
+  <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
+
+  <header class="student-header">
+    <div class="student-header-inner">
+      <div class="student-header-left">
+        <a href="http://localhost/beranda"
+           class="student-nav-btn "
+           title="Kembali ke Beranda">
+          Beranda
+        </a>
+          <a href="http://localhost/belajar" class="student-nav-btn" title="Kembali ke Daftar Kategori">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="19" y1="12" x2="5" y2="12"/>
+      <polyline points="12 19 5 12 12 5"/>
+    </svg>
+    <span>Kategori</span>
+  </a>
+      </div>
+
+      <h1 class="student-header-title">Hewan</h1>
+
+      <div class="student-header-actions">
+        <a href="http://localhost/pengaturan"
+           class="student-nav-btn "
+           title="Pengaturan Tampilan & Suara">
+          Atur
+        </a>
+        <form action="http://localhost/keluar" method="POST" style="display: inline;">
+          <input type="hidden" name="_token" value="9Mn1kncW5P3kFgYgBl9dTOLnN7yl9RQcxbU2IDyU" autocomplete="off">          <button type="submit" class="student-nav-btn student-nav-btn--logout" title="Keluar">
+            Keluar
+          </button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="student-container">
+    <div class="learn-workspace">
+  <!-- Bar Progres Kartu Materi -->
+  <div class="learn-progress-header">
+    <span class="st-topic-pill st-topic-pill--blue">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      <span>Hewan</span>
+    </span>
+
+    <div class="learn-progress-track" aria-hidden="true">
+              <span class="learn-step-pill learn-step-pill--active"></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+              <span class="learn-step-pill "></span>
+          </div>
+
+    <span class="learn-count-label">
+      1 dari 10
+    </span>
+  </div>
+
+  <!-- Kartu Gambar Interaktif -->
+  <section class="learn-flashcard" aria-label="Kartu belajar Kucing">
+    <div class="learn-picture-frame learn-picture-frame--blue"
+         id="materialImageBox"
+         tabindex="0"
+         role="button"
+         aria-label="Gambar Kucing. Tekan untuk mendengarkan suara."
+         title="Ketuk gambar untuk mendengar suara">
+      <span class="learn-tap-hint" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+        Ketuk Gambar
+      </span>
+
+      <img src="/storage/materials/hewan-1.svg" alt="Kucing" class="learn-picture-img">
+    </div>
+
+    <h2 class="learn-word-heading">Kucing</h2>
+
+    <div>
+      <button type="button" class="learn-speaker-btn" id="btnSpeaker" aria-pressed="false" title="Dengarkan pengucapan kata">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>
+        <span class="learn-sound-bars" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span id="speakerText">Dengar</span>
+      </button>
+    </div>
+
+          <button type="button"
+              class="learn-sentence-card"
+              id="btnSentenceSpeak"
+              title="Dengarkan kalimat pendamping">
+        <p class="learn-sentence-card__text">Ini kucing berbulu lembut.</p>
+        <span class="learn-sentence-card__cta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <span>Dengar Kalimat</span>
+        </span>
+      </button>
+      </section>
+
+  <!-- Navigasi Langkah Besar (Sebelumnya & Berikutnya / Selesai) -->
+  <nav class="learn-step-nav" aria-label="Navigasi kartu materi">
+          <button type="button" class="btn btn-student btn-secondary learn-nav-btn" disabled>
+        &larr; Sebelumnya
+      </button>
+    
+    <span class="learn-nav-spacer" aria-hidden="true">
+      Panah &larr; / &rarr;
+    </span>
+
+          <a href="http://localhost/belajar/hewan/2"
+         class="btn btn-student btn-primary learn-nav-btn"
+         id="btnNext">
+        Berikutnya &rarr;
+      </a>
+      </nav>
+</div>
+  </main>
+
+    <script type="application/json" id="user-settings-data">{"volume":70,"sfx_enabled":false}</script>
+  <script src="/js/core/audio-manager.js" type="module"></script>
+  <script type="module">
+  import { audioManager } from '/js/core/audio-manager.js';
+
+  const audioUrl = null;
+  const textLabel = "Kucing";
+  const sentenceText = "Ini kucing berbulu lembut.";
+
+  const btnSpeaker = document.getElementById('btnSpeaker');
+  const speakerText = document.getElementById('speakerText');
+  const imageBox = document.getElementById('materialImageBox');
+  const btnSentenceSpeak = document.getElementById('btnSentenceSpeak');
+
+  function setPlayingState(active, statusText) {
+    btnSpeaker.classList.toggle('is-playing', active);
+    imageBox.classList.toggle('is-playing', active);
+    btnSpeaker.setAttribute('aria-pressed', active ? 'true' : 'false');
+    speakerText.textContent = statusText || "Dengar";
+  }
+
+  function playSound() {
+    audioManager.play({
+      audioUrl: audioUrl,
+      text: textLabel,
+      onStart: (status) => {
+        setPlayingState(true, status.text || "Sedang berbunyi");
+      },
+      onEnd: () => {
+        setPlayingState(false, "Dengar");
+      }
+    });
+  }
+
+  btnSpeaker.addEventListener('click', playSound);
+  imageBox.addEventListener('click', playSound);
+  imageBox.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      playSound();
+    }
+  });
+
+  if (btnSentenceSpeak && sentenceText) {
+    btnSentenceSpeak.addEventListener('click', () => {
+      audioManager.play({
+        text: sentenceText,
+        onStart: (status) => {
+          imageBox.classList.add('is-playing');
+          speakerText.textContent = status.text || "Sedang berbunyi";
+        },
+        onEnd: () => {
+          imageBox.classList.remove('is-playing');
+          speakerText.textContent = "Dengar";
+        }
+      });
+    });
+  }
+
+  // Navigasi Keyboard: Panah Kiri & Panah Kanan
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      const prevBtn = document.getElementById('btnPrev');
+      if (prevBtn) prevBtn.click();
+    } else if (e.key === 'ArrowRight') {
+      const nextBtn = document.getElementById('btnNext') || document.getElementById('btnFinish');
+      if (nextBtn) nextBtn.click();
+    }
+  });
+</script>
+</body>
+</html>

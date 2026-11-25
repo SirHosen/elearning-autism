@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Material;
 use App\Models\User;
 use App\Models\UserSetting;
+use App\Support\MaterialArtwork;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -161,7 +162,7 @@ class DatabaseSeeder extends Seeder
             $order = 1;
             foreach ($items as $m) {
                 $filename = strtolower($catSlug.'-'.$order).'.svg';
-                $svgContent = $this->generateSvgIllustration($m['label'], $m['color'], $catSlug === 'warna');
+                $svgContent = MaterialArtwork::render($m['label'], $m['color'], $catSlug);
                 File::put($storageDir.'/'.$filename, $svgContent);
 
                 Material::updateOrCreate(
@@ -184,28 +185,5 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('local', 'testing')) {
             $this->call(DemoSeeder::class);
         }
-    }
-
-    private function generateSvgIllustration(string $label, string $color, bool $isColor): string
-    {
-        if ($isColor) {
-            return <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" fill="#F8FAFC" rx="40"/>
-  <circle cx="256" cy="256" r="180" fill="{$color}" stroke="#CBD5E1" stroke-width="8"/>
-</svg>
-SVG;
-        }
-
-        return <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" fill="#F8FAFC" rx="40"/>
-  <circle cx="256" cy="256" r="160" fill="{$color}" opacity="0.15"/>
-  <rect x="136" y="136" width="240" height="240" rx="36" fill="{$color}"/>
-  <circle cx="216" cy="216" r="16" fill="#FFFFFF"/>
-  <circle cx="296" cy="216" r="16" fill="#FFFFFF"/>
-  <path d="M 216 280 Q 256 316 296 280" stroke="#FFFFFF" stroke-width="12" fill="none" stroke-linecap="round"/>
-</svg>
-SVG;
     }
 }

@@ -58,6 +58,11 @@
       "viewport": "1440x900",
       "artifact": "student-home.html",
       "observation": "Rendered student.home displays aligned student header, welcome card with Dengar voice assist button and attendance status pill, and 2+3 Montessori picture-book vector activity bento grid."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "student-learn-viewer.html",
+      "observation": "Rendered student.learn.viewer for /belajar/hewan/1 shows segmented capsule progress track, custom Montessori flat picture-book SVG artwork (hewan-1.svg), interactive tap-to-speak picture frame, 64px Dengar button with sound-wave equalizer, interactive short sentence audio card, and tactile step navigation."
     }
   ]
 }

@@ -1,11 +1,11 @@
 /**
- * Quiz Engine for EduAutis (Sensory-Safe)
+ * Quiz Engine for Sahabat Belajar (Sensory-Safe)
  * Compliant with strict accessibility & sensory safety rules:
  * - 1 question per screen
  * - Pure visual options (NO text label inside option cards)
  * - NO visual or audible timer
  * - Soft highlight on select, explicit 'Lanjut' confirmation
- * - Always positive reinforcement on finish (1-3 stars)
+ * - Always positive vector star reinforcement on finish (1-3 stars)
  */
 
 class QuizEngine {
@@ -31,6 +31,15 @@ class QuizEngine {
         this.init();
     }
 
+    renderStarsSvg(stars) {
+        const safeCount = Math.max(1, Math.min(3, stars || 1));
+        return Array.from({ length: safeCount }, () => `
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="#FBBF24" stroke="#B45309" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+        `).join('');
+    }
+
     async init() {
         try {
             const res = await fetch(this.startUrl, {
@@ -48,11 +57,11 @@ class QuizEngine {
                 this.renderDots();
                 this.renderQuestion();
             } else {
-                this.arena.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Soal kuis belum tersedia.</p>';
+                this.arena.innerHTML = '<div class="st-empty-card"><p style="color: var(--ink-soft); margin: 0;">Soal kuis belum tersedia.</p></div>';
             }
         } catch (e) {
             console.error('Gagal memulai kuis:', e);
-            this.arena.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Gagal memuat kuis. Silakan muat ulang halaman.</p>';
+            this.arena.innerHTML = '<div class="st-empty-card"><p style="color: var(--ink-soft); margin: 0;">Gagal memuat kuis. Silakan muat ulang halaman.</p></div>';
         }
 
         if (this.speakerBtn) {
@@ -66,6 +75,11 @@ class QuizEngine {
     }
 
     speak(text) {
+        if (!text) return;
+        if (window.audioManager) {
+            window.audioManager.play({ text });
+            return;
+        }
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
@@ -78,7 +92,7 @@ class QuizEngine {
     renderDots() {
         if (!this.progressDots) return;
         this.progressDots.innerHTML = this.questions.map((_, i) => `
-            <span class="quiz-dot" data-idx="${i}" style="width: 14px; height: 14px; border-radius: 50%; background: ${i === 0 ? 'var(--primary, #5A8DEE)' : 'var(--border)'}; display: inline-block; transition: all 0.2s ease;"></span>
+            <span class="quiz-dot ${i === 0 ? 'is-current' : ''}" data-idx="${i}"></span>
         `).join('');
     }
 
@@ -89,16 +103,8 @@ class QuizEngine {
         if (this.progressDots) {
             const dots = this.progressDots.querySelectorAll('.quiz-dot');
             dots.forEach((dot, i) => {
-                if (i === this.currentIndex) {
-                    dot.style.background = 'var(--primary, #5A8DEE)';
-                    dot.style.transform = 'scale(1.25)';
-                } else if (i < this.currentIndex) {
-                    dot.style.background = 'var(--success, #246B4D)';
-                    dot.style.transform = 'scale(1)';
-                } else {
-                    dot.style.background = 'var(--border)';
-                    dot.style.transform = 'scale(1)';
-                }
+                dot.classList.toggle('is-current', i === this.currentIndex);
+                dot.classList.toggle('is-done', i < this.currentIndex);
             });
         }
     }
@@ -113,17 +119,17 @@ class QuizEngine {
         }
 
         this.arena.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: var(--space-8);">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); justify-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 28px;">
+                <div class="st-choice-grid">
                     ${q.options.map(opt => `
-                        <button type="button" class="quiz-opt-btn card" data-id="${opt.material_id}" style="width: 100%; max-width: 250px; aspect-ratio: 1/1; padding: var(--space-4); border: 4px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
-                            <img src="${opt.image_url}" alt="Pilihan Jawaban" style="max-width: 85%; max-height: 85%; object-fit: contain; pointer-events: none;">
+                        <button type="button" class="quiz-opt-btn st-quiz-opt-card" data-id="${opt.material_id}" aria-label="Pilihan gambar">
+                            <img src="${opt.image_url}" alt="Pilihan Jawaban" style="max-width: 86%; max-height: 86%; object-fit: contain; pointer-events: none;">
                         </button>
                     `).join('')}
                 </div>
 
                 <div style="display: flex; justify-content: center;">
-                    <button id="btn-next-question" type="button" class="btn btn-primary" disabled style="font-size: 1.25rem; font-weight: 700; padding: var(--space-4) var(--space-10); border-radius: var(--radius-full); opacity: 0.5; cursor: not-allowed; transition: all 0.2s ease;">
+                    <button id="btn-next-question" type="button" class="btn btn-student btn-primary" disabled style="min-width: 220px; border-radius: 999px;">
                         Lanjut &rarr;
                     </button>
                 </div>
@@ -135,19 +141,13 @@ class QuizEngine {
 
         optBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                optBtns.forEach(b => {
-                    b.style.borderColor = 'var(--border)';
-                    b.style.boxShadow = 'var(--shadow-sm)';
-                });
+                optBtns.forEach(b => b.classList.remove('is-selected'));
 
                 this.selectedMaterialId = btn.dataset.id;
-                btn.style.borderColor = 'var(--primary, #5A8DEE)';
-                btn.style.boxShadow = '0 0 0 5px rgba(90, 141, 238, 0.35)';
+                btn.classList.add('is-selected');
 
                 if (nextBtn) {
                     nextBtn.disabled = false;
-                    nextBtn.style.opacity = '1';
-                    nextBtn.style.cursor = 'pointer';
                 }
             });
         });
@@ -215,32 +215,24 @@ class QuizEngine {
             console.error('Gagal menyelesaikan kuis:', e);
         }
 
-        const starEmojis = '⭐'.repeat(finishData.stars || 1);
-
         this.arena.innerHTML = `
-            <div class="card" style="text-align: center; padding: var(--space-8); max-width: 480px; margin: 0 auto; border-radius: var(--radius-lg); background: var(--surface);">
-                <div style="font-size: 3.5rem; letter-spacing: 6px; margin-bottom: var(--space-2); animation: floatSlow 3s ease-in-out infinite;">
-                    ${starEmojis}
+            <div class="st-celebration-card">
+                <div class="st-stars-row" aria-label="Mendapat ${finishData.stars || 1} bintang">
+                    ${this.renderStarsSvg(finishData.stars || 1)}
                 </div>
-                <h2 style="font-size: 1.75rem; margin-bottom: var(--space-2); color: var(--text);">${finishData.feedback}</h2>
-                <p style="color: var(--text-muted); font-size: 1.125rem; margin-bottom: var(--space-6);">
+                <h2 style="font-size: 1.75rem; font-weight: 700; margin: 0 0 8px; color: var(--ink);">${finishData.feedback}</h2>
+                <p style="color: var(--ink-soft); font-size: 1.0625rem; margin: 0 0 28px; line-height: 1.5;">
                     Kamu telah menyelesaikan semua soal kuis dengan baik.
                 </p>
-                <div style="display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap;">
-                    <button type="button" class="btn btn-secondary" onclick="window.location.reload()" style="font-size: 1.125rem; padding: var(--space-3) var(--space-6); border-radius: var(--radius-full);">
+                <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-student btn-secondary" onclick="window.location.reload()" style="border-radius: 999px;">
                         Coba Lagi
                     </button>
-                    <a href="${this.homeUrl}" class="btn btn-primary" style="font-size: 1.125rem; padding: var(--space-3) var(--space-6); border-radius: var(--radius-full);">
-                        Menu Utama
+                    <a href="${this.homeUrl}" class="btn btn-student btn-primary" style="border-radius: 999px;">
+                        Daftar Kuis
                     </a>
                 </div>
             </div>
-            <style>
-                @keyframes floatSlow {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-8px); }
-                }
-            </style>
         `;
 
         if (this.promptText) this.promptText.textContent = 'Kuis Selesai!';
