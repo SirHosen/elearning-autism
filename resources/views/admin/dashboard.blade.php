@@ -197,7 +197,7 @@
           <tr>
             <td>
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span class="tile-{{ $cat->color_key }}" style="width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--line); display: inline-block; flex-shrink: 0;"></span>
+                <span class="adm-swatch adm-swatch--{{ $cat->color_key ?? 'blue' }}"></span>
                 <div>
                   <strong style="color: var(--ink);">{{ $cat->name }}</strong>
                   <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>/belajar/{{ $cat->slug }}</code></div>

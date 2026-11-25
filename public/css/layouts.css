@@ -199,9 +199,9 @@
   }
 }
 
-/* Layout Guard: Menjamin tidak ada overflow horizontal pada viewport 360px */
+/* Layout Guard: Menjamin tidak ada overflow horizontal tanpa memecah position: sticky */
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
 }
 

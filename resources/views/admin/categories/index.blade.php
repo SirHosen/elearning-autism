@@ -33,7 +33,7 @@
       @forelse ($categories as $cat)
         <tr>
           <td>
-            <span class="tile-{{ $cat->color_key }}" style="display: inline-block; width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--line);"></span>
+            <span class="adm-swatch adm-swatch--{{ $cat->color_key ?? 'blue' }}" style="width: 26px; height: 26px;"></span>
           </td>
           <td>
             <strong style="color: var(--ink); font-size: 0.9375rem;">{{ $cat->name }}</strong>

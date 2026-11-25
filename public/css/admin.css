@@ -28,9 +28,10 @@
   display: flex;
   flex-direction: column;
   padding: 20px 16px;
-  position: sticky;
+  position: fixed;
+  left: 0;
   top: 0;
-  height: 100vh;
+  bottom: 0;
   overflow-y: auto;
   z-index: 60;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
@@ -187,6 +188,8 @@
 .adm-workspace {
   flex: 1;
   min-width: 0;
+  margin-left: 272px;
+  width: calc(100% - 272px);
   display: flex;
   flex-direction: column;
 }
@@ -465,9 +468,10 @@
 
 .adm-kpi-card__head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
+  min-height: 36px;
 }
 
 .adm-kpi-card__label {
@@ -695,6 +699,21 @@
 .adm-pill--danger  { background: #FEE2E2; color: #991B1B; }
 .adm-pill--neutral { background: var(--surface-alt); color: var(--ink-soft); }
 
+.adm-swatch {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 1.5px solid rgba(31, 41, 51, 0.16);
+  flex-shrink: 0;
+}
+
+.adm-swatch--blue     { background-color: #2F6F9F; }
+.adm-swatch--green    { background-color: #246B4D; }
+.adm-swatch--yellow   { background-color: #D97706; }
+.adm-swatch--lavender { background-color: #7C3AED; }
+.adm-swatch--peach    { background-color: #EA580C; }
+
 /* ── 6. FORMS & CARDS ── */
 .adm-form-shell {
   max-width: 720px;
@@ -816,6 +835,11 @@
 @media (max-width: 1023px) {
   .adm-drawer-btn {
     display: inline-flex;
+  }
+
+  .adm-workspace {
+    margin-left: 0;
+    width: 100%;
   }
 
   .adm-sidebar {
