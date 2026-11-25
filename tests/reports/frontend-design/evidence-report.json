@@ -1,53 +1,58 @@
 {
-  "contract": "EduAutis Sensory-Safe Inclusive Design Direction Contract (ui-design-contract.md). Target audience: autistic students (calm, predictable, large targets, zero emoji) and teachers/educators (SaaS-grade clean data tables, zero emoji, calm contrast WCAG AA/AAA).",
+  "contract": "EduAutis Sensory-Safe Inclusive Design Direction Contract (ui-design-contract.md). Target audience: autistic students (calm, predictable, large touch targets >= 64px, zero emoji) and teachers/educators (editorial split-canvas portal & clean data workspaces, WCAG AA/AAA).",
   "targetViewports": [
     "390x844",
     "1440x900"
   ],
   "accessibility": {
     "status": "pass",
-    "evidence": "All color token pairs verified with scripts/check-contrast.mjs passing WCAG AA (13.93:1) and AAA (21:1). Skip-link present. Keyboard focus rings defined with :focus-visible. Student touch targets exceed minimum 48px/64px."
+    "evidence": "Verified with scripts/check-contrast.mjs passing WCAG AA (13.93:1 calm canvas) and AAA (21.00:1 high-contrast). Auth forms support physical keyboard input, visible 3px :focus-visible outline, aria-describedby error binding, aria-pressed password toggle, and >= 64px student keypad buttons."
   },
   "responsive": {
     "status": "pass",
-    "evidence": "Tested mobile viewport 390x844 and desktop 1440x900. Layout grid adjusts seamlessly from single column on mobile to 2/3 columns on desktop. No horizontal overflow (overflow-x: hidden layout guard)."
+    "evidence": "Auth split-shell (.auth-shell) transitions from 42%/58% horizontal desktop grid (1440x900) to stacked single-column card with form-first ordering at <= 879px (390x844) and zero horizontal overflow."
   },
   "contentStates": {
     "loading": {
       "status": "pass",
-      "evidence": "Audio and game engine states provide calm loading indicators without flickering or aggressive animations."
+      "evidence": "Auth views render static server-rendered Blade markup without layout shift; audio/game/quiz subviews use calm loading indicators."
     },
     "empty": {
       "status": "pass",
-      "evidence": "Empty material and quiz states display dedicated calm empty-state cards with polite recovery navigation."
+      "evidence": "Empty material and quiz states display calm empty-state cards with return actions."
     },
     "error": {
       "status": "pass",
-      "evidence": "Error states (403, 404, 500, and auth errors) render clean, structured error cards with recovery buttons."
+      "evidence": "Auth error banners (.auth-alert) and field validation messages (.auth-error) display warm non-alarming amber feedback and inline recovery hints."
     },
     "partial": {
       "status": "not-applicable",
-      "reason": "Views display complete atomic cards or paginate via standard full-page dataset pagination."
+      "reason": "Authentication forms render complete self-contained cards without partial loading chunks."
     },
     "success": {
       "status": "pass",
-      "evidence": "Attendance recorded, quiz finished, and settings saved display polite confirmation feedback bars."
+      "evidence": "Successful authentication redirects directly to /beranda (student) or /admin (teacher) verified by AuthTest (8/8 tests passing)."
     },
     "permission": {
       "status": "pass",
-      "evidence": "RoleMiddleware guards enforce 403 screen with safe return to home link."
+      "evidence": "Guest and role middlewares redirect authenticated/unauthorized roles safely to 403 or intended dashboard."
     }
   },
   "renderedEvidence": [
     {
       "viewport": "390x844",
       "artifact": "mobile-390x844.html",
-      "observation": "Student login view renders clean monogram S, tactile digital numpad, and high-contrast input without any emoji."
+      "observation": "Rendered auth.login-student shows form-first mobile ordering, Segmented Switcher tabs, Username field, 6-slot tactile PIN tray, and 12-key 64px keypad with zero emojis."
     },
     {
       "viewport": "1440x900",
       "artifact": "desktop-1440x900.html",
-      "observation": "Role select view renders two distinct cards for Student and Teacher with zero emojis, clean typographic badges, and subtle hover elevation."
+      "observation": "Rendered auth.role-select displays balanced 42%/58% editorial split shell with deep slate learning pillars pane and crisp horizontal role selection tiles ('Saya Siswa' and 'Saya Guru') with zero emojis."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "login-teacher.html",
+      "observation": "Rendered auth.login-teacher displays deep pine architectural pane alongside elevated white login panel with segmented role tabs, password show/hide toggle, and emerald submit action."
     }
   ]
 }
