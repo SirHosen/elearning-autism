@@ -302,14 +302,6 @@
   transform: translateY(-1px);
 }
 
-.login-nav-pill--accent-green {
-  color: var(--success);
-}
-
-.login-nav-pill--accent-blue {
-  color: var(--primary-strong);
-}
-
 /* ── Student Wide Interactive Card (/masuk/siswa) ── */
 .student-wrap {
   width: 100%;

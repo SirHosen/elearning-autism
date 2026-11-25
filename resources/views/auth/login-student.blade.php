@@ -9,10 +9,6 @@
       <span aria-hidden="true">&larr;</span>
       <span>Kembali</span>
     </a>
-    <a href="{{ route('login.teacher') }}" class="login-nav-pill login-nav-pill--accent-green">
-      <span>Masuk Guru</span>
-      <span aria-hidden="true">&rarr;</span>
-    </a>
   </div>
 
   <div class="student-card">
