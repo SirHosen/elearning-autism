@@ -444,6 +444,12 @@
   border-radius: 8px;
 }
 
+.adm-preview-audio-btn.is-playing {
+  background: var(--tint-blue);
+  border-color: var(--primary);
+  color: var(--primary-strong);
+}
+
 /* ── 3. KPI GRID & PROGRESS METERS ── */
 .adm-kpi-grid {
   display: grid;

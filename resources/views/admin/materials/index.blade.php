@@ -72,8 +72,14 @@
                 class="adm-btn adm-btn--secondary adm-btn--xs adm-preview-audio-btn"
                 data-label="{{ $m->label }}"
                 data-audio="{{ $m->audio_path ? '/storage/' . $m->audio_path : '' }}"
+                style="min-width: 34px; padding: 0 8px;"
+                aria-label="Putar suara {{ $m->label }}"
                 title="Uji suara pelafalan">
-          Putar Suara
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
         </button>
       </div>
 
@@ -102,7 +108,16 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     let activeAudio = null;
-    document.querySelectorAll('.adm-preview-audio-btn').forEach(function(btn) {
+    const allBtns = document.querySelectorAll('.adm-preview-audio-btn');
+
+    function resetPlayingState() {
+      allBtns.forEach(function(b) {
+        b.classList.remove('is-playing');
+        b.setAttribute('aria-pressed', 'false');
+      });
+    }
+
+    allBtns.forEach(function(btn) {
       btn.addEventListener('click', function() {
         const audioUrl = btn.dataset.audio;
         const labelText = btn.dataset.label;
@@ -114,24 +129,21 @@
         if ('speechSynthesis' in window) {
           window.speechSynthesis.cancel();
         }
+        resetPlayingState();
 
         if (audioUrl) {
           activeAudio = new Audio(audioUrl);
-          btn.textContent = 'Memutar...';
-          activeAudio.onended = activeAudio.onerror = function() {
-            btn.textContent = 'Putar Suara';
-          };
-          activeAudio.play().catch(function() {
-            btn.textContent = 'Putar Suara';
-          });
+          btn.classList.add('is-playing');
+          btn.setAttribute('aria-pressed', 'true');
+          activeAudio.onended = activeAudio.onerror = resetPlayingState;
+          activeAudio.play().catch(resetPlayingState);
         } else if ('speechSynthesis' in window && labelText) {
           const u = new SpeechSynthesisUtterance(labelText);
           u.lang = 'id-ID';
           u.rate = 0.85;
-          btn.textContent = 'Berbicara...';
-          u.onend = u.onerror = function() {
-            btn.textContent = 'Putar Suara';
-          };
+          btn.classList.add('is-playing');
+          btn.setAttribute('aria-pressed', 'true');
+          u.onend = u.onerror = resetPlayingState;
           window.speechSynthesis.speak(u);
         }
       });
