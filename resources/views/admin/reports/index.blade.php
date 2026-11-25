@@ -260,7 +260,7 @@
             <th>Rata-rata Kuis</th>
             <th>Sesi Permainan</th>
             <th>Total Bintang</th>
-            <th style="text-align: right;">Aksi</th>
+            <th class="adm-td-actions">Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -285,7 +285,7 @@
               <td><strong>{{ $sum['avg_quiz_score'] }}%</strong></td>
               <td>{{ $sum['total_games'] }}</td>
               <td><span class="adm-pill adm-pill--warning">{{ $sum['total_stars'] }} Bintang</span></td>
-              <td style="text-align: right;">
+              <td class="adm-td-actions">
                 <div class="adm-actions">
                   <a href="{{ route('admin.reports.index', ['student_id' => $s->id]) }}" class="adm-btn adm-btn--blue adm-btn--xs">Buka Rapor &rarr;</a>
                   <a href="{{ route('admin.reports.print', $s) }}" target="_blank" class="adm-btn adm-btn--secondary adm-btn--xs">Cetak</a>

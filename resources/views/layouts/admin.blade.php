@@ -203,9 +203,9 @@
         </div>
 
         <div class="adm-topbar__right">
-          <a href="{{ route('admin.materials.create') }}" class="adm-quick-link">+ Materi</a>
-          <a href="{{ route('admin.students.create') }}" class="adm-quick-link">+ Siswa</a>
-          <a href="{{ route('admin.attendances.index') }}" class="adm-quick-link">Absensi</a>
+          <span style="font-size: 0.8125rem; font-weight: 600; color: var(--ink-soft); padding: 0 6px;">
+            {{ now()->translatedFormat('D, d M Y') }}
+          </span>
           <a href="{{ route('admin.profile') }}" class="adm-user-chip" title="Kelola Profil Guru">
             <span class="adm-user-chip__avatar" aria-hidden="true">{{ $initials ?: 'GR' }}</span>
             <span>{{ $teacher?->name ?? 'Guru' }}</span>

@@ -205,33 +205,41 @@
               </div>
             </td>
             <td>
-              <a href="{{ route('admin.materials.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--info">
+              <a href="{{ route('admin.materials.index', ['category_id' => $cat->id]) }}"
+                 class="adm-link-chip {{ $cat->materials_count === 0 ? 'adm-link-chip--zero' : '' }}">
+                <span class="adm-dot" style="color: var(--primary);"></span>
                 {{ $cat->materials_count }} Materi ({{ $cat->active_materials_count }} Aktif)
               </a>
             </td>
             <td>
-              <a href="{{ route('admin.videos.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--purple">
+              <a href="{{ route('admin.videos.index', ['category_id' => $cat->id]) }}"
+                 class="adm-link-chip {{ $cat->videos_count === 0 ? 'adm-link-chip--zero' : '' }}">
+                <span class="adm-dot" style="color: #6D28D9;"></span>
                 {{ $cat->videos_count }} Video
               </a>
             </td>
             <td>
-              <a href="{{ route('admin.games.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--success">
-                {{ $cat->games_count }} Permainan
+              <a href="{{ route('admin.games.index', ['category_id' => $cat->id]) }}"
+                 class="adm-link-chip {{ $cat->games_count === 0 ? 'adm-link-chip--zero' : '' }}">
+                <span class="adm-dot" style="color: var(--success);"></span>
+                {{ $cat->games_count }} Game
               </a>
             </td>
             <td>
-              <a href="{{ route('admin.quizzes.index', ['category_id' => $cat->id]) }}" class="adm-pill adm-pill--warning">
+              <a href="{{ route('admin.quizzes.index', ['category_id' => $cat->id]) }}"
+                 class="adm-link-chip {{ $cat->quizzes_count === 0 ? 'adm-link-chip--zero' : '' }}">
+                <span class="adm-dot" style="color: #D97706;"></span>
                 {{ $cat->quizzes_count }} Kuis
               </a>
             </td>
             <td>
               @if($quizReady)
-                <span class="adm-pill adm-pill--success">Siap Otomatis (&ge;3 Materi)</span>
+                <span class="adm-pill adm-pill--success"><span class="adm-dot"></span>Siap (&ge;3 Materi)</span>
               @else
-                <span class="adm-pill adm-pill--warning">Butuh {{ 3 - $cat->active_materials_count }} Materi Lagi</span>
+                <span class="adm-pill adm-pill--neutral">Kurang {{ 3 - $cat->active_materials_count }} Materi</span>
               @endif
             </td>
-            <td style="text-align: right;">
+            <td class="adm-td-actions">
               <div class="adm-actions">
                 <a href="{{ route('admin.materials.create', ['category_id' => $cat->id]) }}" class="adm-btn adm-btn--secondary adm-btn--xs">+ Materi</a>
                 <a href="{{ route('admin.categories.edit', $cat) }}" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>

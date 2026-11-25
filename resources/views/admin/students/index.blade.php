@@ -88,7 +88,7 @@
         <th>Aktivitas Belajar</th>
         <th>Terakhir Masuk</th>
         <th>Status</th>
-        <th style="text-align: right;">Aksi</th>
+        <th class="adm-td-actions">Aksi</th>
       </tr>
     </thead>
     <tbody>
@@ -112,23 +112,32 @@
           </td>
           <td>{{ $s->class_name ?? '-' }}</td>
           <td>
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <span class="adm-pill adm-pill--success">{{ $s->attended_days_count ?? 0 }} Hadir</span>
-              <span class="adm-pill adm-pill--warning">{{ $s->completed_quizzes_count ?? 0 }} Kuis</span>
-              <span class="adm-pill adm-pill--info">{{ $s->game_sessions_count ?? 0 }} Game</span>
+            <div class="adm-link-group">
+              <span class="adm-link-chip {{ ($s->attended_days_count ?? 0) === 0 ? 'adm-link-chip--zero' : '' }}">
+                <span class="adm-dot" style="color: var(--success);"></span>
+                {{ $s->attended_days_count ?? 0 }} Hadir
+              </span>
+              <span class="adm-link-chip {{ ($s->completed_quizzes_count ?? 0) === 0 ? 'adm-link-chip--zero' : '' }}">
+                <span class="adm-dot" style="color: #D97706;"></span>
+                {{ $s->completed_quizzes_count ?? 0 }} Kuis
+              </span>
+              <span class="adm-link-chip {{ ($s->game_sessions_count ?? 0) === 0 ? 'adm-link-chip--zero' : '' }}">
+                <span class="adm-dot" style="color: var(--primary);"></span>
+                {{ $s->game_sessions_count ?? 0 }} Game
+              </span>
             </div>
           </td>
           <td style="color: var(--ink-soft);">
             {{ $s->last_login_at ? $s->last_login_at->translatedFormat('d M Y, H:i') : 'Belum pernah' }}
           </td>
-          <td>
+          <td style="white-space: nowrap;">
             @if ($s->is_active)
-              <span class="adm-pill adm-pill--success">Aktif</span>
+              <span class="adm-pill adm-pill--success"><span class="adm-dot"></span>Aktif</span>
             @else
-              <span class="adm-pill adm-pill--neutral">Nonaktif</span>
+              <span class="adm-pill adm-pill--neutral"><span class="adm-dot"></span>Nonaktif</span>
             @endif
           </td>
-          <td style="text-align: right;">
+          <td class="adm-td-actions">
             <div class="adm-actions">
               <a href="{{ route('admin.reports.index', ['student_id' => $s->id]) }}" class="adm-btn adm-btn--blue adm-btn--xs" title="Lihat Rapor Siswa">Rapor</a>
               <a href="{{ route('admin.students.card', $s) }}" target="_blank" class="adm-btn adm-btn--secondary adm-btn--xs" title="Cetak Kartu PIN">Kartu</a>

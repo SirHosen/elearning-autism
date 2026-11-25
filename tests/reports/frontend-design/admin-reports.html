@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="csrf-token" content="ojxCqTEw2dYiBSVhjrn4keyMAdlkWPWHl0i51TXF">
+  <meta name="csrf-token" content="rc6Am6Gt3Obfc5D3o36fgi9fMhTG0ytLdDZkfbyE">
   <title>Laporan Hasil Belajar Siswa | Panel Pengelolaan Guru</title>
   <link rel="stylesheet" href="/css/tokens.css">
   <link rel="stylesheet" href="/css/themes.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/layouts.css?v=1795590337">
-  <link rel="stylesheet" href="/css/admin.css?v=1795590379">
+  <link rel="stylesheet" href="/css/layouts.css?v=1795590420">
+  <link rel="stylesheet" href="/css/admin.css?v=1795590645">
   </head>
 <body>
   <a href="#admin-main" class="skip-link">Lewati ke konten panel</a>
@@ -147,7 +147,7 @@
           SLB B-C Wijayakusumah &bull; Sumedang
         </div>
         <form action="http://localhost/keluar" method="POST">
-          <input type="hidden" name="_token" value="ojxCqTEw2dYiBSVhjrn4keyMAdlkWPWHl0i51TXF" autocomplete="off">          <button type="submit" class="adm-logout-btn">
+          <input type="hidden" name="_token" value="rc6Am6Gt3Obfc5D3o36fgi9fMhTG0ytLdDZkfbyE" autocomplete="off">          <button type="submit" class="adm-logout-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
               <polyline points="16 17 21 12 16 7"/>
@@ -179,9 +179,9 @@
         </div>
 
         <div class="adm-topbar__right">
-          <a href="http://localhost/admin/materi/create" class="adm-quick-link">+ Materi</a>
-          <a href="http://localhost/admin/siswa/create" class="adm-quick-link">+ Siswa</a>
-          <a href="http://localhost/admin/absensi" class="adm-quick-link">Absensi</a>
+          <span style="font-size: 0.8125rem; font-weight: 600; color: var(--ink-soft); padding: 0 6px;">
+            Rab, 25 Nov 2026
+          </span>
           <a href="http://localhost/admin/profil" class="adm-user-chip" title="Kelola Profil Guru">
             <span class="adm-user-chip__avatar" aria-hidden="true">GS</span>
             <span>Guru SLB BC</span>
@@ -238,7 +238,7 @@
             <th>Rata-rata Kuis</th>
             <th>Sesi Permainan</th>
             <th>Total Bintang</th>
-            <th style="text-align: right;">Aksi</th>
+            <th class="adm-td-actions">Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -258,7 +258,7 @@
               <td><strong>0%</strong></td>
               <td>0</td>
               <td><span class="adm-pill adm-pill--warning">0 Bintang</span></td>
-              <td style="text-align: right;">
+              <td class="adm-td-actions">
                 <div class="adm-actions">
                   <a href="http://localhost/admin/hasil?student_id=2" class="adm-btn adm-btn--blue adm-btn--xs">Buka Rapor &rarr;</a>
                   <a href="http://localhost/admin/hasil/2/cetak" target="_blank" class="adm-btn adm-btn--secondary adm-btn--xs">Cetak</a>
@@ -281,7 +281,7 @@
               <td><strong>0%</strong></td>
               <td>0</td>
               <td><span class="adm-pill adm-pill--warning">0 Bintang</span></td>
-              <td style="text-align: right;">
+              <td class="adm-td-actions">
                 <div class="adm-actions">
                   <a href="http://localhost/admin/hasil?student_id=3" class="adm-btn adm-btn--blue adm-btn--xs">Buka Rapor &rarr;</a>
                   <a href="http://localhost/admin/hasil/3/cetak" target="_blank" class="adm-btn adm-btn--secondary adm-btn--xs">Cetak</a>
@@ -304,7 +304,7 @@
               <td><strong>0%</strong></td>
               <td>0</td>
               <td><span class="adm-pill adm-pill--warning">0 Bintang</span></td>
-              <td style="text-align: right;">
+              <td class="adm-td-actions">
                 <div class="adm-actions">
                   <a href="http://localhost/admin/hasil?student_id=4" class="adm-btn adm-btn--blue adm-btn--xs">Buka Rapor &rarr;</a>
                   <a href="http://localhost/admin/hasil/4/cetak" target="_blank" class="adm-btn adm-btn--secondary adm-btn--xs">Cetak</a>

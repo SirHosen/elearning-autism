@@ -69,7 +69,7 @@
         <th>Status</th>
         <th>Masuk / Pencatat</th>
         <th>Ubah Status &amp; Catatan</th>
-        <th style="text-align: right;">Rapor</th>
+        <th class="adm-td-actions">Rapor</th>
       </tr>
     </thead>
     <tbody>
@@ -114,10 +114,10 @@
             @endif
           </td>
           <td>
-            <form action="{{ route('admin.attendances.update', $student) }}" method="POST" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+            <form action="{{ route('admin.attendances.update', $student) }}" method="POST" class="adm-actions">
               @csrf
               <input type="hidden" name="date" value="{{ $date }}">
-              <select name="status" class="adm-select" style="width: auto; min-height: 36px; font-size: 0.8125rem; padding: 4px 10px;">
+              <select name="status" class="adm-select" style="width: auto; min-height: 34px; font-size: 0.8125rem; padding: 4px 10px;">
                 <option value="hadir" {{ $status === 'hadir' ? 'selected' : '' }}>Hadir</option>
                 <option value="izin" {{ $status === 'izin' ? 'selected' : '' }}>Izin</option>
                 <option value="sakit" {{ $status === 'sakit' ? 'selected' : '' }}>Sakit</option>
@@ -128,11 +128,11 @@
                      value="{{ $att?->note }}"
                      placeholder="Catatan singkat..."
                      class="adm-input"
-                     style="width: 170px; min-height: 36px; font-size: 0.8125rem; padding: 4px 10px;">
+                     style="width: 170px; min-height: 34px; font-size: 0.8125rem; padding: 4px 10px;">
               <button type="submit" class="adm-btn adm-btn--primary adm-btn--xs">Simpan</button>
             </form>
           </td>
-          <td style="text-align: right;">
+          <td class="adm-td-actions">
             <a href="{{ route('admin.reports.index', ['student_id' => $student->id]) }}" class="adm-btn adm-btn--secondary adm-btn--xs">
               Rapor &rarr;
             </a>

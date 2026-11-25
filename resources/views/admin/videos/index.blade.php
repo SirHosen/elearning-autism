@@ -38,7 +38,7 @@
         <th>Sumber</th>
         <th>Urutan</th>
         <th>Status</th>
-        <th style="text-align: right;">Aksi</th>
+        <th class="adm-td-actions">Aksi</th>
       </tr>
     </thead>
     <tbody>
@@ -83,7 +83,7 @@
               </button>
             </form>
           </td>
-          <td style="text-align: right;">
+          <td class="adm-td-actions">
             <div class="adm-actions">
               <a href="{{ route('admin.videos.edit', $video) }}" class="adm-btn adm-btn--secondary adm-btn--sm">Edit</a>
               <form action="{{ route('admin.videos.destroy', $video) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus video ini?')">

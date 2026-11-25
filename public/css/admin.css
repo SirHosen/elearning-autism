@@ -104,8 +104,12 @@
   color: #E2E8F0;
   font-size: 0.875rem;
   font-weight: 500;
-  border-left: 3px solid transparent;
-  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+  transition: background-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+
+.adm-nav__link:focus-visible {
+  outline: 2px solid #A7F3D0;
+  outline-offset: 2px;
 }
 
 .adm-nav__link-main {
@@ -119,11 +123,11 @@
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  opacity: 0.85;
+  opacity: 0.82;
 }
 
 .adm-nav__link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.09);
   color: #FFFFFF;
 }
 
@@ -131,7 +135,7 @@
   background-color: rgba(255, 255, 255, 0.16);
   color: #FFFFFF;
   font-weight: 700;
-  border-left-color: #6EE7B7;
+  box-shadow: inset 0 0 0 1px rgba(167, 243, 208, 0.35);
 }
 
 .adm-nav__link.is-active svg {
@@ -323,7 +327,7 @@
 /* ── 2. PAGE HEADER & ACTIONS ── */
 .adm-page-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 18px;
   flex-wrap: wrap;
@@ -669,12 +673,74 @@
   flex-shrink: 0;
 }
 
+.adm-td-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
 .adm-actions {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   justify-content: flex-end;
+}
+
+.adm-link-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.adm-link-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--surface-alt);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+  transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease;
+}
+
+.adm-link-chip:hover {
+  border-color: var(--primary);
+  background: var(--tint-blue);
+  color: var(--primary-strong);
+}
+
+.adm-link-chip--zero {
+  background: transparent;
+  color: var(--ink-soft);
+  border-style: dashed;
+  opacity: 0.72;
+}
+
+.adm-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .adm-td-actions {
+    width: auto;
+    white-space: normal;
+  }
+  .adm-actions {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
 }
 
 /* Badges & Matrix Chips */
