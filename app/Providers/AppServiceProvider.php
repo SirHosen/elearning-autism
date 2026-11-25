@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Material;
 use App\Models\Quiz;
 use App\Models\User;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::defaultView('vendor.pagination.sahabat');
+        Paginator::defaultSimpleView('vendor.pagination.sahabat');
+
         View::composer('layouts.admin', function ($view) {
             try {
                 $today = now()->toDateString();

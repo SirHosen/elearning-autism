@@ -125,4 +125,32 @@ class AdminDashboardAndProfileTest extends TestCase
             $res->assertStatus(200);
         }
     }
+
+    public function test_admin_pagination_uses_custom_styled_view_without_tailwind_icons(): void
+    {
+        $category = Category::create([
+            'name' => 'Hewan',
+            'slug' => 'hewan',
+            'color_key' => 'blue',
+            'is_active' => true,
+        ]);
+
+        for ($i = 1; $i <= 18; $i++) {
+            Material::create([
+                'category_id' => $category->id,
+                'label' => "Materi {$i}",
+                'image_path' => 'materials/hewan-1.svg',
+                'is_active' => true,
+            ]);
+        }
+
+        $res = $this->actingAs($this->admin)->get(route('admin.materials.index', ['page' => 1]));
+
+        $res->assertStatus(200);
+        $res->assertSee('adm-pagination');
+        $res->assertSee('Berikutnya');
+        $res->assertDontSee('pagination.previous');
+        $res->assertDontSee('pagination.next');
+        $res->assertDontSee('w-5 h-5');
+    }
 }
