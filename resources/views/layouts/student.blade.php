@@ -16,33 +16,38 @@
   <link rel="stylesheet" href="/css/themes.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/layouts.css">
+  <link rel="stylesheet" href="/css/layouts.css?v={{ @filemtime(public_path('css/layouts.css')) ?: '2' }}">
   @stack('styles')
 </head>
-<body>
+<body class="student-body">
   <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
 
-  {{-- Header Siswa --}}
   <header class="student-header">
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <a href="{{ route('student.home') }}" class="btn btn-secondary" style="min-height: 48px; padding: 0 16px; font-size: 18px;" title="Kembali ke Beranda">
-        Beranda
-      </a>
-      @yield('header_left')
-    </div>
+    <div class="student-header-inner">
+      <div class="student-header-left">
+        <a href="{{ route('student.home') }}"
+           class="student-nav-btn {{ request()->routeIs('student.home') ? 'is-active' : '' }}"
+           title="Kembali ke Beranda">
+          Beranda
+        </a>
+        @yield('header_left')
+      </div>
 
-    <h1 class="student-header-title">@yield('page_title', 'Sahabat Belajar')</h1>
+      <h1 class="student-header-title">@yield('page_title', 'Sahabat Belajar')</h1>
 
-    <div class="student-header-actions">
-      <a href="{{ route('student.settings') }}" class="btn btn-secondary" style="min-height: 48px; padding: 0 16px;" title="Pengaturan Tampilan & Suara">
-        Atur
-      </a>
-      <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-        @csrf
-        <button type="submit" class="btn btn-secondary" style="min-height: 48px; padding: 0 16px;" title="Keluar">
-          Keluar
-        </button>
-      </form>
+      <div class="student-header-actions">
+        <a href="{{ route('student.settings') }}"
+           class="student-nav-btn {{ request()->routeIs('student.settings') ? 'is-active' : '' }}"
+           title="Pengaturan Tampilan & Suara">
+          Atur
+        </a>
+        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+          @csrf
+          <button type="submit" class="student-nav-btn student-nav-btn--logout" title="Keluar">
+            Keluar
+          </button>
+        </form>
+      </div>
     </div>
   </header>
 

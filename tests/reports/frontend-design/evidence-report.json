@@ -1,58 +1,63 @@
 {
-  "contract": "Sahabat Belajar (SLB B-C Wijayakusumah) Auth Visual Contract. Unified frosted glass design over bg.png, child-friendly wide interactive student login card with speech guide and live 6-slot PIN boxes, and consistent illustrated teacher login card with format & Caps Lock assistance.",
+  "contract": "Sahabat Belajar (SLB B-C Wijayakusumah) Auth & Student Home Design Contract. Includes bg.png login suite and special-needs friendly /beranda featuring 2+3 symmetrical bento grid, Montessori flat picture-book SVG illustrations (non-anime), tap-only greeting speech assist, and calm/contrast theme support.",
   "targetViewports": [
     "390x844",
     "1440x900"
   ],
   "accessibility": {
     "status": "pass",
-    "evidence": "Verified with scripts/check-contrast.mjs passing WCAG AA/AAA. Student card adds explicit tap-only voice guidance (Dengar) and toggleable PIN visibility (Lihat) without autoplay or flashing animations; teacher card includes password toggle, email format check, and Caps Lock indicator."
+    "evidence": "Verified with scripts/check-contrast.mjs passing WCAG AA/AAA. Student /beranda supports data-theme=contrast overrides, font_scale scaling, data-motion=off reduced motion, >= 64px voice assist button, and large tactile activity tiles."
   },
   "responsive": {
     "status": "pass",
-    "evidence": "Student horizontal card (.student-grid) aligns symmetrically on desktop (<= 780px wide, ~423px tall) and collapses cleanly to 1 column at <= 740px. Teacher card fits cleanly within 1366x768/1440x900 viewports and mobile screens."
+    "evidence": "Student home grid adapts from 6-column symmetrical 2+3 bento desktop layout to balanced 2-column tablet (5th tile spanning full row) to 1-column mobile cards without horizontal overflow."
   },
   "contentStates": {
     "loading": {
       "status": "pass",
-      "evidence": "Teacher submit transitions calmly to 'Memeriksa...' state; student view updates slots without layout shifts."
+      "evidence": "Server-rendered Blade views and crisp inline vector art load immediately without spinner or flicker."
     },
     "empty": {
       "status": "pass",
-      "evidence": "Empty states in content modules remain clear and polite."
+      "evidence": "Empty states in child modules remain polite and clear."
     },
     "error": {
       "status": "pass",
-      "evidence": "Inline validation errors and warm amber alerts render clearly inside both cards."
+      "evidence": "Error pages and form validation alerts stay calm and consistent."
     },
     "partial": {
       "status": "not-applicable",
-      "reason": "Login screens render complete interactive panels synchronously."
+      "reason": "Home dashboard displays fixed 5 core modules synchronously."
     },
     "success": {
       "status": "pass",
-      "evidence": "Student and teacher authentication flows pass all 8 tests in AuthTest."
+      "evidence": "Attendance recorded state highlights ABSEN card with green border and 'Sudah Hadir' pill verified by StudentLearnTest and AttendanceAndReportTest."
     },
     "permission": {
       "status": "pass",
-      "evidence": "Guest and role access boundaries tested cleanly across the suite."
+      "evidence": "Student role middleware protects /beranda and returns calm 403 screen for unauthorized roles."
     }
   },
   "renderedEvidence": [
     {
       "viewport": "390x844",
       "artifact": "mobile-390x844.html",
-      "observation": "Rendered auth.login-student shows vertical stacked illustrated student card, voice guidance button, username field, 6-box interactive PIN display, and 60px keypad."
+      "observation": "Rendered auth.login-student shows clean Kembali navigation, student login card, 6-slot PIN boxes, and keypad."
     },
     {
       "viewport": "1440x900",
       "artifact": "desktop-1440x900.html",
-      "observation": "Rendered auth.role-select shows warm greeting and Murid/Guru cards with bespoke anime-style covers matching bg.png."
+      "observation": "Rendered auth.role-select displays warm greeting and Murid/Guru selection cards over bg.png."
     },
     {
       "viewport": "1440x900",
       "artifact": "login-teacher.html",
-      "observation": "Rendered auth.login-teacher shows harmonious top guru-cover banner, clean Email/Kata Sandi controls, Lihat toggle, and emerald Masuk button."
+      "observation": "Rendered auth.login-teacher displays clean teacher form card over bg.png."
+    },
+    {
+      "viewport": "1440x900",
+      "artifact": "student-home.html",
+      "observation": "Rendered student.home displays aligned student header, welcome card with Dengar voice assist button and attendance status pill, and 2+3 Montessori picture-book vector activity bento grid."
     }
   ]
 }
