@@ -12,6 +12,7 @@
   <div class="role-grid">
     <a href="{{ route('login.student') }}" class="role-card role-card--student">
       <div class="role-card__cover">
+        <img src="/images/murid-cover.jpg" alt="Ilustrasi murid membawa buku" class="role-card__illus">
         <span class="role-card__tag">Murid</span>
       </div>
       <div class="role-card__body">
@@ -26,6 +27,7 @@
 
     <a href="{{ route('login.teacher') }}" class="role-card role-card--teacher">
       <div class="role-card__cover">
+        <img src="/images/guru-cover.jpg" alt="Ilustrasi guru di kelas" class="role-card__illus">
         <span class="role-card__tag">Guru</span>
       </div>
       <div class="role-card__body">

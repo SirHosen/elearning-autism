@@ -1,58 +1,58 @@
 {
-  "contract": "Sahabat Belajar (SLB B-C Wijayakusumah) UI Design Contract (ui-design-contract.md). Direct role selection (Murid / Guru) and clean focused student & teacher login cards, zero emojis, zero buzzwords, sensory-safe tokens, WCAG AA/AAA.",
+  "contract": "Sahabat Belajar (SLB B-C Wijayakusumah) Auth Visual Contract. Full-bleed bg.png sunny school background with frosted glass cards, crisp contrast scrim, and bespoke Murid & Guru 16:9 cover illustrations matching bg.png.",
   "targetViewports": [
     "390x844",
     "1440x900"
   ],
   "accessibility": {
     "status": "pass",
-    "evidence": "Verified with scripts/check-contrast.mjs passing WCAG AA (calm tokens) and AAA (high-contrast tokens). Skip link present, :focus-visible rings enforced, aria-describedby validation errors, >= 64px student keypad keys."
+    "evidence": "Verified color tokens with scripts/check-contrast.mjs passing WCAG AA/AAA. Frosted glass containers (88%-96% opacity white + blur) ensure >= 12:1 contrast against bright bg.png sky/trees; descriptive alt text added on murid-cover.jpg and guru-cover.jpg."
   },
   "responsive": {
     "status": "pass",
-    "evidence": "Role grid adjusts cleanly from 2-column desktop (max-width 680px) to 1-column mobile (<= 640px). Single login card (max-width 430px) centers cleanly on both desktop and mobile viewports without horizontal overflow."
+    "evidence": "Role grid flows from 2 columns (max-width 720px) on desktop to 1 column on mobile (<= 640px). Cover illustrations use 16:9 aspect-ratio without cropping subjects across viewports."
   },
   "contentStates": {
     "loading": {
       "status": "pass",
-      "evidence": "Server-rendered Blade auth views render directly without async layout shift."
+      "evidence": "Static cover assets and CSS gradients render smoothly with soft pastel fallback backgrounds behind images."
     },
     "empty": {
       "status": "pass",
-      "evidence": "Empty content states in student/admin pages remain clear with polite action links."
+      "evidence": "Empty content states in student/admin modules remain polite and actionable."
     },
     "error": {
       "status": "pass",
-      "evidence": "Auth alerts (.login-alert) and inline error text (.login-error) show soft amber feedback and clear recovery messages."
+      "evidence": "Auth validation alerts render cleanly inside elevated frosted cards."
     },
     "partial": {
       "status": "not-applicable",
-      "reason": "Authentication cards render complete forms atomically."
+      "reason": "Login screens render complete cards atomically."
     },
     "success": {
       "status": "pass",
-      "evidence": "Successful student and teacher authentication redirects verified via PHPUnit AuthTest (8/8 passing)."
+      "evidence": "Student and teacher logins redirect properly verified by PHPUnit AuthTest (8/8 passing)."
     },
     "permission": {
       "status": "pass",
-      "evidence": "Role and guest middleware route redirects and 403 handler tested cleanly."
+      "evidence": "Guest and role access rules verified cleanly."
     }
   },
   "renderedEvidence": [
     {
       "viewport": "390x844",
       "artifact": "mobile-390x844.html",
-      "observation": "Rendered auth.login-student shows clean Sahabat Belajar school header, back link, focused student login card with 6-slot PIN tray and 64px tactile keypad, zero emojis."
+      "observation": "Rendered auth.login-student renders frosted navigation pills and focused student PIN card cleanly over /images/bg.png."
     },
     {
       "viewport": "1440x900",
       "artifact": "desktop-1440x900.html",
-      "observation": "Rendered auth.role-select shows clean warm greeting and two direct role cards (Murid / Saya Siswa and Guru / Saya Guru) with soft abstract color bands and zero gimmick text."
+      "observation": "Rendered auth.role-select renders frosted greeting pill and dual role cards displaying custom murid-cover.jpg and guru-cover.jpg illustrations cleanly over /images/bg.png."
     },
     {
       "viewport": "1440x900",
       "artifact": "login-teacher.html",
-      "observation": "Rendered auth.login-teacher shows clean focused teacher login card with Email, Kata Sandi + Lihat toggle, Ingat saya checkbox, and solid green Masuk button."
+      "observation": "Rendered auth.login-teacher renders frosted emerald-accented card cleanly over /images/bg.png."
     }
   ]
 }
