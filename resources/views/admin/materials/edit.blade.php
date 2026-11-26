@@ -7,7 +7,7 @@
 <div class="adm-form-shell">
   <div class="adm-page-head">
     <div>
-      <a href="{{ route('admin.materials.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Materi</a>
+      <x-admin.back-link :href="route('admin.materials.index')" label="Daftar Materi" />
       <h1 class="adm-title">Ubah Materi: {{ $material->label }}</h1>
       <p class="adm-subtitle">Perbarui informasi kata, kalimat pendamping, ilustrasi gambar, atau audio pelafalan.</p>
     </div>
@@ -43,9 +43,9 @@
 
       <div class="adm-field">
         <label for="image" class="adm-label">Ganti Foto / Gambar (Kosongkan jika tidak diubah)</label>
-        <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
-          <img id="imagePreviewThumb" src="/storage/{{ $material->image_path }}" alt="{{ $material->label }}" style="height: 72px; width: 72px; object-fit: contain; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface-alt); padding: 4px;">
-          <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" class="adm-input" style="flex: 1; padding: 9px 12px; background: var(--surface-alt);">
+        <div class="adm-file-row">
+          <img id="imagePreviewThumb" src="/storage/{{ $material->image_path }}" alt="{{ $material->label }}" class="adm-thumb-preview">
+          <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" class="adm-input adm-file-input">
         </div>
         @error('image')<span class="adm-error">{{ $message }}</span>@enderror
       </div>
@@ -53,17 +53,32 @@
       <div class="adm-field">
         <label for="audio" class="adm-label">Ganti Audio Suara Guru (Kosongkan jika tidak diubah)</label>
         @if ($material->audio_path)
-          <div style="margin-bottom: 10px;">
-            <audio controls src="/storage/{{ $material->audio_path }}" style="height: 36px; width: 100%;"></audio>
+          <div class="adm-audio-stack">
+            <audio controls src="/storage/{{ $material->audio_path }}" class="adm-audio-player"></audio>
+            <label class="adm-check-row">
+              <input type="checkbox" name="remove_audio" value="1" class="adm-checkbox">
+              <span class="adm-check-label">Hapus audio rekaman (kembali ke suara otomatis)</span>
+            </label>
           </div>
         @endif
-        <input type="file" id="audio" name="audio" accept="audio/mpeg,audio/mp3,audio/ogg,audio/wav" class="adm-input" style="padding: 9px 12px; background: var(--surface-alt);">
+        <input type="file" id="audio" name="audio" accept="audio/mpeg,audio/mp3,audio/ogg,audio/wav" class="adm-input adm-file-input">
         @error('audio')<span class="adm-error">{{ $message }}</span>@enderror
       </div>
 
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $material->is_active) ? 'checked' : '' }} style="width: 18px; height: 18px;">
-        <label for="is_active" style="font-weight: 700; font-size: 0.875rem; color: var(--ink);">Aktifkan materi ini agar dapat dipelajari siswa</label>
+      <div class="adm-form-grid-2">
+        <div class="adm-field">
+          <label for="sort_order" class="adm-label">Urutan Tampil</label>
+          <input type="number" id="sort_order" name="sort_order" class="adm-input" value="{{ old('sort_order', $material->sort_order) }}" min="0">
+          @error('sort_order')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="adm-field adm-check-slot">
+          <div class="adm-check-row">
+            <input type="hidden" name="is_active" value="0">
+            <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $material->is_active ? '1' : '0') == '1' ? 'checked' : '' }} class="adm-checkbox">
+            <label for="is_active" class="adm-check-label">Aktifkan materi ini agar dapat dipelajari siswa</label>
+          </div>
+        </div>
       </div>
 
       <div class="adm-form-footer">

@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-<div class="st-empty-card">
+<div class="st-empty-card st-anim st-anim--1">
   <div style="width: 140px; height: 140px; margin: 0 auto 20px;" aria-hidden="true">
     <svg viewBox="0 0 140 140" width="140" height="140" fill="none">
       <circle cx="70" cy="70" r="60" fill="#DCEBF7"/>
@@ -31,8 +31,9 @@
   <p style="color: var(--ink-soft); font-size: calc(1rem * var(--font-scale)); margin: 0 0 24px; line-height: 1.5;">
     {{ __('ui.empty_content') }}
   </p>
-  <a href="{{ route('student.learn.index') }}" class="btn btn-student btn-primary" style="border-radius: 999px;">
-    Lihat Kategori Lain &rarr;
+  <a href="{{ route('student.learn.index') }}" class="btn btn-student btn-primary st-pill-cta">
+    <span>Lihat Kategori Lain</span>
+    @include('student.partials.icon-arrow', ['size' => 17])
   </a>
 </div>
 @endsection

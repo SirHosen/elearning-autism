@@ -31,18 +31,21 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.admin', function ($view) {
             try {
                 $today = now()->toDateString();
-                $activeStudentsCount = User::where('role', 'siswa')->where('is_active', true)->count();
-                $attendedTodayIds = Attendance::whereDate('attendance_date', $today)
-                    ->pluck('user_id');
-
-                $unattendedTodayCount = User::where('role', 'siswa')
+                $activeStudentIds = User::where('role', 'siswa')
                     ->where('is_active', true)
-                    ->whereNotIn('id', $attendedTodayIds)
-                    ->count();
+                    ->pluck('id');
+
+                $activeStudentsCount = $activeStudentIds->count();
+                $attendedTodayCount = $activeStudentsCount > 0
+                    ? Attendance::whereIn('user_id', $activeStudentIds)
+                        ->whereDate('attendance_date', $today)
+                        ->distinct('user_id')
+                        ->count('user_id')
+                    : 0;
 
                 $view->with('adminSidebarCounts', [
                     'students' => $activeStudentsCount,
-                    'unattendedToday' => $unattendedTodayCount,
+                    'unattendedToday' => max(0, $activeStudentsCount - $attendedTodayCount),
                     'materials' => Material::where('is_active', true)->count(),
                     'quizzes' => Quiz::where('is_active', true)->count(),
                 ]);

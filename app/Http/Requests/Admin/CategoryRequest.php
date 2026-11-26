@@ -3,10 +3,22 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class CategoryRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $rawSlug = $this->input('slug');
+        $rawName = (string) $this->input('name', '');
+        $normalized = Str::slug($rawSlug ?: $rawName);
+
+        if ($normalized !== '') {
+            $this->merge(['slug' => $normalized]);
+        }
+    }
+
     public function authorize(): bool
     {
         return $this->user()?->isAdmin() ?? false;

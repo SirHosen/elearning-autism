@@ -6,16 +6,13 @@
 @section('content')
 <div class="st-page-shell" style="max-width: 900px;">
   {{-- Header & Tombol Kembali + Ulangi --}}
-  <div class="st-page-bar">
+  <div class="st-page-bar st-anim st-anim--1">
     <a href="{{ route('student.videos.index') }}" class="st-back-pill">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="19" y1="12" x2="5" y2="12"/>
-        <polyline points="12 19 5 12 12 5"/>
-      </svg>
+      @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 18, 'class' => 'st-back-pill__icon'])
       <span>Kembali</span>
     </a>
 
-    <button id="btn-repeat-video" type="button" class="btn btn-student btn-primary" style="min-height: 48px; border-radius: 999px; font-size: 0.9375rem; padding: 0 20px;">
+    <button id="btn-repeat-video" type="button" class="btn btn-student btn-primary st-repeat-btn">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="1 4 1 10 7 10"/>
         <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
@@ -25,7 +22,7 @@
   </div>
 
   {{-- Kartu Pemutar Video --}}
-  <div class="st-cinema-card">
+  <div class="st-cinema-card st-anim st-anim--2">
     <div class="st-cinema-screen">
       @if($video->source_type === 'upload')
         <video id="edu-video-player" controls playsinline preload="metadata" style="width: 100%; max-height: 520px; display: block;">
@@ -34,7 +31,13 @@
         </video>
       @else
         <div style="position: relative; width: 100%; aspect-ratio: 16/9;">
-          <iframe id="edu-video-iframe" src="{{ $video->youtube_embed_url }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe id="edu-video-iframe"
+                  src="{{ $video->youtube_embed_url }}"
+                  title="{{ $video->title }}"
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
         </div>
       @endif
     </div>

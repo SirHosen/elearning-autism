@@ -16,7 +16,7 @@
 </div>
 
 <form action="{{ route('admin.games.index') }}" method="GET" class="adm-filter-bar">
-  <label for="category_id" style="font-weight: 700; font-size: 0.875rem;">Kategori:</label>
+  <label for="category_id" class="adm-filter-label">Kategori:</label>
   <select name="category_id" id="category_id" class="adm-select" onchange="this.form.submit()">
     <option value="">Semua Kategori</option>
     @foreach($categories as $cat)
@@ -24,7 +24,7 @@
     @endforeach
   </select>
 
-  <label for="game_type" style="font-weight: 700; font-size: 0.875rem;">Jenis Engine:</label>
+  <label for="game_type" class="adm-filter-label">Jenis Engine:</label>
   <select name="game_type" id="game_type" class="adm-select" onchange="this.form.submit()">
     <option value="">Semua Jenis</option>
     <option value="pilih_benar" {{ request('game_type') === 'pilih_benar' ? 'selected' : '' }}>Pilih yang Benar</option>
@@ -54,8 +54,10 @@
       @forelse($games as $game)
         <tr>
           <td>
-            <strong style="color: var(--ink);">{{ $game->title }}</strong>
-            <div style="font-size: 0.8125rem; color: var(--ink-soft); margin-top: 2px;">{{ $game->instruction_text }}</div>
+            <strong class="adm-entity-name">{{ $game->title }}</strong>
+            @if($game->instruction_text)
+              <div class="adm-entity-desc">{{ $game->instruction_text }}</div>
+            @endif
           </td>
           <td>
             @if($game->game_type === 'pilih_benar')
@@ -75,19 +77,19 @@
           <td>
             <span class="adm-pill adm-pill--neutral">{{ $game->sessions_count ?? 0 }} sesi</span>
           </td>
-          <td>
-            <form action="{{ route('admin.games.toggle', $game) }}" method="POST" style="display: inline;">
+          <td class="adm-td-nowrap">
+            <form action="{{ route('admin.games.toggle', $game) }}" method="POST" class="adm-inline-form">
               @csrf
               <button type="submit"
-                      class="adm-pill {{ $game->is_active ? 'adm-pill--success' : 'adm-pill--neutral' }}"
-                      style="border: 0; cursor: pointer;">
-                {{ $game->is_active ? 'Aktif' : 'Nonaktif' }}
+                      class="adm-pill adm-status-toggle {{ $game->is_active ? 'adm-pill--success' : 'adm-pill--neutral' }}"
+                      title="Klik untuk ubah status">
+                <span class="adm-dot"></span>{{ $game->is_active ? 'Aktif' : 'Nonaktif' }}
               </button>
             </form>
           </td>
           <td class="adm-td-actions">
             <div class="adm-actions">
-              <a href="{{ route('admin.games.edit', $game) }}" class="adm-btn adm-btn--secondary adm-btn--sm">Edit</a>
+              <a href="{{ route('admin.games.edit', $game) }}" class="adm-btn adm-btn--secondary adm-btn--sm">Ubah</a>
               <form action="{{ route('admin.games.destroy', $game) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus permainan ini?')">
                 @csrf
                 @method('DELETE')
@@ -98,7 +100,7 @@
         </tr>
       @empty
         <tr>
-          <td colspan="7" style="text-align: center; padding: 36px; color: var(--ink-soft);">
+          <td colspan="7" class="adm-table-empty">
             Belum ada permainan edukasi yang ditambahkan.
           </td>
         </tr>
@@ -107,7 +109,7 @@
   </table>
 </div>
 
-<div style="margin-top: 20px;">
+<div class="adm-pagination-wrap">
   {{ $games->links() }}
 </div>
 @endsection

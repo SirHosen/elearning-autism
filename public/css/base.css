@@ -31,6 +31,31 @@
   src: url('/fonts/lexend/lexend-700.woff2') format('woff2');
 }
 
+/* Font Fredoka Self-Hosted (Display Ramah Anak, 3 Bobot) */
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/fredoka/fredoka-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/fredoka/fredoka-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/fredoka/fredoka-700.woff2') format('woff2');
+}
+
 /* Reset dan Dasar Sensory-Safe */
 *, *::before, *::after {
   box-sizing: border-box;

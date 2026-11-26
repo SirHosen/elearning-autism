@@ -3,453 +3,9 @@
 @section('title', 'Ruang Belajar | Sahabat Belajar')
 @section('page_title', 'Ruang Belajar')
 
-@push('styles')
-<style>
-  /* ── Greeting Welcome Card ── */
-  .home-welcome {
-    background: var(--surface);
-    border: var(--border) solid var(--line);
-    border-radius: 24px;
-    padding: 24px 28px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    box-shadow: 0 4px 16px rgba(31, 41, 51, 0.04);
-  }
-
-  .home-welcome__meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .home-school-pill {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 999px;
-    background: var(--surface-alt);
-    color: var(--ink-soft);
-    font-size: 0.8125rem;
-    font-weight: 700;
-  }
-
-  .home-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 0.8125rem;
-    font-weight: 700;
-    text-decoration: none;
-  }
-
-  .home-status-pill::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  .home-status-pill--done {
-    background: var(--success-bg);
-    color: var(--success);
-  }
-
-  .home-status-pill--pending {
-    background: var(--hint-bg);
-    color: #78350F;
-    border: 1px solid rgba(201, 154, 46, 0.4);
-  }
-
-  :root[data-theme="contrast"] .home-status-pill--pending {
-    color: var(--hint-line);
-    border-color: var(--hint-line);
-  }
-
-  .home-status-pill--pending:hover {
-    background: #FCEFC7;
-  }
-
-  .home-greeting {
-    font-size: clamp(1.5rem, 3.2vw, 2.125rem);
-    font-weight: 700;
-    color: var(--ink);
-    letter-spacing: -0.025em;
-    margin: 0 0 4px;
-    line-height: 1.2;
-  }
-
-  .home-subtitle {
-    color: var(--ink-soft);
-    font-size: calc(1.0625rem * var(--font-scale));
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  /* Tactile Voice Welcome Button (Tap-only, manual playback) */
-  .home-voice-btn {
-    flex-shrink: 0;
-    min-height: 64px;
-    padding: 0 24px;
-    border-radius: 18px;
-    border: var(--border) solid var(--primary);
-    border-bottom-width: 4px;
-    background: var(--tint-blue);
-    color: var(--primary-strong);
-    font-size: calc(1.0625rem * var(--font-scale));
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition:
-      background-color var(--dur) var(--ease),
-      transform var(--dur) var(--ease);
-  }
-
-  .home-voice-btn:hover {
-    background: #CEE3F5;
-  }
-
-  .home-voice-btn:active {
-    transform: translateY(2px);
-    border-bottom-width: 2px;
-  }
-
-  .home-voice-btn.is-playing {
-    background: var(--primary);
-    color: var(--on-primary);
-  }
-
-  .home-voice-bars {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    height: 18px;
-  }
-
-  .home-voice-bars span {
-    width: 3px;
-    border-radius: 2px;
-    background: currentColor;
-  }
-
-  .home-voice-bars span:nth-child(1) { height: 8px; }
-  .home-voice-bars span:nth-child(2) { height: 16px; }
-  .home-voice-bars span:nth-child(3) { height: 11px; }
-
-  /* ── Symmetrical 2 + 3 Activity Bento Grid ── */
-  .home-bento {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 20px;
-  }
-
-  .act-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 24px;
-    border-radius: 24px;
-    border: var(--border) solid var(--line);
-    border-bottom-width: 5px;
-    text-decoration: none;
-    color: var(--ink);
-    overflow: hidden;
-    transition:
-      transform var(--dur) var(--ease),
-      box-shadow var(--dur) var(--ease),
-      border-color var(--dur) var(--ease);
-  }
-
-  .act-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 28px -8px rgba(31, 41, 51, 0.12);
-  }
-
-  .act-card:active {
-    transform: translateY(2px);
-    border-bottom-width: 2px;
-  }
-
-  .act-card--featured {
-    grid-column: span 3;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-    min-height: 210px;
-  }
-
-  .act-card--compact {
-    grid-column: span 2;
-    min-height: 230px;
-  }
-
-  /* Pastel Montessori Activity Tints (adapt to [data-theme="contrast"] automatically) */
-  .act-card--blue {
-    background-color: var(--tint-blue);
-    border-color: #B4D2EA;
-  }
-  .act-card--blue:hover { border-color: var(--primary); }
-
-  .act-card--green {
-    background-color: var(--tint-green);
-    border-color: #B0DBC3;
-  }
-  .act-card--green:hover { border-color: var(--success); }
-
-  .act-card--yellow {
-    background-color: var(--tint-yellow);
-    border-color: #EAD087;
-  }
-  .act-card--yellow:hover { border-color: #B45309; }
-
-  .act-card--lavender {
-    background-color: var(--tint-lavender);
-    border-color: #CEC2EE;
-  }
-  .act-card--lavender:hover { border-color: #6D28D9; }
-
-  .act-card--peach {
-    background-color: var(--tint-peach);
-    border-color: #F0C2A4;
-  }
-  .act-card--peach:hover { border-color: #C2410C; }
-
-  .act-card--attended {
-    border-color: var(--success);
-  }
-
-  :root[data-theme="contrast"] .act-card {
-    background-color: var(--surface);
-    border-color: var(--line);
-    border-width: 3px;
-  }
-
-  :root[data-theme="contrast"] .act-card:hover {
-    border-color: var(--primary);
-  }
-
-  .act-card__info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .act-card__title {
-    font-size: calc(1.5rem * var(--font-scale));
-    font-weight: 700;
-    color: var(--ink);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-
-  .act-card__desc {
-    font-size: calc(0.9375rem * var(--font-scale));
-    color: var(--ink-soft);
-    line-height: 1.45;
-  }
-
-  .act-card__pill {
-    margin-top: 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 36px;
-    padding: 0 14px;
-    border-radius: 999px;
-    background: var(--surface);
-    color: var(--ink);
-    font-size: 0.875rem;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(31, 41, 51, 0.06);
-  }
-
-  :root[data-theme="contrast"] .act-card__pill {
-    background: var(--primary);
-    color: var(--on-primary);
-  }
-
-  .act-card--blue:hover .act-card__pill { background: var(--primary); color: #FFFFFF; }
-  .act-card--green:hover .act-card__pill { background: var(--success); color: #FFFFFF; }
-  .act-card--yellow:hover .act-card__pill { background: #B45309; color: #FFFFFF; }
-  .act-card--lavender:hover .act-card__pill { background: #6D28D9; color: #FFFFFF; }
-  .act-card--peach:hover .act-card__pill { background: #C2410C; color: #FFFFFF; }
-
-  :root[data-theme="contrast"] .act-card:hover .act-card__pill {
-    background: var(--primary-strong);
-    color: var(--on-primary);
-  }
-
-  /* Montessori Flat Picture-Book Artwork Frame */
-  .act-card__art {
-    flex-shrink: 0;
-    display: grid;
-    place-items: center;
-  }
-
-  .act-card--featured .act-card__art {
-    width: 152px;
-    height: 128px;
-  }
-
-  .act-card--compact .act-card__art {
-    width: 100%;
-    height: 100px;
-    justify-items: start;
-    margin-bottom: 14px;
-  }
-
-  .act-card__art svg {
-    width: 100%;
-    height: 100%;
-    max-width: 152px;
-  }
-
-  .act-badge-done {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background-color: var(--success);
-    color: var(--on-success);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 2px 8px rgba(36, 107, 77, 0.25);
-  }
-
-  .act-badge-done::before {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  /* Respect user motion preference off */
-  :root[data-motion="off"] .act-card:hover {
-    transform: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .act-card:hover {
-      transform: none;
-    }
-  }
-
-  /* ── Responsive Tablet (580px - 899px) ── */
-  @media (max-width: 899px) {
-    .home-bento {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .act-card--featured,
-    .act-card--compact {
-      grid-column: span 1;
-      flex-direction: column;
-      align-items: flex-start;
-      min-height: 210px;
-    }
-
-    .act-card--featured .act-card__art {
-      width: 100%;
-      height: 100px;
-      justify-items: start;
-      margin-bottom: 10px;
-    }
-
-    .act-card--featured .act-card__info {
-      order: 2;
-    }
-
-    .act-card--featured .act-card__art {
-      order: 1;
-    }
-
-    /* Make 5th card ABSEN span full 2-column width on tablet cleanly */
-    .act-card--absen {
-      grid-column: span 2;
-      flex-direction: row;
-      align-items: center;
-      min-height: 160px;
-    }
-
-    .act-card--absen .act-card__art {
-      width: 140px;
-      margin-bottom: 0;
-      order: 2;
-    }
-
-    .act-card--absen .act-card__info {
-      order: 1;
-    }
-  }
-
-  /* ── Responsive Mobile (< 580px) ── */
-  @media (max-width: 579px) {
-    .home-welcome {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 20px;
-    }
-
-    .home-voice-btn {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .home-bento {
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
-    .act-card--featured,
-    .act-card--compact,
-    .act-card--absen {
-      grid-column: span 1;
-      flex-direction: row;
-      align-items: center;
-      min-height: 132px;
-      padding: 18px;
-      gap: 14px;
-    }
-
-    .act-card__info {
-      order: 1 !important;
-    }
-
-    .act-card__art {
-      order: 2 !important;
-      width: 96px !important;
-      height: 82px !important;
-      margin-bottom: 0 !important;
-    }
-
-    .act-badge-done {
-      position: static;
-      margin-bottom: 6px;
-    }
-  }
-</style>
-@endpush
-
 @section('content')
 {{-- 1. KARTU SAPAAN & PENGENDALI SUARA --}}
-<section class="home-welcome" aria-label="Sapaan siswa">
+<section class="home-welcome st-anim st-anim--1" aria-label="Sapaan siswa">
   <div class="home-welcome__text">
     <div class="home-welcome__meta">
       <span class="home-school-pill">SLB B-C Wijayakusumah</span>
@@ -473,6 +29,10 @@
     data-greeting="Halo {{ $user->name }}! Pilih kegiatan yang mau kamu lakukan hari ini: Belajar, Bermain, Kuis, Video, atau Absen."
     data-volume="{{ ($setting?->volume ?? 70) / 100 }}"
     title="Dengarkan sapaan">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    </svg>
     <span class="home-voice-bars" aria-hidden="true">
       <span></span><span></span><span></span>
     </span>
@@ -484,11 +44,14 @@
 <div class="home-bento">
 
   {{-- 1. BELAJAR (Picture Book Flat Montessori Illustration - Non-Anime) --}}
-  <a href="{{ route('student.learn.index') }}" class="act-card act-card--featured act-card--blue">
+  <a href="{{ route('student.learn.index') }}" class="act-card act-card--featured act-card--blue st-anim st-anim--2">
     <div class="act-card__info">
       <span class="act-card__title">BELAJAR</span>
       <span class="act-card__desc">Kenali hewan, warna, dan benda sekitar</span>
-      <span class="act-card__pill">Buka &rarr;</span>
+      <span class="act-card__pill">
+        <span>Buka</span>
+        @include('student.partials.icon-arrow', ['size' => 16])
+      </span>
     </div>
     <div class="act-card__art" aria-hidden="true">
       <svg viewBox="0 0 160 128" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -516,11 +79,14 @@
   </a>
 
   {{-- 2. BERMAIN (Montessori Wooden Stacking Toy Blocks - Non-Anime) --}}
-  <a href="{{ route('student.games.index') }}" class="act-card act-card--featured act-card--green">
+  <a href="{{ route('student.games.index') }}" class="act-card act-card--featured act-card--green st-anim st-anim--3">
     <div class="act-card__info">
       <span class="act-card__title">BERMAIN</span>
       <span class="act-card__desc">Permainan tebak gambar seru</span>
-      <span class="act-card__pill">Mainkan &rarr;</span>
+      <span class="act-card__pill">
+        <span>Mainkan</span>
+        @include('student.partials.icon-arrow', ['size' => 16])
+      </span>
     </div>
     <div class="act-card__art" aria-hidden="true">
       <svg viewBox="0 0 160 128" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -545,7 +111,7 @@
   </a>
 
   {{-- 3. KUIS (Picture Card Quiz + Golden Stars - Non-Anime) --}}
-  <a href="{{ route('student.quizzes.index') }}" class="act-card act-card--compact act-card--yellow">
+  <a href="{{ route('student.quizzes.index') }}" class="act-card act-card--compact act-card--yellow st-anim st-anim--4">
     <div class="act-card__art" aria-hidden="true">
       <svg viewBox="0 0 148 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Kartu Kuis -->
@@ -565,12 +131,15 @@
     <div class="act-card__info">
       <span class="act-card__title">KUIS</span>
       <span class="act-card__desc">Latihan kuis bergambar</span>
-      <span class="act-card__pill">Mulai &rarr;</span>
+      <span class="act-card__pill">
+        <span>Mulai</span>
+        @include('student.partials.icon-arrow', ['size' => 16])
+      </span>
     </div>
   </a>
 
   {{-- 4. VIDEO (Cozy Pastel Tablet Cinema - Non-Anime) --}}
-  <a href="{{ route('student.videos.index') }}" class="act-card act-card--compact act-card--lavender">
+  <a href="{{ route('student.videos.index') }}" class="act-card act-card--compact act-card--lavender st-anim st-anim--5">
     <div class="act-card__art" aria-hidden="true">
       <svg viewBox="0 0 148 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- Bingkai Tablet / Layar -->
@@ -588,12 +157,15 @@
     <div class="act-card__info">
       <span class="act-card__title">VIDEO</span>
       <span class="act-card__desc">Tonton video pembelajaran</span>
-      <span class="act-card__pill">Tonton &rarr;</span>
+      <span class="act-card__pill">
+        <span>Tonton</span>
+        @include('student.partials.icon-arrow', ['size' => 16])
+      </span>
     </div>
   </a>
 
   {{-- 5. ABSEN (Warm Morning Calendar + Check Badge - Non-Anime) --}}
-  <a href="{{ route('student.attendance.index') }}" class="act-card act-card--compact act-card--peach act-card--absen {{ $hasAttendedToday ? 'act-card--attended' : '' }}">
+  <a href="{{ route('student.attendance.index') }}" class="act-card act-card--compact act-card--peach act-card--absen st-anim st-anim--6 {{ $hasAttendedToday ? 'act-card--attended' : '' }}">
     @if ($hasAttendedToday)
       <span class="act-badge-done">Sudah Hadir</span>
     @endif
@@ -623,7 +195,8 @@
         {{ $hasAttendedToday ? 'Kehadiranmu hari ini tercatat' : 'Tekan untuk mencatat kehadiranmu' }}
       </span>
       <span class="act-card__pill">
-        {{ $hasAttendedToday ? 'Lihat Status' : 'Saya Hadir' }} &rarr;
+        <span>{{ $hasAttendedToday ? 'Lihat Status' : 'Saya Hadir' }}</span>
+        @include('student.partials.icon-arrow', ['size' => 16])
       </span>
     </div>
   </a>
@@ -639,11 +212,13 @@
   if (btnHomeVoice) {
     const studentVolume = parseFloat(btnHomeVoice.dataset.volume || '0.7');
     const greeting = btnHomeVoice.dataset.greeting || 'Halo! Ayo mulai belajar hari ini.';
+    let homeVoiceToken = 0;
 
     btnHomeVoice.addEventListener('click', () => {
       if (!('speechSynthesis' in window)) return;
 
       if (btnHomeVoice.classList.contains('is-playing')) {
+        homeVoiceToken++;
         window.speechSynthesis.cancel();
         btnHomeVoice.classList.remove('is-playing');
         btnHomeVoice.setAttribute('aria-pressed', 'false');
@@ -651,6 +226,7 @@
         return;
       }
 
+      const token = ++homeVoiceToken;
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(greeting);
       utter.lang = 'id-ID';
@@ -658,12 +234,14 @@
       utter.volume = Math.max(0, Math.min(1, studentVolume));
 
       utter.onstart = () => {
+        if (token !== homeVoiceToken) return;
         btnHomeVoice.classList.add('is-playing');
         btnHomeVoice.setAttribute('aria-pressed', 'true');
         homeVoiceText.textContent = 'Stop';
       };
 
       utter.onend = utter.onerror = () => {
+        if (token !== homeVoiceToken) return;
         btnHomeVoice.classList.remove('is-playing');
         btnHomeVoice.setAttribute('aria-pressed', 'false');
         homeVoiceText.textContent = 'Dengar';

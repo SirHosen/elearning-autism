@@ -58,6 +58,12 @@ class AccessibilityAndErrorPagesTest extends TestCase
             $this->assertFileExists($path, "Font Lexend weight {$weight} harus tersedia di lokal.");
             $this->assertGreaterThan(5000, filesize($path));
         }
+
+        foreach ([500, 600, 700] as $weight) {
+            $fredokaPath = public_path("fonts/fredoka/fredoka-{$weight}.woff2");
+            $this->assertFileExists($fredokaPath, "Font Fredoka weight {$weight} harus tersedia di lokal.");
+            $this->assertGreaterThan(5000, filesize($fredokaPath));
+        }
     }
 
     public function test_zero_external_cdn_references_in_views(): void
@@ -88,5 +94,36 @@ class AccessibilityAndErrorPagesTest extends TestCase
                 );
             }
         }
+    }
+
+    public function test_error_pages_use_valid_tokens_and_role_aware_return_links(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        // Admin hitting missing route gets link back to Panel Guru
+        $admin404 = $this->actingAs($admin)->get('/admin/rute-tidak-ditemukan-999');
+        $admin404->assertStatus(404);
+        $admin404->assertSee('Kembali ke Panel Guru');
+        $admin404->assertSee('href="/admin"', false);
+        $admin404->assertDontSee('--radius-xl');
+        $admin404->assertDontSee('--radius-full');
+
+        // Student hitting missing route gets link back to Beranda
+        $student404 = $this->actingAs($this->student)->get('/rute-siswa-tidak-ada');
+        $student404->assertStatus(404);
+        $student404->assertSee('href="/beranda"', false);
+        $student404->assertSee('Kembali ke Menu Utama');
+
+        // Guest hitting missing route gets link to login page (/masuk)
+        auth()->logout();
+        $guest404 = $this->get('/halaman-publik-tidak-ada');
+        $guest404->assertStatus(404);
+        $guest404->assertSee('href="/masuk"', false);
+
+        // 500 error view uses valid component classes and defined tokens
+        $view500 = view('errors.500')->render();
+        $this->assertStringContainsString('error-card', $view500);
+        $this->assertStringNotContainsString('--radius-xl', $view500);
+        $this->assertStringNotContainsString('--radius-full', $view500);
     }
 }

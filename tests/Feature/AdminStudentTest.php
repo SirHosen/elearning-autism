@@ -84,4 +84,34 @@ class AdminStudentTest extends TestCase
             'is_active' => false,
         ]);
     }
+
+    public function test_admin_can_soft_delete_student_and_cannot_manage_admin_as_student(): void
+    {
+        $student = User::factory()->create([
+            'name' => 'Siswa Arsip',
+            'username' => 'siswa_arsip',
+            'role' => 'siswa',
+        ]);
+
+        // Admin cannot edit, reset PIN, update attendance, or delete an admin account via student endpoints
+        $this->actingAs($this->admin)->get(route('admin.students.edit', $this->admin))->assertStatus(404);
+        $this->actingAs($this->admin)->post(route('admin.students.reset-pin', $this->admin))->assertStatus(404);
+        $this->actingAs($this->admin)->delete(route('admin.students.destroy', $this->admin))->assertStatus(404);
+        $this->actingAs($this->admin)->post(route('admin.attendances.update', $this->admin), [
+            'date' => now()->toDateString(),
+            'status' => 'hadir',
+        ])->assertStatus(404);
+
+        // Removing a student performs a safe soft-delete
+        $deleteRes = $this->actingAs($this->admin)->delete(route('admin.students.destroy', $student));
+        $deleteRes->assertRedirect(route('admin.students.index'));
+        $this->assertSoftDeleted('users', ['id' => $student->id]);
+    }
+
+    public function test_unused_admin_resource_show_routes_return_405_not_500(): void
+    {
+        $this->actingAs($this->admin)->get('/admin/siswa/999')->assertStatus(405);
+        $this->actingAs($this->admin)->get('/admin/kategori/999')->assertStatus(405);
+        $this->actingAs($this->admin)->get('/admin/materi/999')->assertStatus(405);
+    }
 }

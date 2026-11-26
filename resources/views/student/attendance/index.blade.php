@@ -5,12 +5,9 @@
 
 @section('content')
 <div class="st-page-shell st-page-shell--narrow" style="max-width: 600px;">
-  <div class="st-page-bar">
+  <div class="st-page-bar st-anim st-anim--1">
     <a href="{{ route('student.home') }}" class="st-back-pill">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="19" y1="12" x2="5" y2="12"/>
-        <polyline points="12 19 5 12 12 5"/>
-      </svg>
+      @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 18, 'class' => 'st-back-pill__icon'])
       <span>Kembali ke Beranda</span>
     </a>
 
@@ -21,7 +18,7 @@
 
   @if($hasAttendedToday)
     <!-- Kondisi Sudah Hadir -->
-    <div class="st-attendance-card">
+    <div class="st-attendance-card st-anim st-anim--2">
       <div class="st-attendance-art" aria-hidden="true">
         <svg viewBox="0 0 144 144" width="144" height="144" fill="none">
           <circle cx="72" cy="72" r="64" fill="#DDF0E8"/>
@@ -42,14 +39,15 @@
       </p>
 
       <div style="display: flex; justify-content: center;">
-        <a href="{{ route('student.home') }}" class="btn btn-student btn-primary" style="border-radius: 999px; min-width: 240px;">
-          Kembali ke Menu Utama
+        <a href="{{ route('student.home') }}" class="btn btn-student btn-primary st-pill-cta">
+          @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 18, 'class' => 'st-btn-arrow st-btn-arrow--left'])
+          <span>Kembali ke Menu Utama</span>
         </a>
       </div>
     </div>
   @else
     <!-- Kondisi Belum Hadir -->
-    <div class="st-attendance-card">
+    <div class="st-attendance-card st-anim st-anim--2">
       <div class="st-attendance-art" aria-hidden="true">
         <svg viewBox="0 0 144 144" width="144" height="144" fill="none">
           <circle cx="72" cy="72" r="64" fill="#FCEFC7"/>
@@ -79,7 +77,7 @@
 
       <form action="{{ route('student.attendance.submit') }}" method="POST">
         @csrf
-        <button type="submit" class="btn btn-student btn-soft" style="font-size: calc(1.25rem * var(--font-scale)); font-weight: 700; border-radius: 999px; width: 100%; max-width: 320px; margin: 0 auto; border-bottom-width: 5px;">
+        <button type="submit" class="btn btn-student btn-soft st-attendance-cta">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"/>
           </svg>

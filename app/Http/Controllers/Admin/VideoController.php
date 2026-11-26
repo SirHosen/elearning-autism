@@ -84,7 +84,7 @@ class VideoController extends Controller
             'youtube_id' => $youtubeId,
             'description' => $validated['description'] ?? null,
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
-            'is_active' => (bool) ($request->input('is_active', 1)),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
         return redirect()->route('admin.videos.index')->with('success', 'Video berhasil ditambahkan.');
@@ -92,7 +92,10 @@ class VideoController extends Controller
 
     public function edit(Video $video): View
     {
-        $categories = Category::active()->orderBy('name')->get();
+        $categories = Category::where('is_active', true)
+            ->when($video->category_id, fn ($q) => $q->orWhere('id', $video->category_id))
+            ->orderBy('name')
+            ->get();
 
         return view('admin.videos.edit', compact('video', 'categories'));
     }
@@ -146,7 +149,7 @@ class VideoController extends Controller
             'youtube_id' => $youtubeId,
             'description' => $validated['description'] ?? null,
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
-            'is_active' => (bool) ($request->input('is_active', 1)),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : $video->is_active,
         ]);
 
         return redirect()->route('admin.videos.index')->with('success', 'Video berhasil diperbarui.');

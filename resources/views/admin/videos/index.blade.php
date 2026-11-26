@@ -16,7 +16,7 @@
 </div>
 
 <form action="{{ route('admin.videos.index') }}" method="GET" class="adm-filter-bar">
-  <label for="category_id" style="font-weight: 700; font-size: 0.875rem;">Kategori:</label>
+  <label for="category_id" class="adm-filter-label">Kategori:</label>
   <select name="category_id" id="category_id" class="adm-select" onchange="this.form.submit()">
     <option value="">Semua Kategori</option>
     @foreach($categories as $cat)
@@ -32,7 +32,7 @@
   <table class="adm-table">
     <thead>
       <tr>
-        <th style="width: 96px;">Pratinjau</th>
+        <th class="adm-th-w96">Pratinjau</th>
         <th>Judul Video</th>
         <th>Kategori</th>
         <th>Sumber</th>
@@ -47,13 +47,13 @@
           <td>
             <img src="{{ $video->thumbnail_url }}"
                  alt="{{ $video->title }}"
-                 style="width: 80px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line);"
+                 class="adm-thumb-video"
                  onerror="this.src='{{ asset('images/icons/video-placeholder.svg') }}'">
           </td>
           <td>
-            <strong style="color: var(--ink);">{{ $video->title }}</strong>
+            <strong class="adm-entity-name">{{ $video->title }}</strong>
             @if($video->description)
-              <div style="font-size: 0.8125rem; color: var(--ink-soft); max-width: 340px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;">
+              <div class="adm-entity-desc adm-entity-desc--truncate">
                 {{ $video->description }}
               </div>
             @endif
@@ -73,19 +73,19 @@
             @endif
           </td>
           <td>{{ $video->sort_order }}</td>
-          <td>
-            <form action="{{ route('admin.videos.toggle', $video) }}" method="POST" style="display: inline;">
+          <td class="adm-td-nowrap">
+            <form action="{{ route('admin.videos.toggle', $video) }}" method="POST" class="adm-inline-form">
               @csrf
               <button type="submit"
-                      class="adm-pill {{ $video->is_active ? 'adm-pill--success' : 'adm-pill--neutral' }}"
-                      style="border: 0; cursor: pointer;">
-                {{ $video->is_active ? 'Aktif' : 'Nonaktif' }}
+                      class="adm-pill adm-status-toggle {{ $video->is_active ? 'adm-pill--success' : 'adm-pill--neutral' }}"
+                      title="Klik untuk ubah status">
+                <span class="adm-dot"></span>{{ $video->is_active ? 'Aktif' : 'Nonaktif' }}
               </button>
             </form>
           </td>
           <td class="adm-td-actions">
             <div class="adm-actions">
-              <a href="{{ route('admin.videos.edit', $video) }}" class="adm-btn adm-btn--secondary adm-btn--sm">Edit</a>
+              <a href="{{ route('admin.videos.edit', $video) }}" class="adm-btn adm-btn--secondary adm-btn--sm">Ubah</a>
               <form action="{{ route('admin.videos.destroy', $video) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus video ini?')">
                 @csrf
                 @method('DELETE')
@@ -96,7 +96,7 @@
         </tr>
       @empty
         <tr>
-          <td colspan="7" style="text-align: center; padding: 36px; color: var(--ink-soft);">
+          <td colspan="7" class="adm-table-empty">
             Belum ada video edukasi yang ditambahkan.
           </td>
         </tr>
@@ -105,7 +105,7 @@
   </table>
 </div>
 
-<div style="margin-top: 20px;">
+<div class="adm-pagination-wrap">
   {{ $videos->links() }}
 </div>
 @endsection

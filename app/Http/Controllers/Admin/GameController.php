@@ -58,7 +58,7 @@ class GameController extends Controller
 
         $category = Category::findOrFail($validated['category_id']);
         $activeMaterialsCount = $category->activeMaterials()->count();
-        $isActive = (bool) $request->input('is_active', 1);
+        $isActive = $request->has('is_active') ? $request->boolean('is_active') : true;
 
         if ($isActive) {
             $this->validateMinimumMaterials($category, $validated['game_type'], (int) $validated['option_count'], (int) $validated['round_count'], $activeMaterialsCount);
@@ -70,7 +70,7 @@ class GameController extends Controller
             'game_type' => $validated['game_type'],
             'option_count' => $validated['option_count'],
             'round_count' => $validated['round_count'],
-            'instruction_text' => $validated['instruction_text'] ?? $this->defaultInstruction($validated['game_type']),
+            'instruction_text' => ! empty($validated['instruction_text']) ? $validated['instruction_text'] : $this->defaultInstruction($validated['game_type']),
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
             'is_active' => $isActive,
         ]);
@@ -80,7 +80,11 @@ class GameController extends Controller
 
     public function edit(Game $game): View
     {
-        $categories = Category::active()->withCount('activeMaterials')->orderBy('name')->get();
+        $categories = Category::where('is_active', true)
+            ->orWhere('id', $game->category_id)
+            ->withCount('activeMaterials')
+            ->orderBy('name')
+            ->get();
 
         return view('admin.games.edit', compact('game', 'categories'));
     }
@@ -104,7 +108,7 @@ class GameController extends Controller
 
         $category = Category::findOrFail($validated['category_id']);
         $activeMaterialsCount = $category->activeMaterials()->count();
-        $isActive = (bool) $request->input('is_active', 1);
+        $isActive = $request->has('is_active') ? $request->boolean('is_active') : $game->is_active;
 
         if ($isActive) {
             $this->validateMinimumMaterials($category, $validated['game_type'], (int) $validated['option_count'], (int) $validated['round_count'], $activeMaterialsCount);
@@ -116,7 +120,7 @@ class GameController extends Controller
             'game_type' => $validated['game_type'],
             'option_count' => $validated['option_count'],
             'round_count' => $validated['round_count'],
-            'instruction_text' => $validated['instruction_text'] ?? $this->defaultInstruction($validated['game_type']),
+            'instruction_text' => ! empty($validated['instruction_text']) ? $validated['instruction_text'] : $this->defaultInstruction($validated['game_type']),
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
             'is_active' => $isActive,
         ]);

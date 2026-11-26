@@ -2,8 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Models\Attendance;
 use App\Models\Category;
+use App\Models\Game;
+use App\Models\GameSession;
 use App\Models\Material;
+use App\Models\Quiz;
+use App\Models\QuizAttempt;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -152,5 +157,80 @@ class AdminDashboardAndProfileTest extends TestCase
         $res->assertDontSee('pagination.previous');
         $res->assertDontSee('pagination.next');
         $res->assertDontSee('w-5 h-5');
+    }
+
+    public function test_bulk_reports_and_csv_export_accurately_aggregate_multiple_students(): void
+    {
+        $category = Category::create([
+            'name' => 'Warna',
+            'slug' => 'warna',
+            'color_key' => 'green',
+            'is_active' => true,
+        ]);
+
+        $quiz = Quiz::create([
+            'category_id' => $category->id,
+            'title' => 'Kuis Warna',
+            'is_active' => true,
+        ]);
+
+        $game = Game::create([
+            'category_id' => $category->id,
+            'title' => 'Game Warna',
+            'game_type' => 'pilih_benar',
+            'option_count' => 3,
+            'round_count' => 5,
+            'instruction_text' => 'Pilih warna',
+            'is_active' => true,
+        ]);
+
+        $studentA = User::factory()->create([
+            'name' => 'Alya Putri',
+            'username' => 'alya_p',
+            'role' => 'siswa',
+        ]);
+
+        $studentB = User::factory()->create([
+            'name' => 'Bagas Pratama',
+            'username' => 'bagas_p',
+            'role' => 'siswa',
+        ]);
+
+        // Alya: 5/5 quiz (100% -> 3 stars) + 2 stars game + 1 attended day = 5 total stars
+        QuizAttempt::create([
+            'user_id' => $studentA->id,
+            'quiz_id' => $quiz->id,
+            'total_questions' => 5,
+            'correct_first_try' => 5,
+            'finished_at' => now(),
+        ]);
+        GameSession::create([
+            'user_id' => $studentA->id,
+            'game_id' => $game->id,
+            'rounds_total' => 5,
+            'rounds_correct_first_try' => 4,
+            'stars_earned' => 2,
+            'duration_seconds' => 30,
+            'completed_at' => now(),
+        ]);
+        Attendance::create([
+            'user_id' => $studentA->id,
+            'attendance_date' => now()->toDateString(),
+            'status' => 'hadir',
+            'checked_in_at' => now(),
+            'source' => 'siswa',
+        ]);
+
+        $overviewRes = $this->actingAs($this->admin)->get(route('admin.reports.index'));
+        $overviewRes->assertStatus(200);
+        $overviewRes->assertSee('Alya Putri');
+        $overviewRes->assertSee('100%');
+        $overviewRes->assertSee('Bagas Pratama');
+
+        $csvRes = $this->actingAs($this->admin)->get(route('admin.reports.export'));
+        $csvRes->assertStatus(200);
+        $csv = $csvRes->streamedContent();
+        $this->assertStringContainsString('"Alya Putri",alya_p,1,100%,1,5,1', $csv);
+        $this->assertStringContainsString('"Bagas Pratama",bagas_p,0,0%,0,0,0', $csv);
     }
 }

@@ -4,23 +4,17 @@
 
 @section('content')
 <div class="student-wrap">
-  <div class="login-nav-row">
-    <a href="{{ route('login') }}" class="login-nav-pill">
-      <span aria-hidden="true">&larr;</span>
-      <span>Kembali</span>
-    </a>
-  </div>
+  <div class="student-card auth-anim auth-anim--1">
+    @include('auth.partials.login-topbar', ['variant' => 'student', 'badge' => 'Masuk Murid'])
 
-  <div class="student-card">
     <form id="studentLoginForm" action="{{ route('login.student.submit') }}" method="POST" class="student-grid">
       @csrf
 
-      {{-- Kolom Kiri: Ilustrasi Murid, Judul, Suara Petunjuk, & Nama Pengguna --}}
+      {{-- Kolom Kiri: Ilustrasi Vektor Murid, Judul, Suara Petunjuk, & Nama Pengguna --}}
       <div class="sl-left">
         <div class="role-card--student">
           <div class="role-card__cover">
-            <img src="/images/murid-cover.jpg" alt="Ilustrasi murid membawa buku" class="role-card__illus">
-            <span class="role-card__tag">Murid</span>
+            @include('auth.partials.role-art', ['role' => 'student'])
           </div>
         </div>
 
@@ -31,7 +25,11 @@
               <p class="sl-desc">Tulis nama pengguna dan tekan PIN.</p>
             </div>
             <button type="button" id="btnVoiceGuide" class="sl-voice-btn" aria-pressed="false" title="Dengarkan panduan cara masuk">
-              <span class="sl-voice-dot" aria-hidden="true"></span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
               <span id="voiceLabel">Dengar</span>
             </button>
           </div>
@@ -45,18 +43,24 @@
 
           <div class="login-field" style="margin-top: auto;">
             <label for="username" class="login-label">Nama Pengguna Kamu</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value="{{ old('username') }}"
-              required
-              autofocus
-              autocomplete="username"
-              placeholder="Contoh: siswa_a"
-              class="login-input login-input--student @error('username') is-invalid @enderror"
-              @error('username') aria-describedby="username-error" @enderror
-            >
+            <div class="login-input-wrap">
+              <svg class="login-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="{{ old('username') }}"
+                required
+                autofocus
+                autocomplete="username"
+                placeholder="Nama Kamu"
+                class="login-input login-input--student login-input--with-icon @error('username') is-invalid @enderror"
+                @error('username') aria-describedby="username-error" @enderror
+              >
+            </div>
             @error('username')
               <span id="username-error" class="login-error">{{ $message }}</span>
             @enderror
@@ -100,9 +104,25 @@
           <button type="button" class="keypad-btn" data-key="7">7</button>
           <button type="button" class="keypad-btn" data-key="8">8</button>
           <button type="button" class="keypad-btn" data-key="9">9</button>
-          <button type="button" class="keypad-btn keypad-btn--clear" id="btnClear" aria-label="Hapus satu angka PIN">Hapus</button>
+          <button type="button" class="keypad-btn keypad-btn--clear" id="btnClear" aria-label="Hapus satu angka PIN">
+            <span class="keypad-btn__inner">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                <line x1="18" y1="9" x2="12" y2="15"></line>
+                <line x1="12" y1="9" x2="18" y2="15"></line>
+              </svg>
+              <span>Hapus</span>
+            </span>
+          </button>
           <button type="button" class="keypad-btn" data-key="0">0</button>
-          <button type="submit" class="keypad-btn keypad-btn--submit" id="btnSubmitStudent">Masuk</button>
+          <button type="submit" class="keypad-btn keypad-btn--submit" id="btnSubmitStudent">
+            <span class="keypad-btn__inner">
+              <span>Masuk</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </span>
+          </button>
         </div>
       </div>
     </form>
@@ -204,9 +224,11 @@
   });
 
   if (btnVoice) {
+    let voiceToken = 0;
     btnVoice.addEventListener('click', () => {
       if (!('speechSynthesis' in window)) return;
       if (btnVoice.classList.contains('is-speaking')) {
+        voiceToken++;
         window.speechSynthesis.cancel();
         btnVoice.classList.remove('is-speaking');
         btnVoice.setAttribute('aria-pressed', 'false');
@@ -214,16 +236,19 @@
         return;
       }
 
+      const token = ++voiceToken;
       window.speechSynthesis.cancel();
       const msg = new SpeechSynthesisUtterance('Halo! Tulis nama pengguna kamu, lalu tekan angka PIN ya.');
       msg.lang = 'id-ID';
       msg.rate = 0.85;
       msg.onstart = () => {
+        if (token !== voiceToken) return;
         btnVoice.classList.add('is-speaking');
         btnVoice.setAttribute('aria-pressed', 'true');
         voiceLabel.textContent = 'Stop';
       };
       msg.onend = msg.onerror = () => {
+        if (token !== voiceToken) return;
         btnVoice.classList.remove('is-speaking');
         btnVoice.setAttribute('aria-pressed', 'false');
         voiceLabel.textContent = 'Dengar';

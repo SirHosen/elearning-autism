@@ -2,21 +2,87 @@
 
 /* 1. BODY & HEADER SISWA (Konsisten, Terpusat, & Tenang) */
 .student-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse 75% 40% at 15% 0%, rgba(47, 111, 159, 0.06), transparent 65%),
-    radial-gradient(ellipse 70% 40% at 85% 0%, rgba(36, 107, 77, 0.05), transparent 65%);
+    radial-gradient(ellipse 75% 42% at 12% 0%, rgba(47, 111, 159, 0.08), transparent 65%),
+    radial-gradient(ellipse 70% 42% at 88% 0%, rgba(36, 107, 77, 0.07), transparent 65%),
+    radial-gradient(ellipse 60% 35% at 50% 100%, rgba(245, 158, 11, 0.05), transparent 70%);
+}
+
+.st-ambient-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.st-ambient-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes stAmbientDrift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(12px, -4px, 0); }
+}
+
+@keyframes stAmbientTwinkle {
+  0%, 100% { opacity: 0.32; transform: scale(1); }
+  50% { opacity: 0.14; transform: scale(0.86); }
+}
+
+.st-ambient-float {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: stAmbientDrift 9s ease-in-out infinite;
+}
+
+.st-ambient-float--slow {
+  animation-duration: 12s;
+  animation-delay: 2s;
+}
+
+.st-ambient-twinkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: stAmbientTwinkle 5s ease-in-out infinite;
+}
+
+.st-ambient-twinkle--delay {
+  animation-delay: 2.2s;
 }
 
 :root[data-theme="contrast"] .student-body {
   background-image: none;
 }
 
+:root[data-theme="contrast"] .st-ambient-bg {
+  display: none;
+}
+
+:root[data-motion="off"] .st-ambient-float,
+:root[data-motion="off"] .st-ambient-twinkle {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-ambient-float,
+  .st-ambient-twinkle {
+    animation: none !important;
+  }
+}
+
 .student-header {
-  min-height: 74px;
-  background-color: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  min-height: 76px;
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: var(--border) solid var(--line);
   padding: 10px 20px;
   display: flex;
@@ -24,7 +90,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 2px 10px rgba(31, 41, 51, 0.04);
+  box-shadow: 0 4px 16px rgba(31, 41, 51, 0.05);
 }
 
 :root[data-theme="contrast"] .student-header {
@@ -50,22 +116,24 @@
 }
 
 .student-header-title {
-  font-size: 1.25rem;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
   font-weight: 700;
   color: var(--ink);
   text-align: center;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .student-nav-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 48px;
-  padding: 0 18px;
-  border-radius: 14px;
+  gap: 7px;
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 15px;
   border: var(--border) solid var(--line);
+  border-bottom-width: 4px;
   background-color: var(--surface);
   color: var(--ink);
   font-size: 0.9375rem;
@@ -81,6 +149,12 @@
 .student-nav-btn:hover {
   background-color: var(--surface-alt);
   border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.student-nav-btn:active {
+  transform: translateY(1px);
+  border-bottom-width: 2px;
 }
 
 .student-nav-btn.is-active {
@@ -102,6 +176,8 @@
 
 /* 2. CONTAINER UTAMA SISWA */
 .student-container {
+  position: relative;
+  z-index: 1;
   max-width: 1060px;
   margin: 0 auto;
   padding: 28px 20px 44px;
@@ -146,6 +222,7 @@
 }
 
 .material-word {
+  font-family: var(--font-display);
   font-size: var(--fs-word);
   font-weight: 700;
   color: var(--ink);
@@ -211,7 +288,8 @@ html, body {
   }
 
   .student-header {
-    padding: 8px 14px;
+    padding: 8px 12px;
+    min-height: 64px;
   }
 
   .student-header-title {
@@ -219,7 +297,17 @@ html, body {
   }
 
   .student-nav-btn {
-    padding: 0 14px;
+    min-height: 44px;
+    padding: 0 12px;
     font-size: 0.875rem;
+    gap: 5px;
+    border-radius: 13px;
+  }
+}
+
+@media (max-width: 400px) {
+  .student-nav-btn {
+    padding: 0 10px;
+    font-size: 0.8125rem;
   }
 }

@@ -7,7 +7,7 @@
 <div class="adm-form-shell">
   <div class="adm-page-head">
     <div>
-      <a href="{{ route('admin.categories.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Kategori</a>
+      <x-admin.back-link :href="route('admin.categories.index')" label="Daftar Kategori" />
       <h1 class="adm-title">Ubah Kategori: {{ $category->name }}</h1>
       <p class="adm-subtitle">Perbarui identitas, slug URL, dan warna kartu pembelajaran.</p>
     </div>
@@ -31,16 +31,24 @@
         </div>
       </div>
 
-      <div class="adm-field">
-        <label for="color_key" class="adm-label">Warna Kartu Tile Siswa *</label>
-        <select id="color_key" name="color_key" class="adm-select" required>
-          <option value="blue" {{ old('color_key', $category->color_key) === 'blue' ? 'selected' : '' }}>Biru Tenang (Blue)</option>
-          <option value="green" {{ old('color_key', $category->color_key) === 'green' ? 'selected' : '' }}>Hijau Daun (Green)</option>
-          <option value="yellow" {{ old('color_key', $category->color_key) === 'yellow' ? 'selected' : '' }}>Kuning Hangat (Yellow)</option>
-          <option value="lavender" {{ old('color_key', $category->color_key) === 'lavender' ? 'selected' : '' }}>Lavender Lembut</option>
-          <option value="peach" {{ old('color_key', $category->color_key) === 'peach' ? 'selected' : '' }}>Peach Cerah</option>
-        </select>
-        @error('color_key')<span class="adm-error">{{ $message }}</span>@enderror
+      <div class="adm-form-grid-2">
+        <div class="adm-field">
+          <label for="color_key" class="adm-label">Warna Kartu Tile Siswa *</label>
+          <select id="color_key" name="color_key" class="adm-select" required>
+            <option value="blue" {{ old('color_key', $category->color_key) === 'blue' ? 'selected' : '' }}>Biru Tenang (Blue)</option>
+            <option value="green" {{ old('color_key', $category->color_key) === 'green' ? 'selected' : '' }}>Hijau Daun (Green)</option>
+            <option value="yellow" {{ old('color_key', $category->color_key) === 'yellow' ? 'selected' : '' }}>Kuning Hangat (Yellow)</option>
+            <option value="lavender" {{ old('color_key', $category->color_key) === 'lavender' ? 'selected' : '' }}>Lavender Lembut</option>
+            <option value="peach" {{ old('color_key', $category->color_key) === 'peach' ? 'selected' : '' }}>Peach Cerah</option>
+          </select>
+          @error('color_key')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="adm-field">
+          <label for="sort_order" class="adm-label">Urutan Tampil</label>
+          <input type="number" id="sort_order" name="sort_order" class="adm-input" value="{{ old('sort_order', $category->sort_order) }}" min="0">
+          @error('sort_order')<span class="adm-error">{{ $message }}</span>@enderror
+        </div>
       </div>
 
       <div class="adm-field">
@@ -48,9 +56,10 @@
         <textarea id="description" name="description" class="adm-textarea" rows="3">{{ old('description', $category->description) }}</textarea>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $category->is_active) ? 'checked' : '' }} style="width: 18px; height: 18px;">
-        <label for="is_active" style="font-weight: 700; font-size: 0.875rem; color: var(--ink);">Aktifkan kategori ini agar terlihat oleh siswa</label>
+      <div class="adm-check-row">
+        <input type="hidden" name="is_active" value="0">
+        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $category->is_active ? '1' : '0') == '1' ? 'checked' : '' }} class="adm-checkbox">
+        <label for="is_active" class="adm-check-label">Aktifkan kategori ini agar terlihat oleh siswa</label>
       </div>
 
       <div class="adm-form-footer">

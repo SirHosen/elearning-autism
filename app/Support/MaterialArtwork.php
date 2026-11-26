@@ -33,19 +33,33 @@ SVG;
      */
     private static function backdropForCategory(string $categorySlug): array
     {
-        if ($categorySlug === 'hewan') {
-            return [
+        return match ($categorySlug) {
+            'hewan' => [
                 'bg' => '#FFFDF8',
                 'halo' => '#EAF4FA',
                 'shadow' => '#DCE8F0',
-            ];
-        }
-
-        return [
-            'bg' => '#FFFDF8',
-            'halo' => '#FCEFC7',
-            'shadow' => '#E9DEC2',
-        ];
+            ],
+            'musik-nada' => [
+                'bg' => '#FFFDF8',
+                'halo' => '#F1EDFC',
+                'shadow' => '#DDD6F2',
+            ],
+            'matematika' => [
+                'bg' => '#FFFDF8',
+                'halo' => '#E8F5EE',
+                'shadow' => '#CDE3D6',
+            ],
+            'bahasa-inggris' => [
+                'bg' => '#FFFDF8',
+                'halo' => '#FDF0E8',
+                'shadow' => '#EDD7C8',
+            ],
+            default => [
+                'bg' => '#FFFDF8',
+                'halo' => '#FCEFC7',
+                'shadow' => '#E9DEC2',
+            ],
+        };
     }
 
     private static function renderColorCard(string $label, string $color): string
@@ -578,6 +592,133 @@ SVG,
   <line x1="258" y1="256" x2="286" y2="240" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
   <line x1="282" y1="270" x2="310" y2="254" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
 SVG,
+            'nada do' => self::renderXylophoneNote(1, '#E53935'),
+            'nada re' => self::renderXylophoneNote(2, '#FB8C00'),
+            'nada mi' => self::renderXylophoneNote(3, '#FBBF24'),
+            'nada fa' => self::renderXylophoneNote(4, '#246B4D'),
+            'nada sol' => self::renderXylophoneNote(5, '#2F6F9F'),
+            'gitar' => <<<'SVG'
+  <g transform="rotate(-24 256 266)">
+    <ellipse cx="256" cy="316" rx="84" ry="88" fill="#D97706" stroke="#92400E" stroke-width="8"/>
+    <ellipse cx="256" cy="222" rx="64" ry="62" fill="#D97706" stroke="#92400E" stroke-width="8"/>
+    <rect x="236" y="74" width="40" height="128" rx="10" fill="#78350F"/>
+    <rect x="230" y="54" width="52" height="36" rx="8" fill="#5C280B"/>
+    <circle cx="256" cy="272" r="32" fill="#451A03" stroke="#FEF3C7" stroke-width="6"/>
+    <rect x="220" y="348" width="72" height="16" rx="6" fill="#451A03"/>
+    <line x1="244" y1="88" x2="244" y2="348" stroke="#FDE68A" stroke-width="3"/>
+    <line x1="256" y1="88" x2="256" y2="348" stroke="#FDE68A" stroke-width="3"/>
+    <line x1="268" y1="88" x2="268" y2="348" stroke="#FDE68A" stroke-width="3"/>
+  </g>
+SVG,
+            'piano' => <<<'SVG'
+  <rect x="96" y="138" width="320" height="236" rx="26" fill="#1F2933" stroke="#111827" stroke-width="8"/>
+  <rect x="116" y="218" width="280" height="134" rx="12" fill="#FFFFFF"/>
+  <line x1="172" y1="218" x2="172" y2="352" stroke="#CBD5E1" stroke-width="4"/>
+  <line x1="228" y1="218" x2="228" y2="352" stroke="#CBD5E1" stroke-width="4"/>
+  <line x1="284" y1="218" x2="284" y2="352" stroke="#CBD5E1" stroke-width="4"/>
+  <line x1="340" y1="218" x2="340" y2="352" stroke="#CBD5E1" stroke-width="4"/>
+  <rect x="156" y="218" width="30" height="82" rx="6" fill="#1F2933"/>
+  <rect x="212" y="218" width="30" height="82" rx="6" fill="#1F2933"/>
+  <rect x="324" y="218" width="30" height="82" rx="6" fill="#1F2933"/>
+  <rect x="148" y="156" width="216" height="44" rx="10" fill="#2F6F9F"/>
+  <circle cx="192" cy="178" r="10" fill="#FBBF24"/>
+  <circle cx="256" cy="178" r="10" fill="#4ADE80"/>
+  <circle cx="320" cy="178" r="10" fill="#F9A8D4"/>
+SVG,
+            'drum' => <<<'SVG'
+  <ellipse cx="256" cy="340" rx="120" ry="38" fill="#B91C1C"/>
+  <rect x="136" y="200" width="240" height="140" fill="#E53935"/>
+  <polygon points="150,210 198,332 246,210 294,332 342,210 362,210 362,336 150,336" fill="none" stroke="#FDE68A" stroke-width="8" stroke-linejoin="round"/>
+  <ellipse cx="256" cy="200" rx="120" ry="38" fill="#FFFDF9" stroke="#CBD5E1" stroke-width="8"/>
+  <ellipse cx="256" cy="200" rx="88" ry="24" fill="#F3EEE5"/>
+  <line x1="126" y1="114" x2="226" y2="188" stroke="#92400E" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="230" cy="190" r="14" fill="#F59E0B"/>
+  <line x1="386" y1="114" x2="286" y2="188" stroke="#92400E" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="282" cy="190" r="14" fill="#F59E0B"/>
+SVG,
+            '1 + 1 = 2' => self::renderMathOperation(1, 1, '+'),
+            '2 + 1 = 3' => self::renderMathOperation(2, 1, '+'),
+            '2 + 2 = 4' => self::renderMathOperation(2, 2, '+'),
+            '3 + 2 = 5' => self::renderMathOperation(3, 2, '+'),
+            '5 - 2 = 3' => self::renderMathOperation(5, 2, '-'),
+            'lingkaran' => <<<'SVG'
+  <circle cx="256" cy="252" r="136" fill="#EA580C" stroke="#9A3412" stroke-width="12"/>
+  <circle cx="256" cy="252" r="92" fill="#FDBA74" opacity="0.4"/>
+  <circle cx="206" cy="204" r="20" fill="#FFFFFF" opacity="0.5"/>
+SVG,
+            'persegi' => <<<'SVG'
+  <rect x="120" y="116" width="272" height="272" rx="28" fill="#2F6F9F" stroke="#1E4E75" stroke-width="12"/>
+  <rect x="156" y="152" width="200" height="200" rx="16" fill="#93C5FD" opacity="0.35"/>
+  <circle cx="182" cy="178" r="14" fill="#FFFFFF" opacity="0.5"/>
+SVG,
+            'segitiga' => <<<'SVG'
+  <polygon points="256,104 406,374 106,374" fill="#246B4D" stroke="#143326" stroke-width="14" stroke-linejoin="round"/>
+  <polygon points="256,166 346,340 166,340" fill="#86EFAC" opacity="0.32" stroke-linejoin="round"/>
+SVG,
+            'apple' => <<<'SVG'
+  <path d="M256 164 C180 144 114 202 126 292 C136 372 198 408 242 396 C252 393 260 393 270 396 C314 408 376 372 386 292 C398 202 332 144 256 164 Z" fill="#E53935" stroke="#991B1B" stroke-width="10"/>
+  <path d="M256 164 Q254 110 278 96" stroke="#78350F" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M264 128 C302 96 348 112 342 152 C304 164 274 148 264 128 Z" fill="#246B4D"/>
+  <path d="M168 228 C164 258 172 284 184 300" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" opacity="0.55" fill="none"/>
+SVG,
+            'cat' => self::getArtworkBody('kucing', '#E08E45'),
+            'book' => <<<'SVG'
+  <rect x="92" y="136" width="328" height="240" rx="24" fill="#2F6F9F" stroke="#1E4E75" stroke-width="8"/>
+  <path d="M114 154 H252 V356 H122 C116 356 114 352 114 346 Z" fill="#FFFFFF"/>
+  <path d="M260 154 H398 V346 C398 352 396 356 390 356 H260 Z" fill="#F8FAFC"/>
+  <rect x="136" y="182" width="90" height="72" rx="12" fill="#DCEBF7"/>
+  <circle cx="182" cy="218" r="18" fill="#F59E0B"/>
+  <rect x="136" y="274" width="92" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="136" y="302" width="68" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="282" y="186" width="92" height="16" rx="8" fill="#93C5FD"/>
+  <rect x="282" y="220" width="84" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="282" y="248" width="92" height="14" rx="7" fill="#CBD5E1"/>
+  <rect x="282" y="276" width="74" height="14" rx="7" fill="#CBD5E1"/>
+  <path d="M352 124 H378 V192 L365 178 L352 192 Z" fill="#E53935"/>
+SVG,
+            'sun' => <<<'SVG'
+  <g stroke="#EA580C" stroke-width="16" stroke-linecap="round">
+    <line x1="256" y1="74" x2="256" y2="112"/>
+    <line x1="256" y1="398" x2="256" y2="436"/>
+    <line x1="74" y1="256" x2="112" y2="256"/>
+    <line x1="398" y1="256" x2="436" y2="256"/>
+    <line x1="128" y1="128" x2="156" y2="156"/>
+    <line x1="356" y1="356" x2="384" y2="384"/>
+    <line x1="384" y1="128" x2="356" y2="156"/>
+    <line x1="156" y1="356" x2="128" y2="384"/>
+  </g>
+  <circle cx="256" cy="256" r="108" fill="#FBBF24" stroke="#D97706" stroke-width="10"/>
+  <circle cx="218" cy="242" r="12" fill="#78350F"/>
+  <circle cx="294" cy="242" r="12" fill="#78350F"/>
+  <path d="M222 284 Q256 312 290 284" fill="none" stroke="#78350F" stroke-width="10" stroke-linecap="round"/>
+SVG,
+            'star' => <<<'SVG'
+  <polygon points="256,82 308,186 424,202 340,284 360,400 256,344 152,400 172,284 88,202 204,186" fill="#FBBF24" stroke="#B45309" stroke-width="12" stroke-linejoin="round"/>
+  <circle cx="222" cy="226" r="10" fill="#78350F"/>
+  <circle cx="290" cy="226" r="10" fill="#78350F"/>
+  <path d="M230 264 Q256 286 282 264" fill="none" stroke="#78350F" stroke-width="9" stroke-linecap="round"/>
+SVG,
+            'house' => <<<'SVG'
+  <rect x="132" y="218" width="248" height="176" rx="14" fill="#FFFDF9" stroke="#CBD5E1" stroke-width="8"/>
+  <polygon points="98,232 256,102 414,232" fill="#E53935" stroke="#991B1B" stroke-width="10" stroke-linejoin="round"/>
+  <rect x="318" y="114" width="38" height="54" rx="6" fill="#9A3412"/>
+  <rect x="218" y="286" width="76" height="108" rx="12" fill="#8D6E63" stroke="#5D4037" stroke-width="6"/>
+  <circle cx="278" cy="342" r="7" fill="#FBBF24"/>
+  <rect x="156" y="246" width="44" height="44" rx="8" fill="#93C5FD" stroke="#2F6F9F" stroke-width="6"/>
+  <rect x="312" y="246" width="44" height="44" rx="8" fill="#93C5FD" stroke="#2F6F9F" stroke-width="6"/>
+SVG,
+            'water' => <<<'SVG'
+  <path d="M160 156 H352 L328 386 C326 398 316 406 304 406 H208 C196 406 186 398 184 386 Z" fill="#E0F2FE" stroke="#2F6F9F" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M174 252 Q216 236 256 252 Q296 268 338 252 L326 382 C324 392 316 396 306 396 H206 C196 396 188 392 186 382 Z" fill="#38BDF8" opacity="0.85"/>
+  <path d="M256 106 C284 152 300 176 300 198 C300 222 280 242 256 242 C232 242 212 222 212 198 C212 176 228 152 256 106 Z" fill="#0284C7"/>
+  <ellipse cx="238" cy="196" rx="8" ry="18" fill="#FFFFFF" opacity="0.5"/>
+SVG,
+            'ball' => <<<'SVG'
+  <circle cx="256" cy="252" r="142" fill="#FFFFFF" stroke="#1E4E75" stroke-width="10"/>
+  <path d="M256 110 A142 142 0 0 1 392 212 Q324 248 256 224 Q188 248 120 212 A142 142 0 0 1 256 110 Z" fill="#E53935"/>
+  <path d="M120 294 Q188 262 256 286 Q324 262 392 294 A142 142 0 0 1 120 294 Z" fill="#2F6F9F"/>
+  <circle cx="256" cy="252" r="42" fill="#FBBF24" stroke="#B45309" stroke-width="8"/>
+SVG,
             default => <<<SVG
   <!-- Kancing atas topi -->
   <circle cx="256" cy="148" r="16" fill="#E65100"/>
@@ -590,5 +731,93 @@ SVG,
   <path d="M108 290 C168 272 288 272 414 316 C432 324 424 350 388 352 L114 328 C98 326 94 296 108 290 Z" fill="#D84315"/>
 SVG,
         };
+    }
+
+    private static function renderXylophoneNote(int $step, string $activeColor): string
+    {
+        $colors = [
+            1 => '#E53935',
+            2 => '#FB8C00',
+            3 => '#FBBF24',
+            4 => '#246B4D',
+            5 => '#2F6F9F',
+        ];
+
+        $bars = '';
+        for ($i = 1; $i <= 5; $i++) {
+            $x = 86 + ($i - 1) * 70;
+            $h = 200 - ($i - 1) * 22;
+            $y = 374 - $h;
+            $isActive = $i === $step;
+            $fill = $isActive ? $activeColor : '#E2E8F0';
+            $stroke = $isActive ? '#1F2933' : '#CBD5E1';
+            $dotColor = $isActive ? '#FFFFFF' : ($colors[$i] ?? '#94A3B8');
+            $dotCy = $y + 26;
+            $cx = $x + 28;
+            $bars .= "<rect x=\"{$x}\" y=\"{$y}\" width=\"56\" height=\"{$h}\" rx=\"14\" fill=\"{$fill}\" stroke=\"{$stroke}\" stroke-width=\"6\"/>\n";
+            $bars .= "  <circle cx=\"{$cx}\" cy=\"{$dotCy}\" r=\"10\" fill=\"{$dotColor}\"/>\n";
+        }
+
+        $noteX = 114 + ($step - 1) * 70;
+        $noteY = 174 - ($step - 1) * 22 - 52;
+        $stemX = $noteX + 16;
+        $stemTop = $noteY - 46;
+        $flagEnd = $stemX + 24;
+        $flagMid = $stemTop + 18;
+
+        return <<<SVG
+  <rect x="70" y="346" width="372" height="36" rx="14" fill="#92400E"/>
+  {$bars}
+  <g>
+    <ellipse cx="{$noteX}" cy="{$noteY}" rx="20" ry="15" transform="rotate(-18 {$noteX} {$noteY})" fill="{$activeColor}" stroke="#1F2933" stroke-width="5"/>
+    <line x1="{$stemX}" y1="{$noteY}" x2="{$stemX}" y2="{$stemTop}" stroke="#1F2933" stroke-width="7" stroke-linecap="round"/>
+    <path d="M{$stemX} {$stemTop} Q{$flagEnd} {$stemTop} {$flagEnd} {$flagMid}" stroke="#1F2933" stroke-width="7" stroke-linecap="round" fill="none"/>
+  </g>
+SVG;
+    }
+
+    private static function renderMathOperation(int $left, int $right, string $op): string
+    {
+        $leftColor = '#2F6F9F';
+        $rightColor = $op === '-' ? '#FCA5A5' : '#246B4D';
+        $opBg = $op === '-' ? '#FEE2E2' : '#FCEFC7';
+        $opStroke = $op === '-' ? '#B91C1C' : '#D97706';
+
+        $renderGroup = function (int $count, int $startX, int $startY, string $fill, bool $crossed = false): string {
+            $out = '';
+            for ($i = 0; $i < $count; $i++) {
+                $col = $i % 2;
+                $row = intdiv($i, 2);
+                $cx = $startX + $col * 46;
+                $cy = $startY + $row * 46;
+                $stroke = $crossed ? '#DC2626' : '#FFFFFF';
+                $out .= "<circle cx=\"{$cx}\" cy=\"{$cy}\" r=\"18\" fill=\"{$fill}\" stroke=\"{$stroke}\" stroke-width=\"4\"/>";
+                if ($crossed) {
+                    $x1 = $cx - 9;
+                    $y1 = $cy - 9;
+                    $x2 = $cx + 9;
+                    $y2 = $cy + 9;
+                    $out .= "<line x1=\"{$x1}\" y1=\"{$y1}\" x2=\"{$x2}\" y2=\"{$y2}\" stroke=\"#991B1B\" stroke-width=\"4\" stroke-linecap=\"round\"/>";
+                }
+            }
+
+            return $out;
+        };
+
+        $leftDots = $renderGroup($left, 118, $left > 2 ? 196 : 244, $leftColor, false);
+        $rightDots = $renderGroup($right, 338, $right > 2 ? 196 : 244, $rightColor, $op === '-');
+
+        $opMark = $op === '-'
+            ? '<line x1="240" y1="256" x2="272" y2="256" stroke="#991B1B" stroke-width="10" stroke-linecap="round"/>'
+            : '<line x1="256" y1="240" x2="256" y2="272" stroke="#92400E" stroke-width="10" stroke-linecap="round"/><line x1="240" y1="256" x2="272" y2="256" stroke="#92400E" stroke-width="10" stroke-linecap="round"/>';
+
+        return <<<SVG
+  <rect x="82" y="156" width="128" height="196" rx="24" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="6"/>
+  {$leftDots}
+  <circle cx="256" cy="256" r="34" fill="{$opBg}" stroke="{$opStroke}" stroke-width="6"/>
+  {$opMark}
+  <rect x="302" y="156" width="128" height="196" rx="24" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="6"/>
+  {$rightDots}
+SVG;
     }
 }

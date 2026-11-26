@@ -1,23 +1,31 @@
+@php
+  $errUser = auth()->user();
+  $isAdmin = $errUser?->isAdmin() ?? false;
+  $errTheme = $errUser?->setting?->theme ?? 'calm';
+  $homeUrl = $isAdmin ? '/admin' : ($errUser ? '/beranda' : '/masuk');
+  $homeLabel = $isAdmin ? 'Kembali ke Panel Guru' : ($errUser ? 'Kembali ke Beranda' : 'Kembali ke Halaman Masuk');
+@endphp
 <!DOCTYPE html>
-<html lang="id" data-theme="calm">
+<html lang="id" data-theme="{{ $errTheme }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Akses Tidak Diizinkan - Sahabat Belajar</title>
-  <link rel="stylesheet" href="/css/tokens.css">
-  <link rel="stylesheet" href="/css/themes.css">
-  <link rel="stylesheet" href="/css/base.css">
-  <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/layouts.css">
+  <link rel="stylesheet" href="/css/tokens.css?v={{ @filemtime(public_path('css/tokens.css')) ?: '1' }}">
+  <link rel="stylesheet" href="/css/themes.css?v={{ @filemtime(public_path('css/themes.css')) ?: '1' }}">
+  <link rel="stylesheet" href="/css/base.css?v={{ @filemtime(public_path('css/base.css')) ?: '1' }}">
+  <link rel="stylesheet" href="/css/components.css?v={{ @filemtime(public_path('css/components.css')) ?: '2' }}">
 </head>
-<body style="display: grid; place-items: center; min-height: 100vh; padding: 24px;">
-  <div style="background: var(--surface); border: var(--border) solid var(--line); border-radius: var(--radius); padding: 40px; max-width: 500px; text-align: center;">
-    <div style="width: 80px; height: 80px; border-radius: 20px; background: #FEE2E2; color: #991B1B; font-size: 2rem; font-weight: 800; display: grid; place-items: center; margin: 0 auto 20px;">403</div>
-    <h1 style="font-size: var(--fs-title); margin-bottom: 12px;">Halaman Terkunci</h1>
-    <p style="color: var(--ink-soft); font-size: var(--fs-base); margin-bottom: 24px;">
+<body class="error-page">
+  <main class="error-card">
+    <div class="error-badge error-badge--danger" aria-hidden="true">403</div>
+    <h1 class="error-title">Halaman Terkunci</h1>
+    <p class="error-desc">
       {{ $message ?? 'Ups! Kamu tidak dapat membuka halaman ini. Ayo kembali belajar bersama teman-teman.' }}
     </p>
-    <a href="/beranda" class="btn btn-student btn-primary">Kembali ke Beranda</a>
-  </div>
+    <div class="error-actions">
+      <a href="{{ $homeUrl }}" class="btn btn-student btn-primary error-cta">{{ $homeLabel }}</a>
+    </div>
+  </main>
 </body>
 </html>

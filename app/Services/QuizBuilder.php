@@ -20,12 +20,14 @@ class QuizBuilder
 
         if ($materials->count() < $count) {
             throw ValidationException::withMessages([
+                'question_count' => "Kategori '{$category->name}' hanya memiliki {$materials->count()} materi aktif. Tidak mencukupi untuk membuat {$count} soal.",
                 'count' => "Kategori '{$category->name}' hanya memiliki {$materials->count()} materi aktif. Tidak mencukupi untuk membuat {$count} soal.",
             ]);
         }
 
         if ($materials->count() < 3) {
             throw ValidationException::withMessages([
+                'question_count' => 'Diperlukan minimal 3 materi aktif dalam kategori untuk membuat pilihan pengecoh.',
                 'count' => 'Diperlukan minimal 3 materi aktif dalam kategori untuk membuat pilihan pengecoh.',
             ]);
         }

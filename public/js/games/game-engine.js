@@ -1,18 +1,17 @@
 /**
- * Game Engine for Sahabat Belajar (Sensory-Safe)
- * Compliant with strict accessibility & sensory safety rules:
- * - NO buzzer, NO red X
- * - Gentle ding via Web Audio API (respects mute setting)
- * - Dimming wrong cards (opacity 0.45)
- * - Auto-hint after 2 consecutive errors
- * - Motor-accessible tap-to-select alternative for drag & drop
- * - Guaranteed >= 1 star vector celebration (no Unicode emojis)
+ * Game Engine for Sahabat Belajar (Sensory-Safe & Interactive)
+ * - Symmetrical layouts across Pilih Benar, Cocokkan, and Seret & Tempatkan
+ * - Calm Web Audio feedback + TTS speaking via shared window.audioManager & window.ArenaHelpers
+ * - Live cumulative positive score & round progress dots
  */
 
 class GameEngine {
     constructor(config) {
         this.gameId = config.gameId;
         this.gameType = config.gameType;
+        this.categorySlug = config.categorySlug || '';
+        this.isEnglishCategory = this.categorySlug === 'bahasa-inggris';
+        this.wordLang = this.isEnglishCategory ? 'en-US' : 'id-ID';
         this.roundsUrl = config.roundsUrl;
         this.sessionUrl = config.sessionUrl;
         this.csrfToken = config.csrfToken;
@@ -21,35 +20,95 @@ class GameEngine {
         this.rounds = [];
         this.currentRoundIndex = 0;
         this.correctFirstTryCount = 0;
+        this.score = 0;
         this.startTime = Date.now();
         this.roundAttempts = 0;
         this.consecutiveErrors = 0;
 
         this.arena = document.getElementById('game-arena');
         this.progressEl = document.getElementById('game-progress');
+        this.progressDotsEl = document.getElementById('game-progress-dots');
+        this.scoreValEl = document.getElementById('game-score-val');
         this.instructionEl = document.getElementById('game-instruction');
         this.speakerBtn = document.getElementById('btn-speak-instruction');
+        this.sfxToggleBtn = document.getElementById('btn-toggle-sfx');
+        this.sfxToggleLabel = document.getElementById('sfx-toggle-label');
+        this.feedbackEl = document.getElementById('game-feedback');
+        this.feedbackTextEl = document.getElementById('game-feedback-text');
 
         this.init();
     }
 
-    getVolume() {
-        if (window.audioManager && typeof window.audioManager.volume === 'number') {
-            return window.audioManager.volume;
-        }
-        return 0.7;
+    esc(str) {
+        return window.ArenaHelpers ? window.ArenaHelpers.escapeHtml(str) : String(str ?? '');
     }
 
-    renderStarsSvg(stars) {
-        const safeCount = Math.max(1, Math.min(3, stars || 1));
-        return Array.from({ length: safeCount }, () => `
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="#FBBF24" stroke="#B45309" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-        `).join('');
+    setFeedback(variant, message) {
+        if (window.ArenaHelpers) {
+            window.ArenaHelpers.setFeedback(this.feedbackEl, this.feedbackTextEl, variant, message);
+        } else if (this.feedbackTextEl) {
+            this.feedbackTextEl.textContent = message;
+        }
+    }
+
+    sfx(method) {
+        if (window.audioManager && typeof window.audioManager[method] === 'function') {
+            window.audioManager[method]();
+        }
+    }
+
+    speak(text, { lang = 'id-ID', segments = null } = {}) {
+        if (!text && (!segments || !segments.length)) return;
+        if (window.audioManager) {
+            if (window.audioManager.getEffectiveVolume() > 0) {
+                window.audioManager.play({ text, lang, segments });
+            }
+            return;
+        }
+        if ('speechSynthesis' in window && text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang || 'id-ID';
+            utterance.rate = lang.startsWith('en') ? 0.86 : 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    addScore(points) {
+        this.score += points;
+        if (this.scoreValEl) {
+            this.scoreValEl.textContent = String(this.score);
+        }
+    }
+
+    updateProgress() {
+        if (this.progressEl) {
+            this.progressEl.textContent = `Ronde ${this.currentRoundIndex + 1} dari ${this.rounds.length}`;
+        }
+        if (this.progressDotsEl) {
+            this.progressDotsEl.innerHTML = this.rounds.map((_, idx) => `
+                <span class="quiz-dot ${idx === this.currentRoundIndex ? 'is-current' : (idx < this.currentRoundIndex ? 'is-done' : '')}"></span>
+            `).join('');
+        }
     }
 
     async init() {
+        if (window.ArenaHelpers && window.audioManager) {
+            window.ArenaHelpers.bindSfxToggle(
+                this.sfxToggleBtn,
+                this.sfxToggleLabel,
+                window.audioManager,
+                (muted) => {
+                    this.setFeedback(
+                        'neutral',
+                        muted
+                            ? 'Mode hening aktif. Ketuk lagi kapan saja untuk menyalakan suara.'
+                            : 'Suara efek dan pelafalan diaktifkan.'
+                    );
+                }
+            );
+        }
+
         try {
             const res = await fetch(this.roundsUrl);
             const data = await res.json();
@@ -57,72 +116,31 @@ class GameEngine {
                 this.rounds = data.rounds;
                 this.renderRound();
             } else {
-                this.arena.innerHTML = '<div class="st-empty-card"><p style="color: var(--ink-soft); margin: 0;">Materi permainan belum tersedia.</p></div>';
+                this.setFeedback('hint', 'Materi permainan pada kategori ini belum tersedia.');
+                this.arena.innerHTML = '<div class="st-empty-card"><p class="st-arena-loading">Materi permainan belum tersedia.</p></div>';
             }
         } catch (e) {
             console.error('Gagal memuat permainan:', e);
-            this.arena.innerHTML = '<div class="st-empty-card"><p style="color: var(--ink-soft); margin: 0;">Gagal memuat data permainan. Silakan muat ulang halaman.</p></div>';
+            this.setFeedback('hint', 'Gagal memuat data permainan. Silakan muat ulang halaman.');
+            this.arena.innerHTML = '<div class="st-empty-card"><p class="st-arena-loading">Gagal memuat data permainan. Silakan muat ulang halaman.</p></div>';
         }
 
         if (this.speakerBtn) {
             this.speakerBtn.addEventListener('click', () => {
                 const round = this.rounds[this.currentRoundIndex];
-                if (round && round.instruction) {
-                    this.speak(round.instruction);
+                if (!round || !round.instruction) return;
+                const targetWord = round.target_label || round.target?.label || '';
+                if (this.isEnglishCategory && targetWord) {
+                    this.speak(round.instruction, {
+                        segments: [
+                            { text: round.instruction, lang: 'id-ID' },
+                            { text: targetWord, lang: 'en-US' },
+                        ],
+                    });
+                } else {
+                    this.speak(round.instruction, { lang: 'id-ID' });
                 }
             });
-        }
-    }
-
-    playGentleDing() {
-        const vol = this.getVolume();
-        if (vol <= 0) return;
-
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (!AudioContext) return;
-            const ctx = new AudioContext();
-            const now = ctx.currentTime;
-
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, now);
-            osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1);
-
-            gain.gain.setValueAtTime(0.01, now);
-            gain.gain.linearRampToValueAtTime(0.2 * vol, now + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.start(now);
-            osc.stop(now + 0.35);
-        } catch (e) {
-            // Audio context not allowed or unsupported
-        }
-    }
-
-    speak(text) {
-        if (!text) return;
-        if (window.audioManager) {
-            window.audioManager.play({ text });
-            return;
-        }
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'id-ID';
-            utterance.rate = 0.85;
-            window.speechSynthesis.speak(utterance);
-        }
-    }
-
-    updateProgress() {
-        if (this.progressEl) {
-            this.progressEl.textContent = `Ronde ${this.currentRoundIndex + 1} dari ${this.rounds.length}`;
         }
     }
 
@@ -132,8 +150,14 @@ class GameEngine {
         this.updateProgress();
 
         const round = this.rounds[this.currentRoundIndex];
+        const instr = round.instruction || 'Selesaikan permainan';
+        const targetWord = round.target_label || round.target?.label || '';
         if (this.instructionEl) {
-            this.instructionEl.textContent = round.instruction || 'Selesaikan permainan';
+            if (window.ArenaHelpers) {
+                this.instructionEl.innerHTML = window.ArenaHelpers.formatTargetHtml(instr, targetWord);
+            } else {
+                this.instructionEl.textContent = instr;
+            }
         }
 
         if (this.gameType === 'pilih_benar') {
@@ -147,17 +171,19 @@ class GameEngine {
 
     // --- ENGINE 1: PILIH YANG BENAR ---
     renderPilihBenar(round) {
+        this.setFeedback('neutral', `Ketuk kartu gambar: "${round.target_label}"`);
+
         this.arena.innerHTML = `
             <div id="hint-banner" class="st-hint-banner">
                 Petunjuk: perhatikan kartu yang diberi bingkai kuning ini.
             </div>
             <div class="st-choice-grid">
                 ${round.options.map(opt => `
-                    <button type="button" class="game-opt-card st-game-opt-card" data-id="${opt.id}" data-correct="${opt.is_correct ? '1' : '0'}">
+                    <button type="button" class="game-opt-card st-game-opt-card" data-id="${opt.id}" data-label="${this.esc(opt.label)}" data-correct="${opt.is_correct ? '1' : '0'}">
                         <div class="st-opt-thumb">
-                            <img src="${opt.image_url}" alt="${opt.label}">
+                            <img src="${this.esc(opt.image_url)}" alt="${this.esc(opt.label)}">
                         </div>
-                        <div class="st-opt-label">${opt.label}</div>
+                        <div class="st-opt-label">${this.esc(opt.label)}</div>
                     </button>
                 `).join('')}
             </div>
@@ -168,60 +194,87 @@ class GameEngine {
             card.addEventListener('click', () => {
                 if (card.disabled) return;
                 const isCorrect = card.dataset.correct === '1';
+                const label = card.dataset.label || '';
 
                 if (isCorrect) {
+                    const earned = this.roundAttempts === 0 ? 10 : 5;
                     if (this.roundAttempts === 0) {
                         this.correctFirstTryCount++;
                     }
-                    this.playGentleDing();
-                    card.style.borderColor = 'var(--success)';
-                    card.style.background = 'var(--success-bg)';
+                    this.addScore(earned);
+                    this.sfx('playCorrectSound');
+                    card.classList.add('is-correct');
+                    card.classList.remove('is-hinted');
+                    card.insertAdjacentHTML('beforeend', '<span class="st-opt-badge">Benar</span>');
                     cards.forEach(c => { c.disabled = true; });
+                    this.setFeedback('success', `Hebat! Itu memang "${label}" (+${earned} poin).`);
 
-                    setTimeout(() => this.nextRound(), 950);
+                    setTimeout(() => this.nextRound(), 1050);
                 } else {
                     this.roundAttempts++;
                     this.consecutiveErrors++;
-                    card.style.opacity = '0.45';
-                    card.style.cursor = 'default';
+                    this.sfx('playWrongSound');
+                    card.classList.add('is-wrong', 'is-dimmed');
                     card.disabled = true;
+                    this.setFeedback('hint', `Itu "${label}". Yuk cari gambar "${round.target_label}"!`);
 
                     if (this.consecutiveErrors >= 2) {
                         const hintBanner = document.getElementById('hint-banner');
-                        if (hintBanner) hintBanner.style.display = 'block';
+                        if (hintBanner) hintBanner.classList.add('is-visible');
                         const correctCard = this.arena.querySelector('.game-opt-card[data-correct="1"]');
-                        if (correctCard) {
-                            correctCard.style.outline = '4px solid var(--hint-line)';
-                            correctCard.style.outlineOffset = '4px';
-                        }
+                        if (correctCard) correctCard.classList.add('is-hinted');
                     }
                 }
             });
         });
     }
 
-    // --- ENGINE 2: COCOKKAN GAMBAR ---
+    // --- ENGINE 2: COCOKKAN GAMBAR (SIMETRIS & INTERAKTIF) ---
     renderCocokkan(round) {
         let selectedLeft = null;
         let selectedRight = null;
         let matchedPairs = 0;
+        let roundPairError = false;
+        let locked = false;
         const totalPairs = round.left_items.length;
 
+        this.setFeedback('neutral', 'Ketuk satu "Gambar" di kiri, lalu ketuk "Kata" pasangannya di kanan.');
+
         this.arena.innerHTML = `
+            <div class="st-match-subbar">
+                <span class="st-match-subbar__guide">Pasangkan gambar dengan kata yang tepat</span>
+                <span id="match-pair-counter" class="st-topic-pill st-topic-pill--blue">Cocok: 0 dari ${totalPairs}</span>
+            </div>
+
             <div class="st-match-grid">
                 <div class="st-match-col">
                     <div class="st-match-col-title">Pilih Gambar</div>
                     ${round.left_items.map(item => `
-                        <button type="button" class="match-left-item st-match-tile" data-id="${item.id}">
-                            <img src="${item.image_url}" alt="Gambar" style="width: 84px; height: 84px; object-fit: contain; pointer-events: none;">
+                        <button type="button"
+                                class="match-left-item st-match-tile"
+                                data-id="${item.id}"
+                                data-label="${this.esc(item.label)}"
+                                aria-label="Gambar ${this.esc(item.label)}">
+                            <div class="st-match-thumb">
+                                <img src="${this.esc(item.image_url)}" alt="Gambar ${this.esc(item.label)}">
+                            </div>
                         </button>
                     `).join('')}
                 </div>
                 <div class="st-match-col">
                     <div class="st-match-col-title">Pilih Kata</div>
                     ${round.right_items.map(item => `
-                        <button type="button" class="match-right-item st-match-tile" data-id="${item.id}">
-                            ${item.label}
+                        <button type="button"
+                                class="match-right-item st-match-tile"
+                                data-id="${item.id}"
+                                data-label="${this.esc(item.label)}">
+                            <span class="st-match-word-icon" aria-hidden="true">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                                </svg>
+                            </span>
+                            <span class="st-match-word-text">${this.esc(item.label)}</span>
                         </button>
                     `).join('')}
                 </div>
@@ -230,23 +283,47 @@ class GameEngine {
 
         const leftBtns = this.arena.querySelectorAll('.match-left-item');
         const rightBtns = this.arena.querySelectorAll('.match-right-item');
+        const pairCounterEl = document.getElementById('match-pair-counter');
+
+        const clearHints = () => {
+            leftBtns.forEach(b => b.classList.remove('is-hinted'));
+            rightBtns.forEach(b => b.classList.remove('is-hinted'));
+        };
 
         const checkMatch = () => {
             if (!selectedLeft || !selectedRight) return;
-            const leftId = selectedLeft.dataset.id;
-            const rightId = selectedRight.dataset.id;
+            const leftEl = selectedLeft;
+            const rightEl = selectedRight;
+            const leftId = leftEl.dataset.id;
+            const rightId = rightEl.dataset.id;
+
+            clearHints();
 
             if (leftId === rightId) {
-                this.playGentleDing();
-                selectedLeft.style.borderColor = 'var(--success)';
-                selectedLeft.style.background = 'var(--success-bg)';
-                selectedLeft.disabled = true;
+                const earned = !roundPairError ? 10 : 5;
+                this.addScore(earned);
+                this.consecutiveErrors = 0;
+                roundPairError = false;
+                this.sfx('playCorrectSound');
 
-                selectedRight.style.borderColor = 'var(--success)';
-                selectedRight.style.background = 'var(--success-bg)';
-                selectedRight.disabled = true;
+                leftEl.classList.remove('is-selected', 'is-wrong');
+                leftEl.classList.add('is-matched');
+                leftEl.disabled = true;
+                leftEl.insertAdjacentHTML('beforeend', '<span class="st-match-check">Cocok</span>');
+
+                rightEl.classList.remove('is-selected', 'is-wrong');
+                rightEl.classList.add('is-matched');
+                rightEl.disabled = true;
+                rightEl.insertAdjacentHTML('beforeend', '<span class="st-match-check">Cocok</span>');
 
                 matchedPairs++;
+                if (pairCounterEl) {
+                    pairCounterEl.textContent = `Cocok: ${matchedPairs} dari ${totalPairs}`;
+                }
+
+                const matchedWord = rightEl.dataset.label || '';
+                this.setFeedback('success', `Bagus! Gambar cocok dengan "${matchedWord}" (+${earned} poin).`);
+
                 selectedLeft = null;
                 selectedRight = null;
 
@@ -254,47 +331,88 @@ class GameEngine {
                     if (this.roundAttempts === 0) {
                         this.correctFirstTryCount++;
                     }
-                    setTimeout(() => this.nextRound(), 950);
+                    setTimeout(() => this.nextRound(), 1050);
                 }
             } else {
                 this.roundAttempts++;
-                selectedLeft.style.borderColor = 'var(--line)';
-                selectedLeft.style.boxShadow = 'none';
-                selectedRight.style.borderColor = 'var(--line)';
-                selectedRight.style.boxShadow = 'none';
-                selectedLeft = null;
-                selectedRight = null;
+                this.consecutiveErrors++;
+                roundPairError = true;
+                locked = true;
+                this.sfx('playWrongSound');
+
+                leftEl.classList.remove('is-selected');
+                rightEl.classList.remove('is-selected');
+                leftEl.classList.add('is-wrong');
+                rightEl.classList.add('is-wrong');
+
+                this.setFeedback('hint', 'Belum cocok. Ayo coba pasangkan dengan teliti ya!');
+
+                if (this.consecutiveErrors >= 2) {
+                    const targetRight = Array.from(rightBtns).find(b => b.dataset.id === leftId && !b.disabled);
+                    if (targetRight) {
+                        leftEl.classList.add('is-hinted');
+                        targetRight.classList.add('is-hinted');
+                        this.setFeedback('hint', `Petunjuk: coba pasangkan kartu yang berkilau kuning ("${targetRight.dataset.label}").`);
+                    }
+                }
+
+                setTimeout(() => {
+                    leftEl.classList.remove('is-wrong');
+                    rightEl.classList.remove('is-wrong');
+                    selectedLeft = null;
+                    selectedRight = null;
+                    locked = false;
+                }, 520);
             }
         };
 
         leftBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                if (btn.disabled) return;
+                if (btn.disabled || locked) return;
+                if (selectedLeft === btn) {
+                    btn.classList.remove('is-selected');
+                    selectedLeft = null;
+                    this.setFeedback('neutral', 'Pilihan gambar dibatalkan. Silakan pilih gambar lain.');
+                    return;
+                }
+
                 leftBtns.forEach(b => {
-                    if (!b.disabled) {
-                        b.style.borderColor = 'var(--line)';
-                        b.style.boxShadow = 'none';
-                    }
+                    if (!b.disabled) b.classList.remove('is-selected');
                 });
                 selectedLeft = btn;
-                btn.style.borderColor = 'var(--primary)';
-                btn.style.boxShadow = '0 0 0 4px rgba(47, 111, 159, 0.22)';
+                btn.classList.add('is-selected');
+                this.sfx('playSelectSound');
+
+                if (!selectedRight) {
+                    this.setFeedback('neutral', 'Gambar dipilih! Sekarang ketuk kata yang sesuai di kolom kanan.');
+                }
                 checkMatch();
             });
         });
 
         rightBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                if (btn.disabled) return;
+                if (btn.disabled || locked) return;
+                const wordLabel = btn.dataset.label || '';
+
+                if (selectedRight === btn) {
+                    btn.classList.remove('is-selected');
+                    selectedRight = null;
+                    this.setFeedback('neutral', 'Pilihan kata dibatalkan. Silakan pilih kata lain.');
+                    return;
+                }
+
                 rightBtns.forEach(b => {
-                    if (!b.disabled) {
-                        b.style.borderColor = 'var(--line)';
-                        b.style.boxShadow = 'none';
-                    }
+                    if (!b.disabled) b.classList.remove('is-selected');
                 });
                 selectedRight = btn;
-                btn.style.borderColor = 'var(--primary)';
-                btn.style.boxShadow = '0 0 0 4px rgba(47, 111, 159, 0.22)';
+                btn.classList.add('is-selected');
+                this.sfx('playSelectSound');
+
+                if (!selectedLeft) {
+                    this.speak(wordLabel, { lang: this.wordLang });
+                    this.setFeedback('neutral', `Kata "${wordLabel}" dipilih! Sekarang ketuk gambarnya di kolom kiri.`);
+                }
                 checkMatch();
             });
         });
@@ -303,23 +421,25 @@ class GameEngine {
     // --- ENGINE 3: SERET & TEMPATKAN ---
     renderSeretTempatkan(round) {
         let isSelectedForMotor = false;
+        let roundCompleted = false;
+        this.setFeedback('neutral', `Seret atau ketuk gambar, lalu pilih kotak "${round.target.label}".`);
 
         this.arena.innerHTML = `
             <div class="st-drag-stage">
-                <div style="text-align: center;">
-                    <div id="drag-source" draggable="true" tabindex="0" role="button" aria-label="${round.target.label}" class="st-drag-source">
-                        <img src="${round.target.image_url}" alt="${round.target.label}" style="max-width: 88%; max-height: 88%; object-fit: contain; pointer-events: none;">
+                <div class="st-drag-source-wrap">
+                    <div id="drag-source" draggable="true" tabindex="0" role="button" aria-label="${this.esc(round.target.label)}" class="st-drag-source">
+                        <img src="${this.esc(round.target.image_url)}" alt="${this.esc(round.target.label)}">
                     </div>
-                    <small style="color: var(--ink-soft); font-weight: 600; display: block; margin-top: 10px;">
-                        Seret gambar atau ketuk untuk memilih, lalu ketuk kotak kata yang sesuai
+                    <small class="st-drag-helper">
+                        Ketuk gambar untuk memilih atau seret langsung ke salah satu kotak di bawah
                     </small>
                 </div>
 
                 <div class="st-drop-grid">
                     ${round.targets.map(t => `
-                        <div class="drop-target st-drop-target" data-id="${t.id}" data-correct="${t.is_correct ? '1' : '0'}" tabindex="0" role="button">
-                            <span style="font-size: 1.1875rem; font-weight: 700; color: var(--ink);">${t.label}</span>
-                            <div class="drop-slot" style="margin-top: 10px; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;"></div>
+                        <div class="drop-target st-drop-target" data-id="${t.id}" data-label="${this.esc(t.label)}" data-correct="${t.is_correct ? '1' : '0'}" tabindex="0" role="button">
+                            <span class="st-drop-label">${this.esc(t.label)}</span>
+                            <div class="drop-slot st-drop-slot"></div>
                         </div>
                     `).join('')}
                 </div>
@@ -330,69 +450,103 @@ class GameEngine {
         const dropTargets = this.arena.querySelectorAll('.drop-target');
 
         source.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', round.target.id);
-            source.style.opacity = '0.5';
+            e.dataTransfer.setData('text/plain', String(round.target.id));
+            source.classList.add('is-dragging');
         });
 
         source.addEventListener('dragend', () => {
-            source.style.opacity = '1';
+            source.classList.remove('is-dragging');
         });
 
         source.addEventListener('click', () => {
+            if (roundCompleted) return;
             isSelectedForMotor = !isSelectedForMotor;
+            source.classList.toggle('is-selected', isSelectedForMotor);
             if (isSelectedForMotor) {
-                source.style.borderColor = 'var(--primary)';
-                source.style.boxShadow = '0 0 0 5px rgba(47, 111, 159, 0.25)';
+                this.sfx('playSelectSound');
+                this.setFeedback('neutral', `Gambar siap! Sekarang ketuk kotak "${round.target.label}" di bawah.`);
             } else {
-                source.style.borderColor = 'var(--line)';
-                source.style.boxShadow = '0 8px 20px rgba(31, 41, 51, 0.08)';
+                this.setFeedback('neutral', `Seret gambar atau ketuk untuk memilih kotak "${round.target.label}".`);
+            }
+        });
+
+        source.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                source.click();
             }
         });
 
         const handlePlacement = (targetEl) => {
+            if (roundCompleted) return;
             const isCorrect = targetEl.dataset.correct === '1';
             if (isCorrect) {
+                roundCompleted = true;
+                isSelectedForMotor = false;
+                const earned = this.roundAttempts === 0 ? 10 : 5;
                 if (this.roundAttempts === 0) {
                     this.correctFirstTryCount++;
                 }
-                this.playGentleDing();
-                targetEl.style.borderStyle = 'solid';
-                targetEl.style.borderColor = 'var(--success)';
-                targetEl.style.background = 'var(--success-bg)';
+                this.addScore(earned);
+                this.sfx('playCorrectSound');
+
+                dropTargets.forEach(t => t.classList.remove('is-hinted', 'is-wrong'));
+                targetEl.classList.add('is-correct');
                 const slot = targetEl.querySelector('.drop-slot');
                 if (slot) {
-                    slot.innerHTML = `<img src="${round.target.image_url}" alt="${round.target.label}" style="width: 54px; height: 54px; object-fit: contain;">`;
+                    slot.innerHTML = `<img src="${this.esc(round.target.image_url)}" alt="${this.esc(round.target.label)}">`;
                 }
                 source.style.display = 'none';
+                this.setFeedback('success', `Hebat! Gambar masuk ke kotak "${round.target.label}" (+${earned} poin).`);
 
-                setTimeout(() => this.nextRound(), 950);
+                setTimeout(() => this.nextRound(), 1050);
             } else {
                 this.roundAttempts++;
-                source.style.borderColor = 'var(--line)';
-                source.style.boxShadow = '0 8px 20px rgba(31, 41, 51, 0.08)';
-                isSelectedForMotor = false;
+                this.consecutiveErrors++;
+                this.sfx('playWrongSound');
+                targetEl.classList.add('is-wrong');
+                this.setFeedback('hint', `Itu kotak "${targetEl.dataset.label}". Coba letakkan di kotak "${round.target.label}" ya!`);
+
+                if (this.consecutiveErrors >= 2) {
+                    const correctBox = this.arena.querySelector('.drop-target[data-correct="1"]');
+                    if (correctBox) correctBox.classList.add('is-hinted');
+                }
+
+                setTimeout(() => {
+                    targetEl.classList.remove('is-wrong');
+                }, 520);
             }
         };
 
         dropTargets.forEach(target => {
             target.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                target.style.borderColor = 'var(--primary)';
+                target.classList.add('is-drag-over');
             });
 
             target.addEventListener('dragleave', () => {
-                target.style.borderColor = 'var(--line)';
+                target.classList.remove('is-drag-over');
             });
 
             target.addEventListener('drop', (e) => {
                 e.preventDefault();
-                target.style.borderColor = 'var(--line)';
+                target.classList.remove('is-drag-over');
                 handlePlacement(target);
             });
 
             target.addEventListener('click', () => {
                 if (isSelectedForMotor) {
                     handlePlacement(target);
+                } else {
+                    this.speak(target.dataset.label || '', { lang: this.wordLang });
+                    this.setFeedback('neutral', `Kotak "${target.dataset.label}". Ketuk gambar di atas dulu untuk meletakkannya.`);
+                }
+            });
+
+            target.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    target.click();
                 }
             });
         });
@@ -410,7 +564,7 @@ class GameEngine {
     async finishGame() {
         const totalDuration = Math.round((Date.now() - this.startTime) / 1000);
         const totalRounds = this.rounds.length;
-        const accuracy = (this.correctFirstTryCount / totalRounds) * 100;
+        const accuracy = totalRounds > 0 ? Math.round((this.correctFirstTryCount / totalRounds) * 100) : 100;
 
         let stars = 1;
         if (accuracy >= 100) {
@@ -437,20 +591,46 @@ class GameEngine {
             console.error('Gagal mencatat sesi:', e);
         }
 
+        if (this.progressDotsEl) {
+            this.progressDotsEl.querySelectorAll('.quiz-dot').forEach(dot => {
+                dot.classList.remove('is-current');
+                dot.classList.add('is-done');
+            });
+        }
+
+        this.sfx('playCelebrationSound');
+        this.setFeedback('success', `Permainan selesai dengan total ${this.score} poin!`);
+
+        const starsHtml = window.ArenaHelpers
+            ? window.ArenaHelpers.renderStarsSvg(stars)
+            : '';
+
         this.arena.innerHTML = `
             <div class="st-celebration-card">
                 <div class="st-stars-row" aria-label="Mendapat ${stars} bintang">
-                    ${this.renderStarsSvg(stars)}
+                    ${starsHtml}
                 </div>
-                <h2 style="font-size: 1.75rem; font-weight: 700; margin: 0 0 8px; color: var(--ink);">Hebat Sekali!</h2>
-                <p style="color: var(--ink-soft); font-size: 1.0625rem; margin: 0 0 28px; line-height: 1.5;">
-                    Kamu berhasil menyelesaikan semua ronde dengan baik.
+                <h2 class="st-celebration-title">Hebat Sekali!</h2>
+                <p class="st-celebration-desc">
+                    Kamu berhasil menyelesaikan semua ${totalRounds} ronde permainan dengan tenang dan fokus.
                 </p>
-                <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
-                    <button type="button" class="btn btn-student btn-secondary" onclick="window.location.reload()" style="border-radius: 999px;">
+
+                <div class="st-score-summary-grid">
+                    <div class="st-score-summary-box">
+                        <span class="st-score-summary-box__label">Total Skor</span>
+                        <strong class="st-score-summary-box__val">${this.score} Poin</strong>
+                    </div>
+                    <div class="st-score-summary-box">
+                        <span class="st-score-summary-box__label">Tepat Percobaan Pertama</span>
+                        <strong class="st-score-summary-box__val">${this.correctFirstTryCount} / ${totalRounds} (${accuracy}%)</strong>
+                    </div>
+                </div>
+
+                <div class="st-celebration-actions">
+                    <button type="button" class="btn btn-student btn-secondary st-celebration-btn" onclick="window.location.reload()">
                         Main Lagi
                     </button>
-                    <a href="${this.homeUrl}" class="btn btn-student btn-primary" style="border-radius: 999px;">
+                    <a href="${this.esc(this.homeUrl)}" class="btn btn-student btn-primary st-celebration-btn">
                         Daftar Permainan
                     </a>
                 </div>
@@ -459,7 +639,7 @@ class GameEngine {
 
         if (this.instructionEl) this.instructionEl.textContent = 'Permainan Selesai!';
         if (this.speakerBtn) this.speakerBtn.style.display = 'none';
-        this.speak('Hebat sekali! Kamu berhasil menyelesaikan permainan.');
+        this.speak(`Hebat sekali! Kamu mendapat ${this.score} poin.`);
     }
 }
 

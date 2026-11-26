@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'Panel Pengelolaan Guru | SLB B-C Wijayakusumah')</title>
-  <link rel="stylesheet" href="/css/tokens.css">
-  <link rel="stylesheet" href="/css/themes.css">
-  <link rel="stylesheet" href="/css/base.css">
-  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/tokens.css?v={{ @filemtime(public_path('css/tokens.css')) ?: '1' }}">
+  <link rel="stylesheet" href="/css/themes.css?v={{ @filemtime(public_path('css/themes.css')) ?: '1' }}">
+  <link rel="stylesheet" href="/css/base.css?v={{ @filemtime(public_path('css/base.css')) ?: '1' }}">
+  <link rel="stylesheet" href="/css/components.css?v={{ @filemtime(public_path('css/components.css')) ?: '2' }}">
   <link rel="stylesheet" href="/css/layouts.css?v={{ @filemtime(public_path('css/layouts.css')) ?: '2' }}">
-  <link rel="stylesheet" href="/css/admin.css?v={{ @filemtime(public_path('css/admin.css')) ?: '1' }}">
+  <link rel="stylesheet" href="/css/admin.css?v={{ @filemtime(public_path('css/admin.css')) ?: '2' }}">
   @stack('styles')
 </head>
 <body>
@@ -35,13 +35,18 @@
     <div id="admSidebarBackdrop" class="adm-sidebar-backdrop" aria-hidden="true"></div>
 
     <aside id="admSidebar" class="adm-sidebar" aria-label="Menu navigasi panel guru">
-      <a href="{{ route('admin.dashboard') }}" class="adm-brand">
-        <div class="adm-brand__logo" aria-hidden="true">SB</div>
-        <div>
-          <span class="adm-brand__title">Sahabat Belajar</span>
-          <span class="adm-brand__sub">Panel Pengelolaan Guru</span>
-        </div>
-      </a>
+      <div class="adm-brand-row">
+        <a href="{{ route('admin.dashboard') }}" class="adm-brand">
+          <div class="adm-brand__logo" aria-hidden="true">SB</div>
+          <div>
+            <span class="adm-brand__title">Sahabat Belajar</span>
+            <span class="adm-brand__sub">Panel Pengelolaan Guru</span>
+          </div>
+        </a>
+        <button type="button" id="admDrawerCloseBtn" class="adm-drawer-close" aria-label="Tutup menu navigasi">
+          &times;
+        </button>
+      </div>
 
       <nav class="adm-nav">
         <div class="adm-nav__group">Utama</div>
@@ -166,7 +171,7 @@
       </nav>
 
       <div class="adm-sidebar__footer">
-        <div style="font-size: 0.75rem; color: rgba(226, 232, 240, 0.75); padding: 0 4px;">
+        <div class="adm-sidebar-school">
           SLB B-C Wijayakusumah &bull; Sumedang
         </div>
         <form action="{{ route('logout') }}" method="POST">
@@ -203,8 +208,14 @@
         </div>
 
         <div class="adm-topbar__right">
-          <span style="font-size: 0.8125rem; font-weight: 600; color: var(--ink-soft); padding: 0 6px;">
-            {{ now()->translatedFormat('D, d M Y') }}
+          <span class="adm-topbar-date">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>{{ now()->translatedFormat('D, d M Y') }}</span>
           </span>
           <a href="{{ route('admin.profile') }}" class="adm-user-chip" title="Kelola Profil Guru">
             <span class="adm-user-chip__avatar" aria-hidden="true">{{ $initials ?: 'GR' }}</span>
@@ -215,13 +226,13 @@
 
       <main id="admin-main" class="adm-main">
         @if (session('success'))
-          <div class="feedback-bar feedback-success" role="status" style="margin-bottom: 20px;">
-            <span style="font-weight: 800;">Berhasil</span> <span>{{ session('success') }}</span>
+          <div class="feedback-bar feedback-success adm-flash-bar" role="status">
+            <span class="adm-flash-bar__tag">Berhasil</span> <span>{{ session('success') }}</span>
           </div>
         @endif
         @if (session('error'))
-          <div class="feedback-bar feedback-hint" role="alert" style="margin-bottom: 20px;">
-            <span style="font-weight: 800;">Perhatian</span> <span>{{ session('error') }}</span>
+          <div class="feedback-bar feedback-hint adm-flash-bar" role="alert">
+            <span class="adm-flash-bar__tag">Perhatian</span> <span>{{ session('error') }}</span>
           </div>
         @endif
 
@@ -233,6 +244,7 @@
   <script>
     (function() {
       const btn = document.getElementById('admDrawerBtn');
+      const closeBtn = document.getElementById('admDrawerCloseBtn');
       const sidebar = document.getElementById('admSidebar');
       const backdrop = document.getElementById('admSidebarBackdrop');
       if (!btn || !sidebar || !backdrop) return;
@@ -241,9 +253,11 @@
         sidebar.classList.toggle('is-open', open);
         backdrop.classList.toggle('is-open', open);
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        document.body.style.overflow = open ? 'hidden' : '';
       }
 
       btn.addEventListener('click', () => setOpen(!sidebar.classList.contains('is-open')));
+      if (closeBtn) closeBtn.addEventListener('click', () => setOpen(false));
       backdrop.addEventListener('click', () => setOpen(false));
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') setOpen(false);

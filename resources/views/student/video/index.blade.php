@@ -5,12 +5,9 @@
 
 @section('content')
 <div class="st-page-shell">
-  <div class="st-page-bar">
+  <div class="st-page-bar st-anim st-anim--1">
     <a href="{{ route('student.home') }}" class="st-back-pill">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="19" y1="12" x2="5" y2="12"/>
-        <polyline points="12 19 5 12 12 5"/>
-      </svg>
+      @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 18, 'class' => 'st-back-pill__icon'])
       <span>Kembali ke Beranda</span>
     </a>
 
@@ -19,7 +16,7 @@
     </span>
   </div>
 
-  <div class="st-intro-banner">
+  <div class="st-intro-banner st-anim st-anim--2">
     <div class="st-intro-banner__text">
       <h2>Nonton Video Edukasi</h2>
       <p>Tekan salah satu video di bawah untuk memutar cerita atau lagu belajar.</p>
@@ -37,7 +34,10 @@
     <div class="st-empty-card">
       <h2 style="font-size: 1.375rem; font-weight: 700; margin: 0 0 8px;">Belum Ada Video</h2>
       <p style="color: var(--ink-soft); margin: 0 0 24px;">Bapak/Ibu guru akan menambahkan video pembelajaran di sini segera.</p>
-      <a href="{{ route('student.home') }}" class="btn btn-student btn-primary" style="border-radius: 999px;">Kembali ke Menu Utama</a>
+      <a href="{{ route('student.home') }}" class="btn btn-student btn-primary st-pill-cta">
+        @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 18, 'class' => 'st-btn-arrow st-btn-arrow--left'])
+        <span>Kembali ke Menu Utama</span>
+      </a>
     </div>
   @else
     <div class="st-hub-grid">
@@ -67,7 +67,10 @@
 
           <div class="st-hub-card__footer">
             <span class="st-hub-card__meta">Putar Manual</span>
-            <span class="st-hub-card__cta">Tonton Video &rarr;</span>
+            <span class="st-hub-card__cta">
+              <span>Tonton Video</span>
+              @include('student.partials.icon-arrow', ['size' => 15])
+            </span>
           </div>
         </a>
       @endforeach

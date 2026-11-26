@@ -5,12 +5,9 @@
 
 @section('content')
 <div class="st-page-shell">
-  <div class="st-page-bar">
+  <div class="st-page-bar st-anim st-anim--1">
     <a href="{{ route('student.home') }}" class="st-back-pill">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="19" y1="12" x2="5" y2="12"/>
-        <polyline points="12 19 5 12 12 5"/>
-      </svg>
+      @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 18, 'class' => 'st-back-pill__icon'])
       <span>Kembali ke Beranda</span>
     </a>
 
@@ -19,7 +16,7 @@
     </span>
   </div>
 
-  <div class="st-intro-banner">
+  <div class="st-intro-banner st-anim st-anim--2">
     <div class="st-intro-banner__text">
       <h2>Pilih Kategori Belajar</h2>
       <p>Tekan satu kartu di bawah ini untuk mengenal gambar dan mendengarkan suaranya.</p>
@@ -109,6 +106,41 @@
               <circle cx="70" cy="74" r="7" fill="#2F6F9F"/>
               <circle cx="88" cy="74" r="7" fill="#2F6F9F"/>
             </svg>
+          @elseif ($cat->slug === 'musik-nada')
+            <svg class="st-hub-card__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+              <ellipse cx="64" cy="108" rx="42" ry="7" fill="#D5CFE8"/>
+              <rect x="22" y="84" width="84" height="12" rx="6" fill="#92400E"/>
+              <rect x="26" y="42" width="16" height="44" rx="5" fill="#E53935"/>
+              <rect x="46" y="48" width="16" height="38" rx="5" fill="#FBBF24"/>
+              <rect x="66" y="54" width="16" height="32" rx="5" fill="#246B4D"/>
+              <rect x="86" y="60" width="16" height="26" rx="5" fill="#2F6F9F"/>
+              <circle cx="82" cy="34" r="7" fill="#6D28D9"/>
+              <line x1="88" y1="34" x2="88" y2="16" stroke="#6D28D9" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M88 16 Q98 16 98 24" stroke="#6D28D9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          @elseif ($cat->slug === 'matematika')
+            <svg class="st-hub-card__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+              <ellipse cx="64" cy="108" rx="42" ry="7" fill="#CDE3D6"/>
+              <rect x="20" y="30" width="38" height="38" rx="10" fill="#246B4D"/>
+              <line x1="39" y1="40" x2="39" y2="58" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+              <line x1="30" y1="49" x2="48" y2="49" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+              <rect x="70" y="30" width="38" height="38" rx="10" fill="#2F6F9F"/>
+              <line x1="80" y1="49" x2="98" y2="49" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+              <rect x="20" y="76" width="88" height="24" rx="10" fill="#FFFFFF" stroke="#246B4D" stroke-width="3"/>
+              <circle cx="40" cy="88" r="5" fill="#E53935"/>
+              <circle cx="56" cy="88" r="5" fill="#FBBF24"/>
+              <circle cx="72" cy="88" r="5" fill="#246B4D"/>
+              <circle cx="88" cy="88" r="5" fill="#2F6F9F"/>
+            </svg>
+          @elseif ($cat->slug === 'bahasa-inggris')
+            <svg class="st-hub-card__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
+              <ellipse cx="64" cy="108" rx="42" ry="7" fill="#EED8C8"/>
+              <circle cx="48" cy="64" r="28" fill="#2F6F9F"/>
+              <ellipse cx="48" cy="64" rx="12" ry="28" fill="none" stroke="#DCEBF7" stroke-width="2.5"/>
+              <line x1="22" y1="64" x2="74" y2="64" stroke="#DCEBF7" stroke-width="2.5"/>
+              <rect x="58" y="30" width="52" height="34" rx="12" fill="#FFFFFF" stroke="#EA580C" stroke-width="3"/>
+              <text x="84" y="52" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="16" fill="#C2410C">ABC</text>
+            </svg>
           @else
             <svg class="st-hub-card__art" viewBox="0 0 128 128" fill="none" aria-hidden="true">
               <rect x="22" y="30" width="84" height="68" rx="14" fill="#2F6F9F"/>
@@ -125,7 +157,10 @@
 
         <div class="st-hub-card__footer">
           <span class="st-hub-card__meta">{{ $cat->materials_count }} materi tersedia</span>
-          <span class="st-hub-card__cta">Buka &rarr;</span>
+          <span class="st-hub-card__cta">
+            <span>Buka</span>
+            @include('student.partials.icon-arrow', ['size' => 15])
+          </span>
         </div>
       </a>
     @empty

@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -14,7 +15,7 @@ class AttendanceController extends Controller
 {
     public function index(Request $request): View
     {
-        $date = $request->input('date', now()->toDateString());
+        $date = $this->parseDate($request->input('date'));
 
         $studentsQuery = User::where('role', 'siswa')->orderBy('name');
         if ($request->filled('class_name')) {
@@ -55,6 +56,8 @@ class AttendanceController extends Controller
 
     public function update(Request $request, User $student): RedirectResponse
     {
+        abort_unless($student->isStudent(), 404);
+
         $validated = $request->validate([
             'date' => 'required|date',
             'status' => 'required|in:hadir,izin,sakit,alpa',
@@ -90,7 +93,7 @@ class AttendanceController extends Controller
 
     public function exportCsv(Request $request): StreamedResponse
     {
-        $date = $request->input('date', now()->toDateString());
+        $date = $this->parseDate($request->input('date'));
 
         $students = User::where('role', 'siswa')->orderBy('name')->get();
         $attendances = Attendance::whereDate('attendance_date', $date)->get()->keyBy('user_id');
@@ -132,5 +135,18 @@ class AttendanceController extends Controller
 
             fclose($handle);
         }, 200, $headers);
+    }
+
+    private function parseDate(?string $rawDate): string
+    {
+        if (! $rawDate) {
+            return now()->toDateString();
+        }
+
+        try {
+            return Carbon::parse($rawDate)->toDateString();
+        } catch (\Throwable) {
+            return now()->toDateString();
+        }
     }
 }

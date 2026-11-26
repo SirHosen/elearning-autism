@@ -17,7 +17,7 @@
 </div>
 
 {{-- Ringkasan Statistik Siswa --}}
-<div class="adm-kpi-grid" style="margin-bottom: 20px;">
+<div class="adm-kpi-grid adm-kpi-grid--compact">
   <div class="adm-kpi-card adm-kpi-card--blue">
     <span class="adm-kpi-card__label">Total Terdaftar</span>
     <strong class="adm-kpi-card__val">{{ $summaryStats['total'] }}</strong>
@@ -37,17 +37,17 @@
 
 {{-- Banner Flash PIN Baru (Tampil Sekali) --}}
 @if (session('generated_pin'))
-  <div style="background: var(--tint-yellow); border: 2px solid var(--hint-line); border-radius: var(--adm-radius); padding: 20px; margin-bottom: 20px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+  <div class="adm-pin-banner">
+    <div class="adm-pin-banner__inner">
       <div>
-        <p style="font-size: 0.75rem; font-weight: 700; color: #78350F; letter-spacing: 0.8px; margin: 0 0 4px;">
+        <p class="adm-pin-banner__eyebrow">
           KARTU PIN DIGITAL SISWA (HANYA TAMPIL SEKALI)
         </p>
-        <h2 style="font-size: 1.25rem; margin: 0 0 6px; color: var(--ink);">
+        <h2 class="adm-pin-banner__title">
           {{ session('student_name') }} (Username: <code>{{ session('student_username') }}</code>)
         </h2>
-        <p style="font-size: 1rem; margin: 0; color: var(--ink);">
-          PIN Masuk: <strong style="font-size: 1.5rem; letter-spacing: 4px; color: var(--primary-strong);">{{ session('generated_pin') }}</strong>
+        <p class="adm-pin-banner__pin-row">
+          PIN Masuk: <strong class="adm-pin-banner__code">{{ session('generated_pin') }}</strong>
         </p>
       </div>
       <div>
@@ -61,7 +61,7 @@
 
 {{-- Filter & Pencarian Siswa --}}
 <form action="{{ route('admin.students.index') }}" method="GET" class="adm-filter-bar">
-  <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama siswa, username, atau kelas..." class="adm-input" style="flex: 1; min-width: 220px;">
+  <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama siswa, username, atau kelas..." class="adm-input adm-filter-grow">
   <select name="class_name" class="adm-select" onchange="this.form.submit()">
     <option value="">Semua Kelas</option>
     @foreach($classes as $cls)
@@ -102,11 +102,11 @@
         @endphp
         <tr>
           <td>
-            <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="adm-entity-cell">
               <span class="adm-avatar" aria-hidden="true">{{ $initials ?: 'S' }}</span>
               <div>
-                <strong style="color: var(--ink);">{{ $s->name }}</strong>
-                <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>{{ $s->username }}</code></div>
+                <strong class="adm-entity-name">{{ $s->name }}</strong>
+                <div class="adm-entity-sub"><code>{{ $s->username }}</code></div>
               </div>
             </div>
           </td>
@@ -114,23 +114,23 @@
           <td>
             <div class="adm-link-group">
               <span class="adm-link-chip {{ ($s->attended_days_count ?? 0) === 0 ? 'adm-link-chip--zero' : '' }}">
-                <span class="adm-dot" style="color: var(--success);"></span>
+                <span class="adm-dot adm-dot--green"></span>
                 {{ $s->attended_days_count ?? 0 }} Hadir
               </span>
               <span class="adm-link-chip {{ ($s->completed_quizzes_count ?? 0) === 0 ? 'adm-link-chip--zero' : '' }}">
-                <span class="adm-dot" style="color: #D97706;"></span>
+                <span class="adm-dot adm-dot--amber"></span>
                 {{ $s->completed_quizzes_count ?? 0 }} Kuis
               </span>
               <span class="adm-link-chip {{ ($s->game_sessions_count ?? 0) === 0 ? 'adm-link-chip--zero' : '' }}">
-                <span class="adm-dot" style="color: var(--primary);"></span>
+                <span class="adm-dot adm-dot--blue"></span>
                 {{ $s->game_sessions_count ?? 0 }} Game
               </span>
             </div>
           </td>
-          <td style="color: var(--ink-soft);">
+          <td class="adm-cell-muted">
             {{ $s->last_login_at ? $s->last_login_at->translatedFormat('d M Y, H:i') : 'Belum pernah' }}
           </td>
-          <td style="white-space: nowrap;">
+          <td class="adm-td-nowrap">
             @if ($s->is_active)
               <span class="adm-pill adm-pill--success"><span class="adm-dot"></span>Aktif</span>
             @else
@@ -146,12 +146,17 @@
                 <button type="submit" class="adm-btn adm-btn--secondary adm-btn--xs">Reset PIN</button>
               </form>
               <a href="{{ route('admin.students.edit', $s) }}" class="adm-btn adm-btn--secondary adm-btn--xs">Ubah</a>
+              <form action="{{ route('admin.students.destroy', $s) }}" method="POST" onsubmit="return confirm('Arsipkan akun siswa {{ $s->name }}?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="adm-btn adm-btn--danger adm-btn--xs">Hapus</button>
+              </form>
             </div>
           </td>
         </tr>
       @empty
         <tr>
-          <td colspan="6" style="padding: 36px; text-align: center; color: var(--ink-soft);">
+          <td colspan="6" class="adm-table-empty">
             Tidak ada data siswa yang sesuai filter.
           </td>
         </tr>
@@ -160,7 +165,7 @@
   </table>
 </div>
 
-<div style="margin-top: 20px;">
+<div class="adm-pagination-wrap">
   {{ $students->links() }}
 </div>
 @endsection

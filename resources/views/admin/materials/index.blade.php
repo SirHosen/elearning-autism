@@ -18,7 +18,7 @@
 
 {{-- Filter & Pencarian --}}
 <form action="{{ route('admin.materials.index') }}" method="GET" class="adm-filter-bar">
-  <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama materi (mis. Kucing, Bola)..." class="adm-input" style="flex: 1; min-width: 220px;">
+  <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama materi (mis. Kucing, Bola)..." class="adm-input adm-filter-grow">
   <select name="category_id" class="adm-select" onchange="this.form.submit()">
     <option value="">Semua Kategori</option>
     @foreach ($categories as $c)
@@ -45,10 +45,10 @@
         <img src="/storage/{{ $m->image_path }}" alt="{{ $m->label }}">
       </div>
 
-      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+      <div class="adm-media-card__head">
         <div>
-          <h3 style="margin: 0; font-size: 1.0625rem; font-weight: 700; color: var(--ink);">{{ $m->label }}</h3>
-          <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-strong);">{{ $m->category->name }}</span>
+          <h3 class="adm-media-card__title">{{ $m->label }}</h3>
+          <span class="adm-media-card__cat">{{ $m->category->name }}</span>
         </div>
         @if ($m->is_active)
           <span class="adm-pill adm-pill--success">Aktif</span>
@@ -57,11 +57,11 @@
         @endif
       </div>
 
-      <p style="margin: 0; font-size: 0.8125rem; color: var(--ink-soft); flex: 1; line-height: 1.4;">
+      <p class="adm-media-card__desc">
         {{ $m->short_sentence ?? 'Belum ada kalimat pendamping.' }}
       </p>
 
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+      <div class="adm-media-card__meta">
         @if ($m->audio_path)
           <span class="adm-pill adm-pill--success">Rekaman Guru</span>
         @else
@@ -69,10 +69,10 @@
         @endif
 
         <button type="button"
-                class="adm-btn adm-btn--secondary adm-btn--xs adm-preview-audio-btn"
+                class="adm-btn adm-btn--secondary adm-btn--xs adm-icon-btn adm-preview-audio-btn"
                 data-label="{{ $m->label }}"
+                data-lang="{{ $m->category?->slug === 'bahasa-inggris' ? 'en-US' : 'id-ID' }}"
                 data-audio="{{ $m->audio_path ? '/storage/' . $m->audio_path : '' }}"
-                style="min-width: 34px; padding: 0 8px;"
                 aria-label="Putar suara {{ $m->label }}"
                 title="Uji suara pelafalan">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -83,69 +83,59 @@
         </button>
       </div>
 
-      <div style="display: flex; gap: 8px; padding-top: 10px; border-top: 1px solid var(--line);">
-        <a href="{{ route('admin.materials.edit', $m) }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="flex: 1;">Ubah</a>
-        <form action="{{ route('admin.materials.destroy', $m) }}" method="POST" style="flex: 1;" onsubmit="return confirm('Hapus materi {{ $m->label }}?')">
+      <div class="adm-media-card__foot">
+        <a href="{{ route('admin.materials.edit', $m) }}" class="adm-btn adm-btn--secondary adm-btn--sm adm-btn-flex">Ubah</a>
+        <form action="{{ route('admin.materials.destroy', $m) }}" method="POST" onsubmit="return confirm('Hapus materi {{ $m->label }}?')">
           @csrf
           @method('DELETE')
-          <button type="submit" class="adm-btn adm-btn--danger adm-btn--sm" style="width: 100%;">Hapus</button>
+          <button type="submit" class="adm-btn adm-btn--danger adm-btn--sm adm-btn-block">Hapus</button>
         </form>
       </div>
     </article>
   @empty
-    <div style="grid-column: 1 / -1; background: var(--surface); padding: 48px; border: 1px dashed var(--line); border-radius: var(--adm-radius); text-align: center; color: var(--ink-soft);">
+    <div class="adm-empty-grid">
       Materi tidak ditemukan. Silakan tambahkan materi baru atau ubah filter pencarian.
     </div>
   @endforelse
 </div>
 
-<div style="margin-top: 24px;">
+<div class="adm-pagination-wrap">
   {{ $materials->links() }}
 </div>
 @endsection
 
 @push('scripts')
-<script>
+<script type="module" src="/js/core/audio-manager.js?v={{ @filemtime(public_path('js/core/audio-manager.js')) ?: '2' }}"></script>
+<script type="module">
   document.addEventListener('DOMContentLoaded', function() {
-    let activeAudio = null;
     const allBtns = document.querySelectorAll('.adm-preview-audio-btn');
-
-    function resetPlayingState() {
-      allBtns.forEach(function(b) {
+    const resetPlayingState = () => {
+      allBtns.forEach((b) => {
         b.classList.remove('is-playing');
         b.setAttribute('aria-pressed', 'false');
       });
-    }
+    };
 
-    allBtns.forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const audioUrl = btn.dataset.audio;
-        const labelText = btn.dataset.label;
+    allBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mgr = window.audioManager;
+        if (!mgr) return;
 
-        if (activeAudio) {
-          activeAudio.pause();
-          activeAudio = null;
-        }
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-        }
+        const wasPlaying = btn.classList.contains('is-playing');
+        mgr.stop();
         resetPlayingState();
+        if (wasPlaying) return;
 
-        if (audioUrl) {
-          activeAudio = new Audio(audioUrl);
-          btn.classList.add('is-playing');
-          btn.setAttribute('aria-pressed', 'true');
-          activeAudio.onended = activeAudio.onerror = resetPlayingState;
-          activeAudio.play().catch(resetPlayingState);
-        } else if ('speechSynthesis' in window && labelText) {
-          const u = new SpeechSynthesisUtterance(labelText);
-          u.lang = 'id-ID';
-          u.rate = 0.85;
-          btn.classList.add('is-playing');
-          btn.setAttribute('aria-pressed', 'true');
-          u.onend = u.onerror = resetPlayingState;
-          window.speechSynthesis.speak(u);
-        }
+        mgr.play({
+          audioUrl: btn.dataset.audio || null,
+          text: btn.dataset.label || '',
+          lang: btn.dataset.lang || 'id-ID',
+          onStart: () => {
+            btn.classList.add('is-playing');
+            btn.setAttribute('aria-pressed', 'true');
+          },
+          onEnd: resetPlayingState,
+        });
       });
     });
   });

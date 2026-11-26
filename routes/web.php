@@ -81,35 +81,42 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // CRUD Kategori
     Route::resource('kategori', CategoryController::class)
         ->names('categories')
-        ->parameters(['kategori' => 'category']);
+        ->parameters(['kategori' => 'category'])
+        ->except(['show']);
 
     // CRUD Materi
     Route::resource('materi', MaterialController::class)
         ->names('materials')
-        ->parameters(['materi' => 'material']);
+        ->parameters(['materi' => 'material'])
+        ->except(['show']);
 
     // CRUD Siswa
     Route::resource('siswa', StudentController::class)
         ->names('students')
-        ->parameters(['siswa' => 'student']);
+        ->parameters(['siswa' => 'student'])
+        ->except(['show']);
     Route::post('siswa/{student}/reset-pin', [StudentController::class, 'resetPin'])->name('students.reset-pin');
     Route::get('siswa/{student}/kartu', [StudentController::class, 'printCard'])->name('students.card');
 
-    // Placeholder untuk modul berikutnya
     // CRUD Video
     Route::resource('video', AdminVideoController::class)
         ->names('videos')
-        ->parameters(['video' => 'video']);
+        ->parameters(['video' => 'video'])
+        ->except(['show']);
     Route::post('video/{video}/toggle', [AdminVideoController::class, 'toggleActive'])->name('videos.toggle');
+
     // CRUD Permainan
     Route::resource('permainan', AdminGameController::class)
         ->names('games')
-        ->parameters(['permainan' => 'game']);
+        ->parameters(['permainan' => 'game'])
+        ->except(['show']);
     Route::post('permainan/{game}/toggle', [AdminGameController::class, 'toggleActive'])->name('games.toggle');
+
     // CRUD Kuis & Soal
     Route::resource('kuis', AdminQuizController::class)
         ->names('quizzes')
-        ->parameters(['kuis' => 'quiz']);
+        ->parameters(['kuis' => 'quiz'])
+        ->except(['show']);
     Route::post('kuis/{quiz}/toggle', [AdminQuizController::class, 'toggleActive'])->name('quizzes.toggle');
     Route::get('kuis/{quiz}/soal', [AdminQuizController::class, 'questions'])->name('quizzes.questions');
     Route::post('kuis/{quiz}/soal', [AdminQuizController::class, 'storeQuestion'])->name('quizzes.questions.store');

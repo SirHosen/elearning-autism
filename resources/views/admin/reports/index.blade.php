@@ -20,8 +20,8 @@
 
 {{-- Pemilih Siswa --}}
 <form action="{{ route('admin.reports.index') }}" method="GET" class="adm-filter-bar">
-  <label for="student_id" style="font-weight: 700; font-size: 0.875rem;">Pilih Siswa:</label>
-  <select name="student_id" id="student_id" class="adm-select" style="min-width: 280px;" onchange="this.form.submit()">
+  <label for="student_id" class="adm-filter-label">Pilih Siswa:</label>
+  <select name="student_id" id="student_id" class="adm-select adm-filter-grow" onchange="this.form.submit()">
     <option value="">-- Ringkasan Seluruh Kelas --</option>
     @foreach($students as $s)
       <option value="{{ $s->id }}" {{ request('student_id') == $s->id ? 'selected' : '' }}>
@@ -36,15 +36,15 @@
 
 @if($selectedStudent)
   {{-- Identitas Siswa Terpilih --}}
-  <section class="adm-panel" style="margin-bottom: 20px;">
-    <div class="adm-panel__body" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <span class="adm-avatar" style="width: 48px; height: 48px; font-size: 1rem;">
+  <section class="adm-panel adm-panel-spaced">
+    <div class="adm-panel__body adm-student-hero">
+      <div class="adm-student-hero__row">
+        <span class="adm-avatar adm-avatar--lg" aria-hidden="true">
           {{ strtoupper(substr($selectedStudent->name, 0, 2)) }}
         </span>
         <div>
-          <h2 style="margin: 0; font-size: 1.25rem; color: var(--ink);">{{ $selectedStudent->name }}</h2>
-          <p style="margin: 3px 0 0; font-size: 0.875rem; color: var(--ink-soft);">
+          <h2 class="adm-student-hero__name">{{ $selectedStudent->name }}</h2>
+          <p class="adm-student-hero__meta">
             {{ $selectedStudent->class_name ?? 'Kelas Umum' }} &bull; Username: <code>{{ $selectedStudent->username }}</code>
           </p>
         </div>
@@ -59,16 +59,16 @@
   </section>
 
   {{-- Ringkasan Statistik Siswa --}}
-  <div class="adm-kpi-grid" style="margin-bottom: 24px;">
+  <div class="adm-kpi-grid adm-kpi-grid--5">
     <div class="adm-kpi-card adm-kpi-card--blue">
-      <span class="adm-kpi-card__label">Kuis Diselesaikan</span>
+      <span class="adm-kpi-card__label">Kuis Selesai</span>
       <strong class="adm-kpi-card__val">{{ $summary['total_quizzes'] }}</strong>
-      <span class="adm-kpi-card__sub">Total percobaan kuis selesai</span>
+      <span class="adm-kpi-card__sub">Total percobaan selesai</span>
     </div>
     <div class="adm-kpi-card adm-kpi-card--green">
-      <span class="adm-kpi-card__label">Rata-rata Skor Kuis</span>
+      <span class="adm-kpi-card__label">Rata Skor Kuis</span>
       <strong class="adm-kpi-card__val">{{ $summary['avg_quiz_score'] }}%</strong>
-      <span class="adm-kpi-card__sub">Jawaban tepat percobaan pertama</span>
+      <span class="adm-kpi-card__sub">Tepat percobaan pertama</span>
     </div>
     <div class="adm-kpi-card adm-kpi-card--forest">
       <span class="adm-kpi-card__label">Sesi Permainan</span>
@@ -78,12 +78,12 @@
     <div class="adm-kpi-card adm-kpi-card--amber">
       <span class="adm-kpi-card__label">Total Bintang</span>
       <strong class="adm-kpi-card__val">{{ $summary['total_stars'] }}</strong>
-      <span class="adm-kpi-card__sub">Akumulasi kuis &amp; permainan</span>
+      <span class="adm-kpi-card__sub">Akumulasi kuis &amp; game</span>
     </div>
     <div class="adm-kpi-card adm-kpi-card--purple">
       <span class="adm-kpi-card__label">Hari Hadir</span>
       <strong class="adm-kpi-card__val">{{ $summary['attendance_days'] }}</strong>
-      <span class="adm-kpi-card__sub">Kehadiran tercatat di kelas</span>
+      <span class="adm-kpi-card__sub">Kehadiran tercatat</span>
     </div>
   </div>
 
@@ -92,7 +92,7 @@
     @php
       $chartItems = $quizAttempts->take(8)->reverse()->values();
     @endphp
-    <section class="adm-panel" style="margin-bottom: 24px;">
+    <section class="adm-panel adm-panel-spaced">
       <div class="adm-panel__head">
         <div>
           <h2 class="adm-panel__title">Perkembangan Skor Kuis Terakhir</h2>
@@ -120,11 +120,11 @@
   @endif
 
   {{-- Riwayat Kuis & Permainan --}}
-  <section class="adm-panel" style="margin-bottom: 24px;">
+  <section class="adm-panel adm-panel-spaced">
     <div class="adm-panel__head">
       <h2 class="adm-panel__title">Riwayat Pengerjaan Kuis</h2>
     </div>
-    <div style="overflow-x: auto;">
+    <div class="adm-table-scroll">
       <table class="adm-table">
         <thead>
           <tr>
@@ -150,7 +150,7 @@
             </tr>
           @empty
             <tr>
-              <td colspan="5" style="text-align: center; padding: 28px; color: var(--ink-soft);">
+              <td colspan="5" class="adm-table-empty">
                 Siswa belum pernah mengerjakan kuis.
               </td>
             </tr>
@@ -165,7 +165,7 @@
       <div class="adm-panel__head">
         <h2 class="adm-panel__title">Riwayat Sesi Permainan</h2>
       </div>
-      <div style="overflow-x: auto;">
+      <div class="adm-table-scroll">
         <table class="adm-table">
           <thead>
             <tr>
@@ -180,7 +180,7 @@
               <tr>
                 <td>
                   <strong>{{ $session->game?->title ?? 'Permainan' }}</strong>
-                  <div style="font-size: 0.75rem; color: var(--ink-soft);">
+                  <div class="adm-cell-sub">
                     {{ $session->game?->category?->name ?? '-' }} &bull; {{ $session->created_at->format('d M Y') }}
                   </div>
                 </td>
@@ -190,7 +190,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="4" style="text-align: center; padding: 28px; color: var(--ink-soft);">
+                <td colspan="4" class="adm-table-empty">
                   Belum pernah memainkan permainan edukasi.
                 </td>
               </tr>
@@ -205,7 +205,7 @@
         <h2 class="adm-panel__title">Catatan Presensi Terakhir</h2>
         <a href="{{ route('admin.attendances.index') }}" class="adm-btn adm-btn--secondary adm-btn--xs">Kelola Absensi</a>
       </div>
-      <div style="overflow-x: auto;">
+      <div class="adm-table-scroll">
         <table class="adm-table">
           <thead>
             <tr>
@@ -223,14 +223,14 @@
                     {{ ucfirst($att->status) }}
                   </span>
                 </td>
-                <td style="font-size: 0.8125rem; color: var(--ink-soft);">
+                <td class="adm-cell-muted">
                   {{ $att->source === 'siswa' ? 'Mandiri' : 'Guru' }}
                   @if($att->note) &bull; {{ $att->note }} @endif
                 </td>
               </tr>
             @empty
               <tr>
-                <td colspan="3" style="text-align: center; padding: 28px; color: var(--ink-soft);">
+                <td colspan="3" class="adm-table-empty">
                   Belum ada catatan kehadiran.
                 </td>
               </tr>
@@ -249,7 +249,7 @@
         <p class="adm-panel__sub">Klik Buka Rapor untuk melihat detail grafik, jawaban kuis, permainan, dan riwayat absensi</p>
       </div>
     </div>
-    <div style="overflow-x: auto;">
+    <div class="adm-table-scroll">
       <table class="adm-table">
         <thead>
           <tr>
@@ -271,11 +271,11 @@
             @endphp
             <tr>
               <td>
-                <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="adm-entity-cell">
                   <span class="adm-avatar" aria-hidden="true">{{ strtoupper(substr($s->name, 0, 2)) }}</span>
                   <div>
                     <strong>{{ $s->name }}</strong>
-                    <div style="font-size: 0.75rem; color: var(--ink-soft);"><code>{{ $s->username }}</code></div>
+                    <div class="adm-entity-sub"><code>{{ $s->username }}</code></div>
                   </div>
                 </div>
               </td>
@@ -294,7 +294,7 @@
             </tr>
           @empty
             <tr>
-              <td colspan="8" style="text-align: center; padding: 36px; color: var(--ink-soft);">
+              <td colspan="8" class="adm-table-empty">
                 Belum ada siswa terdaftar.
               </td>
             </tr>

@@ -18,7 +18,7 @@
 </div>
 
 {{-- Strip Ringkasan Kehadiran Harian --}}
-<div class="adm-kpi-grid" style="margin-bottom: 20px;">
+<div class="adm-kpi-grid adm-kpi-grid--compact">
   <div class="adm-kpi-card adm-kpi-card--green">
     <span class="adm-kpi-card__label">Hadir</span>
     <strong class="adm-kpi-card__val">{{ $statusSummary['hadir'] }}</strong>
@@ -43,10 +43,10 @@
 
 {{-- Filter Tanggal & Kelas --}}
 <form action="{{ route('admin.attendances.index') }}" method="GET" class="adm-filter-bar">
-  <label for="date" style="font-weight: 700; font-size: 0.875rem;">Tanggal:</label>
+  <label for="date" class="adm-filter-label">Tanggal:</label>
   <input type="date" name="date" id="date" class="adm-input" value="{{ $date }}" onchange="this.form.submit()">
 
-  <label for="class_name" style="font-weight: 700; font-size: 0.875rem;">Kelas:</label>
+  <label for="class_name" class="adm-filter-label">Kelas:</label>
   <select name="class_name" id="class_name" class="adm-select" onchange="this.form.submit()">
     <option value="">Semua Kelas</option>
     @foreach($classes as $cls)
@@ -64,7 +64,7 @@
   <table class="adm-table">
     <thead>
       <tr>
-        <th style="width: 52px;">No</th>
+        <th class="adm-th-w52">No</th>
         <th>Siswa</th>
         <th>Status</th>
         <th>Masuk / Pencatat</th>
@@ -82,17 +82,17 @@
         <tr>
           <td>{{ $index + 1 }}</td>
           <td>
-            <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="adm-entity-cell">
               <span class="adm-avatar" aria-hidden="true">{{ $initials }}</span>
               <div>
-                <strong style="color: var(--ink);">{{ $student->name }}</strong>
-                <div style="font-size: 0.75rem; color: var(--ink-soft);">
+                <strong class="adm-entity-name">{{ $student->name }}</strong>
+                <div class="adm-entity-sub">
                   {{ $student->class_name ?? 'Umum' }} &bull; <code>{{ $student->username }}</code>
                 </div>
               </div>
             </div>
           </td>
-          <td>
+          <td class="adm-td-nowrap">
             @if($status === 'hadir')
               <span class="adm-pill adm-pill--success">Hadir</span>
             @elseif($status === 'sakit')
@@ -108,7 +108,7 @@
           <td>
             <div>{{ $att?->checked_in_at ? $att->checked_in_at->format('H:i') : '-' }}</div>
             @if($att)
-              <span style="font-size: 0.75rem; color: var(--ink-soft);">
+              <span class="adm-cell-sub">
                 Oleh {{ $att->source === 'siswa' ? 'Mandiri' : 'Guru' }}
               </span>
             @endif
@@ -117,7 +117,7 @@
             <form action="{{ route('admin.attendances.update', $student) }}" method="POST" class="adm-actions">
               @csrf
               <input type="hidden" name="date" value="{{ $date }}">
-              <select name="status" class="adm-select" style="width: auto; min-height: 34px; font-size: 0.8125rem; padding: 4px 10px;">
+              <select name="status" class="adm-select adm-select--compact">
                 <option value="hadir" {{ $status === 'hadir' ? 'selected' : '' }}>Hadir</option>
                 <option value="izin" {{ $status === 'izin' ? 'selected' : '' }}>Izin</option>
                 <option value="sakit" {{ $status === 'sakit' ? 'selected' : '' }}>Sakit</option>
@@ -127,8 +127,7 @@
                      name="note"
                      value="{{ $att?->note }}"
                      placeholder="Catatan singkat..."
-                     class="adm-input"
-                     style="width: 170px; min-height: 34px; font-size: 0.8125rem; padding: 4px 10px;">
+                     class="adm-input adm-att-note">
               <button type="submit" class="adm-btn adm-btn--primary adm-btn--xs">Simpan</button>
             </form>
           </td>
@@ -140,7 +139,7 @@
         </tr>
       @empty
         <tr>
-          <td colspan="6" style="text-align: center; padding: 36px; color: var(--ink-soft);">
+          <td colspan="6" class="adm-table-empty">
             Belum ada data siswa terdaftar.
           </td>
         </tr>

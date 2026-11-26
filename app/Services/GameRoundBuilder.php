@@ -12,7 +12,11 @@ class GameRoundBuilder
      */
     public function build(Game $game): array
     {
-        $materials = $game->category->activeMaterials()->get();
+        $materials = $game->category?->activeMaterials()->get() ?? collect();
+
+        if ($materials->isEmpty()) {
+            return [];
+        }
 
         return match ($game->game_type) {
             'pilih_benar' => $this->buildPilihBenar($game, $materials),
@@ -36,8 +40,8 @@ class GameRoundBuilder
                 return [
                     'id' => $item->id,
                     'label' => $item->label,
-                    'image_url' => asset('storage/'.$item->image_path),
-                    'audio_url' => $item->audio_path ? asset('storage/'.$item->audio_path) : null,
+                    'image_url' => '/storage/'.$item->image_path,
+                    'audio_url' => $item->audio_path ? '/storage/'.$item->audio_path : null,
                     'is_correct' => $item->id === $target->id,
                 ];
             })->values()->all();
@@ -67,7 +71,7 @@ class GameRoundBuilder
                 return [
                     'id' => $item->id,
                     'label' => $item->label,
-                    'image_url' => asset('storage/'.$item->image_path),
+                    'image_url' => '/storage/'.$item->image_path,
                 ];
             })->values()->all();
 
@@ -113,8 +117,8 @@ class GameRoundBuilder
                 'target' => [
                     'id' => $target->id,
                     'label' => $target->label,
-                    'image_url' => asset('storage/'.$target->image_path),
-                    'audio_url' => $target->audio_path ? asset('storage/'.$target->audio_path) : null,
+                    'image_url' => '/storage/'.$target->image_path,
+                    'audio_url' => $target->audio_path ? '/storage/'.$target->audio_path : null,
                 ],
                 'instruction' => $game->instruction_text ?: "Tempatkan gambar pada kotak {$target->label}",
                 'targets' => $targets,

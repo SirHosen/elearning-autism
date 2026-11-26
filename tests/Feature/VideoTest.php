@@ -98,8 +98,10 @@ class VideoTest extends TestCase
         $response = $this->actingAs($this->student)->get(route('student.videos.show', $video));
 
         $response->assertStatus(200);
+        $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->assertSee('Lagu Burung Kakatua');
         $response->assertSee('https://www.youtube-nocookie.com/embed/abc12345678?rel=0&amp;modestbranding=1&amp;playsinline=1', false);
+        $response->assertSee('referrerpolicy="strict-origin-when-cross-origin"', false);
         $response->assertDontSee('autoplay');
     }
 
@@ -171,6 +173,9 @@ class VideoTest extends TestCase
             'https://www.youtube.com/watch?v=dQw4w9WgXcQ' => 'dQw4w9WgXcQ',
             'https://youtu.be/dQw4w9WgXcQ' => 'dQw4w9WgXcQ',
             'https://www.youtube.com/embed/dQw4w9WgXcQ' => 'dQw4w9WgXcQ',
+            'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ' => 'dQw4w9WgXcQ',
+            'https://www.youtube.com/shorts/dQw4w9WgXcQ' => 'dQw4w9WgXcQ',
+            'https://www.youtube.com/live/dQw4w9WgXcQ' => 'dQw4w9WgXcQ',
             'dQw4w9WgXcQ' => 'dQw4w9WgXcQ',
         ];
 

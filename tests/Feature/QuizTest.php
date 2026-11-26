@@ -122,6 +122,12 @@ class QuizTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Kuis Aktif');
         $response->assertDontSee('Kuis Nonaktif');
+
+        $playRes = $this->actingAs($this->student1)->get(route('student.quizzes.play', $activeQuiz));
+        $playRes->assertStatus(200);
+        $playRes->assertSee('id="quiz-score-val"', false);
+        $playRes->assertSee('id="btn-toggle-quiz-sfx"', false);
+        $playRes->assertSee('id="quiz-feedback"', false);
     }
 
     public function test_student_can_start_quiz_and_fetch_visual_options(): void
@@ -266,5 +272,66 @@ class QuizTest extends TestCase
         $delRes = $this->actingAs($this->admin)->delete(route('admin.quizzes.destroy', $quiz));
         $delRes->assertRedirect(route('admin.quizzes.index'));
         $this->assertDatabaseMissing('quizzes', ['id' => $quiz->id]);
+    }
+
+    public function test_quiz_answer_hardening_prevents_invalid_options_duplicate_credit_and_cross_category_questions(): void
+    {
+        $otherCategory = Category::create([
+            'name' => 'Lainnya',
+            'slug' => 'lainnya',
+            'color_key' => 'green',
+            'is_active' => true,
+        ]);
+        $outsideMaterial = Material::create([
+            'category_id' => $otherCategory->id,
+            'label' => 'Di Luar Kategori',
+            'image_path' => 'materials/other.svg',
+            'is_active' => true,
+        ]);
+
+        $quiz = app(QuizBuilder::class)->autoGenerate($this->category, 3);
+
+        // Admin cannot add a question referencing a material outside the quiz's category
+        $badQuestionRes = $this->actingAs($this->admin)->post(route('admin.quizzes.questions.store', $quiz), [
+            'prompt_text' => 'Soal Lintas Kategori',
+            'correct_material_id' => $outsideMaterial->id,
+            'option_ids' => [$outsideMaterial->id, $this->category->materials()->first()->id],
+        ]);
+        $badQuestionRes->assertSessionHasErrors('correct_material_id');
+
+        $startRes = $this->actingAs($this->student1)->postJson(route('student.quizzes.start', $quiz));
+        $startRes->assertStatus(200);
+        $this->assertStringStartsWith('/storage/', $startRes->json('questions.0.options.0.image_url'));
+
+        $attemptId = $startRes->json('attempt_id');
+        $firstQ = QuizQuestion::find($startRes->json('questions.0.id'));
+
+        // Student cannot submit a material ID not in that question's options
+        $this->actingAs($this->student1)->postJson(route('student.quizzes.answer', $attemptId), [
+            'question_id' => $firstQ->id,
+            'selected_material_id' => $outsideMaterial->id,
+        ])->assertStatus(422);
+
+        // Submitting the same question twice cannot double-count first-try accuracy
+        $this->actingAs($this->student1)->postJson(route('student.quizzes.answer', $attemptId), [
+            'question_id' => $firstQ->id,
+            'selected_material_id' => $firstQ->correct_material_id,
+            'is_first_try' => true,
+        ])->assertStatus(200);
+
+        $this->actingAs($this->student1)->postJson(route('student.quizzes.answer', $attemptId), [
+            'question_id' => $firstQ->id,
+            'selected_material_id' => $firstQ->correct_material_id,
+            'is_first_try' => true,
+        ])->assertStatus(200);
+
+        $this->assertSame(1, QuizAttempt::find($attemptId)->correct_first_try);
+
+        // Finishing locks the attempt from subsequent answer submissions
+        $this->actingAs($this->student1)->postJson(route('student.quizzes.finish', $attemptId))->assertStatus(200);
+        $this->actingAs($this->student1)->postJson(route('student.quizzes.answer', $attemptId), [
+            'question_id' => $firstQ->id,
+            'selected_material_id' => $firstQ->correct_material_id,
+        ])->assertStatus(422);
     }
 }

@@ -52,10 +52,14 @@ class GameController extends Controller
 
     public function storeSession(Request $request, Game $game): JsonResponse
     {
+        if (! $game->is_active) {
+            return response()->json(['error' => 'Permainan tidak aktif.'], 404);
+        }
+
         $validated = $request->validate([
-            'total_rounds' => 'required|integer|min:1',
-            'correct_first_try' => 'required|integer|min:0',
-            'duration_seconds' => 'nullable|integer|min:0',
+            'total_rounds' => 'required|integer|min:1|max:50',
+            'correct_first_try' => 'required|integer|min:0|lte:total_rounds',
+            'duration_seconds' => 'nullable|integer|min:0|max:86400',
         ]);
 
         $stars = GameSession::calculateStars($validated['total_rounds'], $validated['correct_first_try']);

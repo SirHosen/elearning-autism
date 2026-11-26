@@ -9,6 +9,7 @@ use App\Models\QuizAttempt;
 use App\Models\QuizQuestion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class QuizController extends Controller
@@ -55,12 +56,14 @@ class QuizController extends Controller
         ]);
 
         $formattedQuestions = $questions->map(function ($q, $index) {
-            $shuffledOptions = $q->options->shuffle()->map(function ($opt) {
-                return [
-                    'material_id' => $opt->material_id,
-                    'image_url' => asset('storage/'.$opt->material->image_path),
-                ];
-            })->values()->all();
+            $shuffledOptions = $q->options->shuffle()
+                ->filter(fn ($opt) => $opt->material !== null)
+                ->map(function ($opt) {
+                    return [
+                        'material_id' => $opt->material_id,
+                        'image_url' => '/storage/'.$opt->material->image_path,
+                    ];
+                })->values()->all();
 
             return [
                 'id' => $q->id,
@@ -84,9 +87,16 @@ class QuizController extends Controller
             abort(403, 'Anda tidak memiliki izin mengakses percobaan kuis ini.');
         }
 
+        if ($attempt->finished_at !== null) {
+            return response()->json(['error' => 'Percobaan kuis ini sudah selesai.'], 422);
+        }
+
         $validated = $request->validate([
-            'question_id' => 'required|exists:quiz_questions,id',
-            'selected_material_id' => 'required|exists:materials,id',
+            'question_id' => [
+                'required',
+                Rule::exists('quiz_questions', 'id')->where('quiz_id', $attempt->quiz_id),
+            ],
+            'selected_material_id' => 'required|integer',
             'is_first_try' => 'nullable|boolean',
         ]);
 
@@ -94,6 +104,22 @@ class QuizController extends Controller
             ->where('quiz_id', $attempt->quiz_id)
             ->firstOrFail();
 
+        $optionBelongs = $question->options()
+            ->where('material_id', $validated['selected_material_id'])
+            ->exists();
+
+        if (! $optionBelongs) {
+            return response()->json([
+                'message' => 'Pilihan jawaban tidak termasuk dalam opsi soal ini.',
+                'errors' => ['selected_material_id' => ['Pilihan jawaban tidak valid untuk soal ini.']],
+            ], 422);
+        }
+
+        $alreadyAnswered = QuizAnswer::where('attempt_id', $attempt->id)
+            ->where('question_id', $question->id)
+            ->exists();
+
+        $isFirstTry = ! $alreadyAnswered && $request->boolean('is_first_try', true);
         $isCorrect = (int) $question->correct_material_id === (int) $validated['selected_material_id'];
 
         QuizAnswer::create([
@@ -101,10 +127,10 @@ class QuizController extends Controller
             'question_id' => $question->id,
             'selected_material_id' => $validated['selected_material_id'],
             'is_correct' => $isCorrect,
-            'attempt_no' => $request->boolean('is_first_try', true) ? 1 : 2,
+            'attempt_no' => $isFirstTry ? 1 : 2,
         ]);
 
-        if ($isCorrect && $request->boolean('is_first_try', true)) {
+        if ($isCorrect && $isFirstTry && $attempt->correct_first_try < $attempt->total_questions) {
             $attempt->increment('correct_first_try');
         }
 
@@ -121,7 +147,9 @@ class QuizController extends Controller
             abort(403, 'Anda tidak memiliki izin menyelesaikan percobaan kuis ini.');
         }
 
-        $attempt->update(['finished_at' => now()]);
+        if ($attempt->finished_at === null) {
+            $attempt->update(['finished_at' => now()]);
+        }
 
         $stars = $attempt->calculateStars();
         $total = $attempt->total_questions;

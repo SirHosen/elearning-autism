@@ -107,6 +107,30 @@ class DatabaseSeeder extends Seeder
                 'sort_order' => 6,
                 'is_active' => false,
             ],
+            [
+                'name' => 'Musik & Nada',
+                'slug' => 'musik-nada',
+                'description' => 'Mengenal tangga nada Do Re Mi dan alat musik ceria.',
+                'color_key' => 'lavender',
+                'sort_order' => 7,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Matematika',
+                'slug' => 'matematika',
+                'description' => 'Belajar penjumlahan, pengurangan sederhana, dan bangun datar.',
+                'color_key' => 'green',
+                'sort_order' => 8,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Bahasa Inggris',
+                'slug' => 'bahasa-inggris',
+                'description' => 'Mengenal kosakata dasar bahasa Inggris beserta artinya.',
+                'color_key' => 'peach',
+                'sort_order' => 9,
+                'is_active' => true,
+            ],
         ];
 
         $categories = [];
@@ -154,6 +178,36 @@ class DatabaseSeeder extends Seeder
                 ['label' => 'Tas', 'sentence' => 'Tas sekolah untuk membawa perlengkapan.', 'color' => '#7B1FA2'],
                 ['label' => 'Sepatu', 'sentence' => 'Sepatu bersih melindungi kaki kita.', 'color' => '#37474F'],
                 ['label' => 'Topi', 'sentence' => 'Topi melindungi kepala dari terik matahari.', 'color' => '#F57C00'],
+            ],
+            'musik-nada' => [
+                ['label' => 'Nada Do', 'sentence' => 'Nada Do adalah nada dasar pertama yang tenang.', 'color' => '#E53935'],
+                ['label' => 'Nada Re', 'sentence' => 'Nada Re berbunyi naik setelah nada Do.', 'color' => '#FB8C00'],
+                ['label' => 'Nada Mi', 'sentence' => 'Nada Mi bernada merdu dan menenangkan.', 'color' => '#FBBF24'],
+                ['label' => 'Nada Fa', 'sentence' => 'Nada Fa terdengar hangat dan lembut.', 'color' => '#246B4D'],
+                ['label' => 'Nada Sol', 'sentence' => 'Nada Sol terdengar cerah dan riang.', 'color' => '#2F6F9F'],
+                ['label' => 'Gitar', 'sentence' => 'Gitar dimainkan dengan cara dipetik senarnya.', 'color' => '#D97706'],
+                ['label' => 'Piano', 'sentence' => 'Piano memiliki tuts putih dan hitam yang merdu.', 'color' => '#1F2933'],
+                ['label' => 'Drum', 'sentence' => 'Drum menghasilkan irama ketukan yang bersemangat.', 'color' => '#E53935'],
+            ],
+            'matematika' => [
+                ['label' => '1 + 1 = 2', 'sentence' => 'Satu ditambah satu sama dengan dua.', 'color' => '#2F6F9F'],
+                ['label' => '2 + 1 = 3', 'sentence' => 'Dua ditambah satu sama dengan tiga.', 'color' => '#246B4D'],
+                ['label' => '2 + 2 = 4', 'sentence' => 'Dua ditambah dua sama dengan empat.', 'color' => '#D97706'],
+                ['label' => '3 + 2 = 5', 'sentence' => 'Tiga ditambah dua sama dengan lima.', 'color' => '#7C3AED'],
+                ['label' => '5 - 2 = 3', 'sentence' => 'Lima dikurangi dua sama dengan tiga.', 'color' => '#DC2626'],
+                ['label' => 'Lingkaran', 'sentence' => 'Lingkaran berbentuk bulat seperti roda sepeda.', 'color' => '#EA580C'],
+                ['label' => 'Persegi', 'sentence' => 'Persegi memiliki empat sisi yang sama panjang.', 'color' => '#2F6F9F'],
+                ['label' => 'Segitiga', 'sentence' => 'Segitiga memiliki tiga sisi dan tiga sudut.', 'color' => '#246B4D'],
+            ],
+            'bahasa-inggris' => [
+                ['label' => 'Apple', 'sentence' => 'Apple artinya buah apel merah yang segar.', 'color' => '#E53935'],
+                ['label' => 'Cat', 'sentence' => 'Cat artinya hewan kucing berbulu lembut.', 'color' => '#E08E45'],
+                ['label' => 'Book', 'sentence' => 'Book artinya buku untuk membaca dan belajar.', 'color' => '#2F6F9F'],
+                ['label' => 'Sun', 'sentence' => 'Sun artinya matahari pagi yang bersinar cerah.', 'color' => '#FBBF24'],
+                ['label' => 'Star', 'sentence' => 'Star artinya bintang yang bersinar indah.', 'color' => '#F59E0B'],
+                ['label' => 'House', 'sentence' => 'House artinya rumah tempat tinggal yang nyaman.', 'color' => '#E53935'],
+                ['label' => 'Water', 'sentence' => 'Water artinya air minum yang bersih dan sehat.', 'color' => '#0284C7'],
+                ['label' => 'Ball', 'sentence' => 'Ball artinya bola bulat untuk bermain.', 'color' => '#2F6F9F'],
             ],
         ];
 

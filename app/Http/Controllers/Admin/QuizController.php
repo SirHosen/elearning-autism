@@ -11,6 +11,7 @@ use App\Services\QuizBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -57,7 +58,7 @@ class QuizController extends Controller
             'title' => $validated['title'],
             'category_id' => $validated['category_id'],
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
-            'is_active' => (bool) $request->input('is_active', 1),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
         return redirect()->route('admin.quizzes.questions', $quiz)->with('success', 'Kuis berhasil dibuat. Silakan tambahkan soal atau gunakan generator otomatis.');
@@ -65,7 +66,11 @@ class QuizController extends Controller
 
     public function edit(Quiz $quiz): View
     {
-        $categories = Category::active()->withCount('activeMaterials')->orderBy('name')->get();
+        $categories = Category::where('is_active', true)
+            ->when($quiz->category_id, fn ($q) => $q->orWhere('id', $quiz->category_id))
+            ->withCount('activeMaterials')
+            ->orderBy('name')
+            ->get();
 
         return view('admin.quizzes.edit', compact('quiz', 'categories'));
     }
@@ -77,13 +82,16 @@ class QuizController extends Controller
             'category_id' => 'required|exists:categories,id',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
+        ], [
+            'title.required' => 'Judul kuis wajib diisi.',
+            'category_id.required' => 'Kategori kuis wajib dipilih.',
         ]);
 
         $quiz->update([
             'title' => $validated['title'],
             'category_id' => $validated['category_id'],
             'sort_order' => (int) ($validated['sort_order'] ?? 0),
-            'is_active' => (bool) $request->input('is_active', 1),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : $quiz->is_active,
         ]);
 
         return redirect()->route('admin.quizzes.index')->with('success', 'Kuis berhasil diperbarui.');
@@ -115,16 +123,21 @@ class QuizController extends Controller
 
     public function storeQuestion(Request $request, Quiz $quiz): RedirectResponse
     {
+        $materialInCategory = Rule::exists('materials', 'id')->where('category_id', $quiz->category_id);
+
         $validated = $request->validate([
             'prompt_text' => 'required|string|max:150',
-            'correct_material_id' => 'required|exists:materials,id',
+            'correct_material_id' => ['required', $materialInCategory],
             'option_ids' => 'required|array|min:2|max:4',
-            'option_ids.*' => 'exists:materials,id',
+            'option_ids.*' => ['distinct', $materialInCategory],
         ], [
             'prompt_text.required' => 'Pertanyaan kuis wajib diisi.',
             'correct_material_id.required' => 'Materi jawaban benar wajib dipilih.',
+            'correct_material_id.exists' => 'Materi jawaban benar harus berasal dari kategori kuis ini.',
             'option_ids.required' => 'Pilihan materi wajib dipilih minimal 2.',
             'option_ids.min' => 'Pilihan materi minimal 2 gambar.',
+            'option_ids.*.distinct' => 'Pilihan materi tidak boleh ada yang ganda.',
+            'option_ids.*.exists' => 'Semua opsi pilihan harus berasal dari kategori kuis ini.',
         ]);
 
         if (! in_array($validated['correct_material_id'], $validated['option_ids'])) {

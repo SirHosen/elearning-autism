@@ -68,7 +68,7 @@ class MaterialController extends Controller
             'image_path' => $imagePath,
             'audio_path' => $audioPath,
             'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
         return redirect()->route('admin.materials.index')
@@ -93,8 +93,12 @@ class MaterialController extends Controller
         }
 
         $audioPath = $material->audio_path;
-        if ($request->hasFile('audio')) {
+        if ($request->boolean('remove_audio') && $material->audio_path) {
             $this->mediaStorage->deleteIfExists($material->audio_path);
+            $audioPath = null;
+        }
+        if ($request->hasFile('audio')) {
+            $this->mediaStorage->deleteIfExists($audioPath);
             $audioPath = $this->mediaStorage->storeAudio($request->file('audio'), 'audio');
         }
 
@@ -105,7 +109,7 @@ class MaterialController extends Controller
             'image_path' => $imagePath,
             'audio_path' => $audioPath,
             'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : $material->is_active,
         ]);
 
         return redirect()->route('admin.materials.index')

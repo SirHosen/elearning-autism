@@ -55,6 +55,9 @@ class DemoSeeder extends Seeder
         $hewanCat = Category::where('slug', 'hewan')->first();
         $warnaCat = Category::where('slug', 'warna')->first();
         $bendaCat = Category::where('slug', 'benda')->first();
+        $musikCat = Category::where('slug', 'musik-nada')->first();
+        $matematikaCat = Category::where('slug', 'matematika')->first();
+        $inggrisCat = Category::where('slug', 'bahasa-inggris')->first();
 
         if ($hewanCat) {
             Game::updateOrCreate(
@@ -101,18 +104,75 @@ class DemoSeeder extends Seeder
             );
         }
 
-        // 3. Buat Contoh Kuis Bergambar
-        if ($hewanCat && $hewanCat->materials()->count() >= 3) {
-            $quiz = Quiz::updateOrCreate(
-                ['title' => 'Kuis Pengenalan Hewan'],
+        if ($musikCat) {
+            Game::updateOrCreate(
+                ['title' => 'Tebak Nada & Alat Musik'],
                 [
-                    'category_id' => $hewanCat->id,
-                    'sort_order' => 1,
+                    'category_id' => $musikCat->id,
+                    'game_type' => 'pilih_benar',
+                    'option_count' => 3,
+                    'round_count' => 5,
+                    'instruction_text' => 'Pilih nada atau alat musik yang tepat.',
+                    'sort_order' => 4,
+                    'is_active' => true,
+                ]
+            );
+        }
+
+        if ($matematikaCat) {
+            Game::updateOrCreate(
+                ['title' => 'Hitung & Bentuk Ceria'],
+                [
+                    'category_id' => $matematikaCat->id,
+                    'game_type' => 'seret_tempatkan',
+                    'option_count' => 3,
+                    'round_count' => 5,
+                    'instruction_text' => 'Pilih hitungan atau bentuk yang tepat.',
+                    'sort_order' => 5,
+                    'is_active' => true,
+                ]
+            );
+        }
+
+        if ($inggrisCat) {
+            Game::updateOrCreate(
+                ['title' => 'Cocokkan Kosakata Bahasa Inggris'],
+                [
+                    'category_id' => $inggrisCat->id,
+                    'game_type' => 'cocokkan',
+                    'option_count' => 3,
+                    'round_count' => 4,
+                    'instruction_text' => 'Cocokkan gambar dengan kata bahasa Inggris.',
+                    'sort_order' => 6,
+                    'is_active' => true,
+                ]
+            );
+        }
+
+        // 3. Buat Contoh Kuis Bergambar (Hewan, Musik & Nada, Matematika, Bahasa Inggris)
+        $quizSpecs = [
+            ['cat' => $hewanCat, 'title' => 'Kuis Pengenalan Hewan', 'order' => 1, 'prefix' => 'Mana yang bernama'],
+            ['cat' => $musikCat, 'title' => 'Kuis Mengenal Musik & Nada', 'order' => 2, 'prefix' => 'Mana gambar untuk'],
+            ['cat' => $matematikaCat, 'title' => 'Kuis Matematika Dasar', 'order' => 3, 'prefix' => 'Mana gambar yang menunjukkan'],
+            ['cat' => $inggrisCat, 'title' => 'Kuis Kosakata Bahasa Inggris', 'order' => 4, 'prefix' => 'Mana gambar untuk kata'],
+        ];
+
+        foreach ($quizSpecs as $spec) {
+            $cat = $spec['cat'];
+            if (! $cat || $cat->materials()->count() < 3) {
+                continue;
+            }
+
+            $quiz = Quiz::updateOrCreate(
+                ['title' => $spec['title']],
+                [
+                    'category_id' => $cat->id,
+                    'sort_order' => $spec['order'],
                     'is_active' => true,
                 ]
             );
 
-            $materials = $hewanCat->materials()->take(5)->get();
+            $materials = $cat->materials()->take(5)->get();
             $order = 1;
             foreach ($materials as $target) {
                 $q = QuizQuestion::updateOrCreate(
@@ -121,19 +181,17 @@ class DemoSeeder extends Seeder
                         'correct_material_id' => $target->id,
                     ],
                     [
-                        'prompt_text' => 'Mana yang bernama "'.$target->label.'"?',
+                        'prompt_text' => $spec['prefix'].' "'.$target->label.'"?',
                         'sort_order' => $order++,
                     ]
                 );
 
-                // Tambahkan opsi benar
                 QuizQuestionOption::firstOrCreate([
                     'question_id' => $q->id,
                     'material_id' => $target->id,
                 ]);
 
-                // Tambahkan 2 pengecoh
-                $distractors = $hewanCat->materials()
+                $distractors = $cat->materials()
                     ->where('id', '!=', $target->id)
                     ->inRandomOrder()
                     ->take(2)

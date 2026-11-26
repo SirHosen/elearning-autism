@@ -71,7 +71,7 @@ class MediaStorage
             return $trimmed;
         }
 
-        if (preg_match('/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([a-zA-Z0-9_-]{11})/', $trimmed, $matches)) {
+        if (preg_match('/(?:youtu\.be\/|(?:youtube|youtube-nocookie)\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))([a-zA-Z0-9_-]{11})/', $trimmed, $matches)) {
             return $matches[1];
         }
 

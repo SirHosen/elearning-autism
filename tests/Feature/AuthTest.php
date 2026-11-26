@@ -17,6 +17,10 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Saya Siswa');
         $response->assertSee('Saya Guru');
+        $response->assertSee('role-vec--student');
+        $response->assertSee('role-vec--teacher');
+        $response->assertDontSee('murid-cover.jpg');
+        $response->assertDontSee('guru-cover.jpg');
     }
 
     public function test_student_login_screen_can_be_rendered(): void
@@ -25,6 +29,27 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Masuk Siswa');
         $response->assertSee('Nama Pengguna Kamu');
+        $response->assertSee('role-vec--student');
+        $response->assertSee('login-card-topbar');
+        $response->assertSee('login-back-btn');
+        $response->assertSee('Masuk Murid');
+        $response->assertSee('Kembali');
+        $response->assertDontSee('login-nav-row');
+        $response->assertDontSee('murid-cover.jpg');
+    }
+
+    public function test_teacher_login_screen_can_be_rendered(): void
+    {
+        $response = $this->get('/masuk/guru');
+        $response->assertStatus(200);
+        $response->assertSee('Masuk Guru');
+        $response->assertSee('role-vec--teacher');
+        $response->assertSee('login-card-topbar');
+        $response->assertSee('login-back-btn');
+        $response->assertSee('Portal Guru');
+        $response->assertSee('Kembali');
+        $response->assertDontSee('login-nav-row');
+        $response->assertDontSee('guru-cover.jpg');
     }
 
     public function test_student_can_login_with_valid_username_and_pin(): void

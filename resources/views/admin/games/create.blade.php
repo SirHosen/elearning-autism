@@ -7,7 +7,7 @@
 <div class="adm-form-shell">
   <div class="adm-page-head">
     <div>
-      <a href="{{ route('admin.games.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Permainan</a>
+      <x-admin.back-link :href="route('admin.games.index')" label="Daftar Permainan" />
       <h1 class="adm-title">Tambah Permainan Edukasi</h1>
       <p class="adm-subtitle">Pilih kategori sumber materi, tipe permainan, dan jumlah ronde yang ramah anak.</p>
     </div>
@@ -73,14 +73,15 @@
           <label for="sort_order" class="adm-label">Urutan Tampil</label>
           <input type="number" name="sort_order" id="sort_order" class="adm-input" value="{{ old('sort_order', 0) }}" min="0">
         </div>
-        <div class="adm-field" style="display: flex; align-items: center; padding-top: 24px;">
-          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700;">
-            <input type="checkbox" name="is_active" value="1" {{ old('is_active', 1) ? 'checked' : '' }} style="width: 18px; height: 18px;">
-            <span>Aktifkan Permainan</span>
+        <div class="adm-field adm-check-slot">
+          <label class="adm-check-row">
+            <input type="hidden" name="is_active" value="0">
+            <input type="checkbox" name="is_active" value="1" {{ old('is_active', '1') == '1' ? 'checked' : '' }} class="adm-checkbox">
+            <span class="adm-check-label">Aktifkan Permainan</span>
           </label>
         </div>
       </div>
-      @error('is_active')<span class="adm-error" style="margin-bottom: 12px;">{{ $message }}</span>@enderror
+      @error('is_active')<span class="adm-error">{{ $message }}</span>@enderror
 
       <div class="adm-form-footer">
         <a href="{{ route('admin.games.index') }}" class="adm-btn adm-btn--secondary">Batal</a>

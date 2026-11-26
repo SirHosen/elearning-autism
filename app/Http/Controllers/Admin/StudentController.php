@@ -74,7 +74,7 @@ class StudentController extends Controller
             'password' => Hash::make($rawPin),
             'role' => 'siswa',
             'class_name' => $validated['class_name'] ?? null,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
         UserSetting::create([
@@ -96,18 +96,22 @@ class StudentController extends Controller
 
     public function edit(User $student): View
     {
+        abort_unless($student->isStudent(), 404);
+
         return view('admin.students.edit', compact('student'));
     }
 
     public function update(StudentRequest $request, User $student): RedirectResponse
     {
+        abort_unless($student->isStudent(), 404);
+
         $validated = $request->validated();
 
         $updateData = [
             'name' => $validated['name'],
             'username' => $validated['username'],
             'class_name' => $validated['class_name'] ?? null,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : $student->is_active,
         ];
 
         if (! empty($validated['pin'])) {
@@ -122,6 +126,8 @@ class StudentController extends Controller
 
     public function resetPin(User $student): RedirectResponse
     {
+        abort_unless($student->isStudent(), 404);
+
         $newPin = sprintf('%04d', mt_rand(1000, 9999));
 
         $student->update([
@@ -138,6 +144,19 @@ class StudentController extends Controller
 
     public function printCard(User $student): View
     {
+        abort_unless($student->isStudent(), 404);
+
         return view('admin.students.card', compact('student'));
+    }
+
+    public function destroy(User $student): RedirectResponse
+    {
+        abort_unless($student->isStudent(), 404);
+
+        $name = $student->name;
+        $student->delete();
+
+        return redirect()->route('admin.students.index')
+            ->with('success', "Akun siswa '{$name}' berhasil diarsipkan.");
     }
 }

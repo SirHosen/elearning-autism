@@ -28,7 +28,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $slug = $validated['slug'] ? Str::slug($validated['slug']) : Str::slug($validated['name']);
+        $slug = ! empty($validated['slug']) ? Str::slug($validated['slug']) : Str::slug($validated['name']);
 
         Category::create([
             'name' => $validated['name'],
@@ -36,7 +36,7 @@ class CategoryController extends Controller
             'description' => $validated['description'] ?? null,
             'color_key' => $validated['color_key'],
             'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
         return redirect()->route('admin.categories.index')
@@ -51,7 +51,7 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
         $validated = $request->validated();
-        $slug = $validated['slug'] ? Str::slug($validated['slug']) : Str::slug($validated['name']);
+        $slug = ! empty($validated['slug']) ? Str::slug($validated['slug']) : Str::slug($validated['name']);
 
         $category->update([
             'name' => $validated['name'],
@@ -59,7 +59,7 @@ class CategoryController extends Controller
             'description' => $validated['description'] ?? null,
             'color_key' => $validated['color_key'],
             'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : $category->is_active,
         ]);
 
         return redirect()->route('admin.categories.index')
@@ -68,8 +68,13 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): RedirectResponse
     {
-        if ($category->materials()->exists() || $category->games()->exists() || $category->quizzes()->exists()) {
-            return back()->with('error', 'Kategori ini masih memiliki materi, kuis, atau permainan aktif. Pindahkan atau hapus data terkait terlebih dahulu.');
+        if (
+            $category->materials()->exists()
+            || $category->games()->exists()
+            || $category->quizzes()->exists()
+            || $category->videos()->exists()
+        ) {
+            return back()->with('error', 'Kategori ini masih memiliki materi, video, kuis, atau permainan terkait. Pindahkan atau hapus data terkait terlebih dahulu.');
         }
 
         $category->delete();

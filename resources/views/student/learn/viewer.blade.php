@@ -30,7 +30,7 @@
 @section('content')
 <div class="learn-workspace">
   <!-- Bar Progres Kartu Materi -->
-  <div class="learn-progress-header">
+  <div class="learn-progress-header st-anim st-anim--1">
     <span class="st-topic-pill st-topic-pill--{{ $pillModifier }}">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -51,7 +51,7 @@
   </div>
 
   <!-- Kartu Gambar Interaktif -->
-  <section class="learn-flashcard" aria-label="Kartu belajar {{ $material->label }}">
+  <section class="learn-flashcard st-anim st-anim--2" aria-label="Kartu belajar {{ $material->label }}">
     <div class="learn-picture-frame learn-picture-frame--{{ $pillModifier }}"
          id="materialImageBox"
          tabindex="0"
@@ -85,6 +85,31 @@
       </button>
     </div>
 
+    @if ($category->slug === 'musik-nada')
+      @php
+        $scaleNotes = [
+            ['key' => 'nada do', 'short' => 'Do', 'mod' => 'do'],
+            ['key' => 'nada re', 'short' => 'Re', 'mod' => 're'],
+            ['key' => 'nada mi', 'short' => 'Mi', 'mod' => 'mi'],
+            ['key' => 'nada fa', 'short' => 'Fa', 'mod' => 'fa'],
+            ['key' => 'nada sol', 'short' => 'Sol', 'mod' => 'sol'],
+        ];
+        $currentNoteLower = strtolower(trim($material->label));
+      @endphp
+      <div class="learn-scale-bar" aria-label="Tangga nada interaktif">
+        <span class="learn-scale-title">Ketuk nada untuk mendengar tinggi bunyi:</span>
+        <div class="learn-scale-keys">
+          @foreach ($scaleNotes as $n)
+            <button type="button"
+                    class="learn-scale-key learn-scale-key--{{ $n['mod'] }} {{ $currentNoteLower === $n['key'] ? 'is-current' : '' }}"
+                    data-note-key="{{ $n['key'] }}">
+              {{ $n['short'] }}
+            </button>
+          @endforeach
+        </div>
+      </div>
+    @endif
+
     @if ($material->short_sentence)
       <button type="button"
               class="learn-sentence-card"
@@ -103,16 +128,18 @@
   </section>
 
   <!-- Navigasi Langkah Besar (Sebelumnya & Berikutnya / Selesai) -->
-  <nav class="learn-step-nav" aria-label="Navigasi kartu materi">
+  <nav class="learn-step-nav st-anim st-anim--3" aria-label="Navigasi kartu materi">
     @if ($prevMaterial)
       <a href="{{ route('student.learn.material', [$category->slug, $prevMaterial->id]) }}"
-         class="btn btn-student btn-secondary learn-nav-btn"
+         class="btn btn-student btn-secondary learn-nav-btn learn-nav-btn--prev"
          id="btnPrev">
-        &larr; Sebelumnya
+        @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 20, 'class' => 'st-btn-arrow st-btn-arrow--left'])
+        <span>Sebelumnya</span>
       </a>
     @else
-      <button type="button" class="btn btn-student btn-secondary learn-nav-btn" disabled>
-        &larr; Sebelumnya
+      <button type="button" class="btn btn-student btn-secondary learn-nav-btn learn-nav-btn--prev" disabled>
+        @include('student.partials.icon-arrow', ['dir' => 'left', 'size' => 20, 'class' => 'st-btn-arrow st-btn-arrow--left'])
+        <span>Sebelumnya</span>
       </button>
     @endif
 
@@ -122,15 +149,16 @@
 
     @if ($nextMaterial)
       <a href="{{ route('student.learn.material', [$category->slug, $nextMaterial->id]) }}"
-         class="btn btn-student btn-primary learn-nav-btn"
+         class="btn btn-student btn-primary learn-nav-btn learn-nav-btn--next"
          id="btnNext">
-        Berikutnya &rarr;
+        <span>Berikutnya</span>
+        @include('student.partials.icon-arrow', ['size' => 20])
       </a>
     @else
       <a href="{{ route('student.learn.index') }}"
-         class="btn btn-student btn-soft learn-nav-btn"
+         class="btn btn-student btn-soft learn-nav-btn learn-nav-btn--finish"
          id="btnFinish">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="st-btn-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
         <span>Selesai</span>
@@ -142,11 +170,14 @@
 
 @push('scripts')
 <script type="module">
-  import { audioManager } from '/js/core/audio-manager.js';
+  const audioManager = window.audioManager;
 
   const audioUrl = @json($audioUrl);
   const textLabel = @json($wordLabel);
   const sentenceText = @json($sentenceLabel);
+  const categorySlug = @json($category->slug);
+  const wordLang = categorySlug === 'bahasa-inggris' ? 'en-US' : 'id-ID';
+  const wordMusicKey = categorySlug === 'musik-nada' ? textLabel : null;
 
   const btnSpeaker = document.getElementById('btnSpeaker');
   const speakerText = document.getElementById('speakerText');
@@ -161,9 +192,12 @@
   }
 
   function playSound() {
+    if (!audioManager) return;
     audioManager.play({
       audioUrl: audioUrl,
       text: textLabel,
+      lang: wordLang,
+      musicKey: wordMusicKey,
       onStart: (status) => {
         setPlayingState(true, status.text || @json(__('ui.hearing')));
       },
@@ -172,6 +206,16 @@
       }
     });
   }
+
+  document.querySelectorAll('.learn-scale-key[data-note-key]').forEach((keyBtn) => {
+    keyBtn.addEventListener('click', () => {
+      if (!audioManager) return;
+      audioManager.stop();
+      audioManager.playMusicCue(keyBtn.dataset.noteKey);
+      keyBtn.classList.add('is-ringing');
+      setTimeout(() => keyBtn.classList.remove('is-ringing'), 420);
+    });
+  });
 
   btnSpeaker.addEventListener('click', playSound);
   imageBox.addEventListener('click', playSound);
@@ -184,15 +228,29 @@
 
   if (btnSentenceSpeak && sentenceText) {
     btnSentenceSpeak.addEventListener('click', () => {
+      if (!audioManager) return;
+      const sentencePayload = categorySlug === 'bahasa-inggris' && window.ArenaHelpers
+        ? {
+            text: sentenceText,
+            segments: window.ArenaHelpers.buildBilingualSegments(sentenceText, textLabel),
+            musicKey: false,
+          }
+        : {
+            text: sentenceText,
+            lang: 'id-ID',
+            musicKey: false,
+          };
+
       audioManager.play({
-        text: sentenceText,
+        ...sentencePayload,
         onStart: (status) => {
+          btnSpeaker.classList.remove('is-playing');
+          btnSpeaker.setAttribute('aria-pressed', 'false');
           imageBox.classList.add('is-playing');
           speakerText.textContent = status.text || @json(__('ui.hearing'));
         },
         onEnd: () => {
-          imageBox.classList.remove('is-playing');
-          speakerText.textContent = @json(__('ui.hear'));
+          setPlayingState(false, @json(__('ui.hear')));
         }
       });
     });

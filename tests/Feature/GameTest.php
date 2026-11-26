@@ -97,6 +97,10 @@ class GameTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Permainan Cocokkan');
         $response->assertSee('id="game-arena"', false);
+        $response->assertSee('id="game-score-val"', false);
+        $response->assertSee('id="btn-toggle-sfx"', false);
+        $response->assertSee('id="game-feedback"', false);
+        $response->assertSee('id="game-progress-dots"', false);
         $response->assertSee('game-engine.js');
     }
 
@@ -292,5 +296,54 @@ class GameTest extends TestCase
         $delRes = $this->actingAs($this->admin)->delete(route('admin.games.destroy', $game));
         $delRes->assertRedirect(route('admin.games.index'));
         $this->assertDatabaseMissing('games', ['id' => $game->id]);
+    }
+
+    public function test_game_api_guards_against_empty_category_inactive_game_and_score_overflow(): void
+    {
+        $emptyCat = Category::create([
+            'name' => 'Kosong Aman',
+            'slug' => 'kosong-aman',
+            'color_key' => 'blue',
+            'is_active' => true,
+        ]);
+        $emptyGame = Game::create([
+            'category_id' => $emptyCat->id,
+            'title' => 'Game Tanpa Materi',
+            'game_type' => 'pilih_benar',
+            'option_count' => 3,
+            'round_count' => 5,
+            'instruction_text' => 'Pilih gambar',
+            'is_active' => true,
+        ]);
+
+        $roundsRes = $this->actingAs($this->student)->getJson(route('student.games.rounds', $emptyGame));
+        $roundsRes->assertStatus(200)->assertJson(['success' => true, 'rounds' => []]);
+
+        // Valid active game uses relative /storage/ asset paths
+        $activeGame = Game::create([
+            'category_id' => $this->category->id,
+            'title' => 'Game Aktif Relatif',
+            'game_type' => 'pilih_benar',
+            'option_count' => 3,
+            'round_count' => 2,
+            'instruction_text' => 'Pilih gambar',
+            'is_active' => true,
+        ]);
+        $activeRounds = $this->actingAs($this->student)->getJson(route('student.games.rounds', $activeGame));
+        $activeRounds->assertStatus(200);
+        $this->assertStringStartsWith('/storage/', $activeRounds->json('rounds.0.options.0.image_url'));
+
+        // Score exceeding rounds is rejected (422)
+        $this->actingAs($this->student)->postJson(route('student.games.session', $activeGame), [
+            'total_rounds' => 3,
+            'correct_first_try' => 5,
+        ])->assertStatus(422);
+
+        // Inactive game session storage is rejected (404)
+        $activeGame->update(['is_active' => false]);
+        $this->actingAs($this->student)->postJson(route('student.games.session', $activeGame), [
+            'total_rounds' => 3,
+            'correct_first_try' => 2,
+        ])->assertStatus(404);
     }
 }

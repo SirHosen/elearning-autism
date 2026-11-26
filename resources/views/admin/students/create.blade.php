@@ -7,7 +7,7 @@
 <div class="adm-form-shell">
   <div class="adm-page-head">
     <div>
-      <a href="{{ route('admin.students.index') }}" class="adm-btn adm-btn--secondary adm-btn--sm" style="margin-bottom: 10px;">&larr; Daftar Siswa</a>
+      <x-admin.back-link :href="route('admin.students.index')" label="Daftar Siswa" />
       <h1 class="adm-title">Tambah Akun Siswa</h1>
       <p class="adm-subtitle">Buat akun masuk sederhana berbasis nama pengguna dan PIN angka 4&ndash;6 digit.</p>
     </div>
@@ -46,9 +46,10 @@
         </div>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', '1') ? 'checked' : '' }} style="width: 18px; height: 18px;">
-        <label for="is_active" style="font-weight: 700; font-size: 0.875rem; color: var(--ink);">Akun aktif (dapat langsung masuk ke ruang belajar)</label>
+      <div class="adm-check-row">
+        <input type="hidden" name="is_active" value="0">
+        <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', '1') == '1' ? 'checked' : '' }} class="adm-checkbox">
+        <label for="is_active" class="adm-check-label">Akun aktif (dapat langsung masuk ke ruang belajar)</label>
       </div>
 
       <div class="adm-form-footer">
